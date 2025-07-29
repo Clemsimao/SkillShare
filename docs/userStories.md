@@ -21,7 +21,7 @@
 <!-- Proposition de reformulation: je veux indiquer mes intérêts afin d'être plus facilement trouvé dans la recherche -->
 - En tant que **utilisateur connecté**, je veux modifier mon profil afin de maintenir mes informations à jour
 - En tant que **utilisateur connecté**, je veux supprimer mon profil/compte
-
+- En tant que **utilisateur connecté**, je veux créer post un tutoriel/compétence
 ---
 
 ## Fonctionnalités d'échange
