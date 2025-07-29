@@ -36,7 +36,7 @@
 - En tant que **utilisateur connecté**, je veux pouvoir interagir avec un auteur en postant un commentaire sur son tutoriel/compétence 
 - En tant que **utilisateur connecté**, je veux poster un commentaire sur un tutoriel/compétence
 - En tant que **utilisateur connecté**, je veux répondre au commentaire sur un tutoriel/compétence   
-
+- En tant que **utilisateur connecté**, je veux contacter l'auteur d'un tutoriel via un formulaire de contact 
 
 ---
 
