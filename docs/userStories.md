@@ -17,8 +17,7 @@
 
   ### Système de profil
 - En tant que **Membre**, je veux renseigner mes compétences afin de les proposer à la communauté
-- En tant que **Membre**, je veux indiquer mes intérêts afin de trouver des personnes qui peuvent m'aider
-<!-- Proposition de reformulation: je veux indiquer mes intérêts afin d'être plus facilement trouvé dans la recherche -->
+- En tant que **Membre**, je veux indiquer mes intérêts pour personnaliser mon profil et potentiellement créer des liens d'interêts avec les personnes interagissant dans les commentaires
 - En tant que **Membre**, je veux modifier mon profil afin de maintenir mes informations à jour
 - En tant que **Membre**, je veux supprimer mon profil/compte
 ---
