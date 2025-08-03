@@ -41,6 +41,7 @@
 | Mauvaise estimation du temps ou de la charge | Élevé | Élevée | Travailler avec un MVP, découper en tâches claires |
 | Travail non sauvegardé ou mal versionné | Élevé | Moyenne | Utiliser Git, commits réguliers, branches thématiques |
 | Dépendance à des services externes (ex: Cloudinary) | Moyen | Moyenne | Prévoir des alternatives, sécuriser les appels externes |
+| Difficultés de coordination dans une équipe de 5 | Désorganisation, travail redondant ou conflits interpersonnels | Moyenne | Moyenne à Élevée | Définir clairement les rôles, mettre en place un gestionnaire de tâches (GitHub Projects), organiser des points réguliers de synchronisation |
 
 ## Risques liés à la base de données
 
