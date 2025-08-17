@@ -1,12 +1,5 @@
 # Plan d'actions SkillShare - MVP COMPLET
 
-## Actions urgentes (Avant démarrage)
-- [ ] **Créer compte Cloudinary** (gratuit, 5min)
-- [ ] **Désigner référent technique** de l'équipe
-- [ ] **Valider horaire daily meetings** : 9h-9h30
-
----
-
 ## **Phase 1 : Fondations & Landing Page**
 
 ### Tâches Backend
