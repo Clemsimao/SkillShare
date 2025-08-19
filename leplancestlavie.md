@@ -3,10 +3,10 @@
 ## **Phase 1 : Fondations & Landing Page**
 
 ### Tâches Backend
-- [ ] Transformation MPD SQL vers Modèles Sequelize + associations (user, category, skill, tutorial, comments)
-- [ ] Configuration Docker complète (docker-compose.yml, Dockerfiles) + Base PostgreSQL
+- [X] Transformation MPD SQL vers Modèles Sequelize + associations (user, category, skill, tutorial, comments)
+- [X] Configuration Docker complète (docker-compose.yml, Dockerfiles) + Base PostgreSQL
 - [ ] Structure Express/MVC + middlewares (JWT, Argon2, Express Validator)
-- [ ] Seeds/fixtures de données test
+- [X] Seeds/fixtures de données test
 - [ ] Configuration Cloudinary
 
 ### Tâches Frontend
