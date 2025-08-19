@@ -4,6 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { sequelize } from './models/index.js';
 
+import apiRoutes from './routes/index.js';
+
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -34,6 +36,10 @@ async function initDatabase() {
     process.exit(1);
   }
 }
+
+// Routes API
+app.use('/api', apiRoutes);
+
 
 // Routes
 app.get('/', (req, res) => {
