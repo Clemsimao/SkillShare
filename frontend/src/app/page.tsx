@@ -3,21 +3,33 @@
 import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
-import Header from "@/components/Header"; 
-import Footer from "@/components/Footer"; 
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [currentSlide, setCurrentSlide] = useState(0); // 0 = skills, 1 = test
+
   const skills = [
-    'Communication',
-    'Programmation',
-    'Graphisme',
-    'Gestion de projet',
-    'Photographie',
+    'Chant',
+    'Dessin',
     'Écriture',
-    'Marketing',
-    'Musique'
+    'Musique',
+    'Peinture',
+    'Photographie',
+    'Sculpture',
   ];
+
+  const test = [
+    'zob',
+    'ouiche',
+    'doudou',
+  ];
+
+  const lists = [skills, test]; // stocke les deux listes à afficher
+  const maxSlide = lists.length - 1;
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev === maxSlide ? 0 : prev + 1));
+  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? maxSlide : prev - 1));
 
   return (
     <main className="min-h-screen bg-base-100 flex flex-col items-center justify-between px-4 pt-4 pb-20">
@@ -37,40 +49,42 @@ export default function Home() {
         </ul>
       </div>
 
-      {/* Liste de compétences */}
-      <section className="w-full relative">
-        <h2 className="text-xl font-semibold mb-2 text-center">Liste des compétences</h2>
-
-        {/* Navigation Gauche */}
-        <button className="absolute left-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle">
+      <section className="w-full relative max-w-xl mx-auto">
+        {/* Chevrons de navigation */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle"
+        >
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
 
-        {/* Compétences */}
-        <ul className="list-disc ml-6 pr-8 space-y-1 mb-6">
-          {skills.map((skill, index) => (
+        {/* Liste affichée */}
+        <ul className="list-disc ml-6 pr-8 space-y-1 mb-6 transition-all duration-300">
+          {lists[currentSlide].map((item, index) => (
             <li key={index} className="bg-base-200 p-2 rounded">
-              {skill}
+              {item}
             </li>
           ))}
         </ul>
 
-        {/* Navigation Droite */}
-        <button className="absolute right-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle">
+        <button
+          onClick={nextSlide}
+          className="absolute right-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle"
+        >
           <ChevronRightIcon className="w-6 h-6" />
         </button>
       </section>
 
-      {/* Barre d'état */}
+      {/* Petits points indicateurs */}
       <div className="flex gap-2 mb-6">
-        {[...Array(7)].map((_, i) => (
+        {lists.map((_, i) => (
           <div
             key={i}
-            className={`w-3 h-3 rounded-full ${i === 1 ? 'bg-neutral' : 'bg-neutral/40'}`}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-neutral' : 'bg-neutral/40'}`}
           />
         ))}
-      </div>  
-      
+      </div>
+
       <Footer />
     </main>
   );
