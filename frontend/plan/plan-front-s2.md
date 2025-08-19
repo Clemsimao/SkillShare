@@ -1,64 +1,33 @@
 # Plan Front (Next.js + React + Tailwind + daisyUI + Headless UI)
 
+# Sprint 1:
 ## Etape 1: Préparation & outillage
 
 - [x] **Initialiser le projet Next.js (TS, App Router, Tailwind)**
 Valider l'installation des différentes dépendances (yes/no)  
-  ```bash
-  npx create-next-app@latest frontend
-  ```
-
-- [x] **Entrer dans le dossier**  
-  ```bash
-  cd frontend
-  ```
-
-- [x] **Lancer le servbeur de dével**  
-  ```bash
-  npm run dev
-  ```
-
-- [x] **Installer les plugins Tailwind (forms/typography)**  
-  ```bash
-  npm i -D @tailwindcss/forms @tailwindcss/typography
-  ```
-
-- [x] **Installer daisyUI**  
-  ```bash
-  npm i -D daisyui
-  ```
-
-- [x] **Configurer ESLint + Prettier**  
-  ```bash
-  npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier
-  ```
-
-- option [ ] **Installer un set d'icônes (Lucide: librairie d’icônes open source)**  
-  ```bash
-  npm i lucide-react
-  ```
+  `npx create-next-app@latest frontend`
+- [x] Entrer dans le dossier`cd frontend`
+- [x] Lancer le servbeur de dével `npm run dev`
+- [x] InstallerTailwind `npm i -D @tailwindcss/forms @tailwindcss/typography`
+- [x] Installer daisyUI `npm i -D daisyui`
+- [x] Configurer ESLint + Prettier 
+  `npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier`
+- [x] Installer Lucide: librairie d’icônes open source `npm i lucide-react`
 
 - option [ ] **Installer Headless UI (Composants d'interface utilisateur entièrement sans style et entièrement accessibles, conçus pour s'intégrer parfaitement à Tailwind CSS)**  
-  ```bash
-  npm i @headlessui/react
-  ```
+  `npm i @headlessui/react`
 
-- [x] **Définir des alias de chemins (tsconfig)**  
-  (éditer tsconfig.json → compilerOptions.paths pour @/*)
+- [x] Définir des alias de chemins (tsconfig): (éditer tsconfig.json → compilerOptions.paths pour @/*)
 
-## Architecture & conventions
-
-- [ ] **Structurer l'arborescence (app/, components/, hooks/, lib/, styles/, types/)**  
-  (créer dossiers selon besoin)
-
-- [ ] **Créer un kit de composants UI**  
-  (créer components/ui/)
-
-- [ ] **Séparer server/client components**  
-  (placer "use client" en tête des composants client)
-
-- [ ] **Centraliser les variables d'env**  
-  (créer .env.local, n'exposer que via NEXT_PUBLIC_ si nécessaire)
+## Etape2: Architecture & conventions
+- [x] **Structurer l'arborescence (app/, components/, hooks/ etc)**  
+- [x] Créer le dossier `/app`
+  -  [x] Créer la landing page `page.tsx`
+  -  [x] Créer la page squellette HTMl `layout.tsx`
+- [x] Créer le dossier `/components`
+  -  [x] Créer les sections réutilisables `Footer.tsx`,`Header.tsx`, `NavMenu.tsx`
+- [x] Séparer server/client components: à voir avec l'équipe back => (placer "use client" en tête des composants client)
+- [x] Centraliser les variables d'env => (créer .env.local, n'exposer que via NEXT_PUBLIC_ si nécessaire) => Action faite (valider en check front-back)
 
 ## Design system & theming
 
@@ -170,6 +139,7 @@ Valider l'installation des différentes dépendances (yes/no)
 - [ ] **Valider les entrées côté client**  
   (valider avec Zod/RHF avant envoi)
 
+- 
 ## Internationalisation (si nécessaire)
 
 - [ ] **Installer next-intl (App Router friendly)**  
