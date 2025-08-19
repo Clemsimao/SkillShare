@@ -1,56 +1,49 @@
 # Plan Front (Next.js + React + Tailwind + daisyUI + Headless UI)
 
-## Préparation & outillage
+## Etape 1: Préparation & outillage
 
-- [ ] **Initialiser le projet Next.js (TS, App Router, Tailwind)**  
+- [x] **Initialiser le projet Next.js (TS, App Router, Tailwind)**
+Valider l'installation des différentes dépendances (yes/no)  
   ```bash
   npx create-next-app@latest frontend
   ```
 
-- [ ] **Entrer dans le dossier**  
+- [x] **Entrer dans le dossier**  
   ```bash
   cd frontend
   ```
 
-- [ ] **Installer les plugins Tailwind (forms/typography)**  
+- [x] **Lancer le servbeur de dével**  
+  ```bash
+  npm run dev
+  ```
+
+- [x] **Installer les plugins Tailwind (forms/typography)**  
   ```bash
   npm i -D @tailwindcss/forms @tailwindcss/typography
   ```
 
-- [ ] **Installer daisyUI**  
+- [x] **Installer daisyUI**  
   ```bash
   npm i -D daisyui
   ```
 
-- [ ] **Installer Headless UI**  
-  ```bash
-  npm i @headlessui/react
-  ```
-
-- [ ] **Installer un set d'icônes (Lucide)**  
-  ```bash
-  npm i lucide-react
-  ```
-
-- [ ] **Configurer ESLint + Prettier**  
+- [x] **Configurer ESLint + Prettier**  
   ```bash
   npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier
   ```
 
-- [ ] **Initialiser Husky (pre-commit)**  
+- option [ ] **Installer un set d'icônes (Lucide: librairie d’icônes open source)**  
   ```bash
-  npx husky-init && npm i
-  npx husky add .husky/pre-commit "npx lint-staged"
+  npm i lucide-react
   ```
 
-- [ ] **Configurer Commitlint (optionnel)**  
+- option [ ] **Installer Headless UI (Composants d'interface utilisateur entièrement sans style et entièrement accessibles, conçus pour s'intégrer parfaitement à Tailwind CSS)**  
   ```bash
-  npm i -D @commitlint/cli @commitlint/config-conventional
-  echo "export default { extends: ['@commitlint/config-conventional'] }" > commitlint.config.js
-  npx husky add .husky/commit-msg "npx --no-install commitlint --edit \$1"
+  npm i @headlessui/react
   ```
 
-- [ ] **Définir des alias de chemins (tsconfig)**  
+- [x] **Définir des alias de chemins (tsconfig)**  
   (éditer tsconfig.json → compilerOptions.paths pour @/*)
 
 ## Architecture & conventions
