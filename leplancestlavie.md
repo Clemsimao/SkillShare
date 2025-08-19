@@ -5,7 +5,7 @@
 ### Tâches Backend
 - [X] Transformation MPD SQL vers Modèles Sequelize + associations (user, category, skill, tutorial, comments)
 - [X] Configuration Docker complète (docker-compose.yml, Dockerfiles) + Base PostgreSQL
-- [ ] Structure Express/MVC + middlewares (JWT, Argon2, Express Validator)
+- [x] Structure Express/MVC + middlewares (JWT, Argon2, Express Validator)
 - [X] Seeds/fixtures de données test
 - [ ] Configuration Cloudinary
 
@@ -28,7 +28,7 @@
 ## **Phase 2 : Authentification & Profils (UC3-UC9)**
 
 ### Tâches Backend
-- [ ] Routes auth (`/api/auth/inscription`, `/connexion`, `/deconnexion`) + UC3, UC4, UC5
+- [x] Routes auth (`/api/auth/inscription`, `/connexion`, `/deconnexion`) + UC3, UC4, UC5
 - [ ] CRUD utilisateurs + UC8, UC9 (mise à jour/suppression profil)
 - [ ] Relations user-skills/interests + UC6, UC7 (compétences/intérêts)
 - [ ] Upload photo de profil via Cloudinary
