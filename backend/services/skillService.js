@@ -1,4 +1,5 @@
-import { User, Skill, Category, UserSkill, UserInterest, Op } from '../models/index.js';
+import { User, Skill, Category, UserSkill, UserInterest } from '../models/index.js';
+import { Op } from 'sequelize';
 
 export const skillService = {
   /**
@@ -10,20 +11,20 @@ export const skillService = {
       const skills = await Skill.findAll({
         include: [{
           association: 'category',
-          attributes: ['category_id', 'name']
+          attributes: ['category_id', 'title']
         }],
         order: [
-          ['category', 'name', 'ASC'], // Trier par catégorie
-          ['name', 'ASC']              // puis par nom de skill
+          ['category', 'title', 'ASC'], // Trier par catégorie
+          ['title', 'ASC']              // puis par nom de skill
         ]
       });
 
       return skills.map(skill => ({
         id: skill.skill_id,
-        name: skill.name,
+        title: skill.title,
         category: {
           id: skill.category.category_id,
-          name: skill.category.name
+          title: skill.category.title
         }
       }));
 
@@ -40,12 +41,12 @@ export const skillService = {
   async getAllCategories() {
     try {
       const categories = await Category.findAll({
-        order: [['name', 'ASC']]
+        order: [['title', 'ASC']]
       });
 
       return categories.map(category => ({
         id: category.category_id,
-        name: category.name
+        title: category.title
       }));
 
     } catch (error) {
@@ -91,7 +92,7 @@ export const skillService = {
 
       return {
         id: skill.skill_id,
-        name: skill.name,
+        title: skill.title,
         message: 'Compétence ajoutée avec succès'
       };
 
@@ -163,7 +164,7 @@ export const skillService = {
 
       return {
         id: skill.skill_id,
-        name: skill.name,
+        title: skill.title,
         message: 'Intérêt ajouté avec succès'
       };
 
@@ -218,10 +219,10 @@ export const skillService = {
 
       return userSkills.map(userSkill => ({
         id: userSkill.skill.skill_id,
-        name: userSkill.skill.name,
+        title: userSkill.skill.title,
         category: {
           id: userSkill.skill.category.category_id,
-          name: userSkill.skill.category.name
+          title: userSkill.skill.category.title
         }
       }));
 
@@ -252,10 +253,10 @@ export const skillService = {
 
       return userInterests.map(userInterest => ({
         id: userInterest.skill.skill_id,
-        name: userInterest.skill.name,
+        title: userInterest.skill.title,
         category: {
           id: userInterest.skill.category.category_id,
-          name: userInterest.skill.category.name
+          title: userInterest.skill.category.title
         }
       }));
 

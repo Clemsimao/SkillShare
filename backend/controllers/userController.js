@@ -174,9 +174,6 @@ export const getExampleProfiles = async (req, res) => {
   }
 };
 
-
-import { skillService } from '../services/skillService.js';
-
 /**
  * Ajouter une compétence à l'utilisateur connecté
  * POST /api/users/skills

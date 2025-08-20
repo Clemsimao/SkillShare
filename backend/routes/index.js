@@ -39,16 +39,16 @@ router.get('/', (req, res) => {
         list: 'GET /api/skills',
         categories: 'GET /api/skills/categories'
       },
-      users: {                              
-        examples: 'GET /api/users/examples',
-        publicProfile: 'GET /api/users/profile/:id',
-        updateProfile: 'PUT /api/users/profile',
-        deleteProfile: 'DELETE /api/users/profile',
-        addSkill: 'POST /api/users/skills',      
-        removeSkill: 'DELETE /api/users/skills/:id',
-        addInterest: 'POST /api/users/interests',    
-        removeInterest: 'DELETE /api/users/interests/:id' 
-      },
+      users: {
+  examples: 'GET /api/users/examples',
+  publicProfile: 'GET /api/users/profile/:id',
+  updateProfile: 'PUT /api/users/profile',
+  deleteProfile: 'DELETE /api/users/profile',
+  addSkill: 'POST /api/users/skills (body: {skillId})',   
+  removeSkill: 'DELETE /api/users/skills/:skillId',            
+  addInterest: 'POST /api/users/interests (body: {skillId})',  
+  removeInterest: 'DELETE /api/users/interests/:skillId' 
+      },      
       utils: {
         health: 'GET /api/health'
       }

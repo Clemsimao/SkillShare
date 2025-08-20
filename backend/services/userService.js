@@ -1,4 +1,5 @@
-import { User, Skill, Category, Op } from '../models/index.js';
+import { User, Skill, Category } from '../models/index.js';
+import { Op } from 'sequelize';
 
 export const userService = {
   /**
@@ -19,7 +20,7 @@ export const userService = {
             through: { attributes: [] }, // Exclure les données de la table de liaison
             include: [{
               association: 'category',
-              attributes: ['category_id', 'name']
+              attributes: ['category_id', 'title']
             }]
           },
           {
@@ -27,7 +28,7 @@ export const userService = {
             through: { attributes: [] },
             include: [{
               association: 'category',
-              attributes: ['category_id', 'name']
+              attributes: ['category_id', 'title']
             }]
           }
         ]
@@ -51,12 +52,12 @@ export const userService = {
         updatedAt: user.updated_at,
         skills: user.skills?.map(skill => ({
           id: skill.skill_id,
-          name: skill.name,
+          name: skill.title,
           category: skill.category
         })) || [],
         interests: user.interests?.map(interest => ({
           id: interest.skill_id,
-          name: interest.name,
+          name: interest.title,
           category: interest.category
         })) || []
       };
@@ -193,10 +194,9 @@ export const userService = {
           {
             association: 'skills',
             through: { attributes: [] },
-            limit: 3, // Limiter le nombre de compétences affichées ???
             include: [{
               association: 'category',
-              attributes: ['name']
+              attributes: ['title']
             }]
           }
         ],
@@ -211,8 +211,8 @@ export const userService = {
         profilePicture: user.profile_picture,
         skills: user.skills?.map(skill => ({
           id: skill.skill_id,
-          name: skill.name,
-          category: skill.category?.name
+          name: skill.title,
+          category: skill.category?.title
         })) || []
       }));
 
