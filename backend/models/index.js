@@ -29,9 +29,11 @@ Skill.belongsTo(Category, {
 });
 
 // User -> Tutorial (un utilisateur a plusieurs tutoriels)
+// CASCADE DELETE : supprime tutoriels quand user supprimé
 User.hasMany(Tutorial, {
     foreignKey: 'user_id',
-    as: 'tutorials'
+    as: 'tutorials',
+    onDelete: 'CASCADE' 
 });
 Tutorial.belongsTo(User, {
     foreignKey: 'user_id',
@@ -39,9 +41,11 @@ Tutorial.belongsTo(User, {
 });
 
 // User -> Comment (un utilisateur peut faire plusieurs commentaires)
+// CASCADE DELETE : supprime commentaires quand user supprimé
 User.hasMany(Comment, {
     foreignKey: 'user_id',
-    as: 'comments'
+    as: 'comments', 
+    onDelete: 'CASCADE'
 });
 Comment.belongsTo(User, {
     foreignKey: 'user_id',
@@ -49,9 +53,11 @@ Comment.belongsTo(User, {
 });
 
 // Tutorial -> Comment (un tutoriel peut avoir plusieurs commentaires)
+// CASCADE DELETE : supprime commentaires quand tutorial supprimé
 Tutorial.hasMany(Comment, {
     foreignKey: 'tutorial_id',
-    as: 'comments'
+    as: 'comments', 
+    onDelete: 'CASCADE' 
 });
 Comment.belongsTo(Tutorial, {
     foreignKey: 'tutorial_id',
@@ -132,9 +138,6 @@ Tutorial.belongsToMany(User, {
     as: 'raters'
 });
 
-// =====================================================
-// EXPORT DE TOUS LES MODÈLES
-// =====================================================
 
 export {
     sequelize,
