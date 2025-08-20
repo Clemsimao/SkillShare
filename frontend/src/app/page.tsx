@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0); // 0 = skills, 1 = test
 
-  const skills = [
+  const art = [
     'Chant',
     'Dessin',
     'Écriture',
@@ -25,7 +25,16 @@ export default function Home() {
     'doudou',
   ];
 
-  const lists = [skills, test]; // stocke les deux listes à afficher
+  const health = [
+    'zob',
+    'ouiche',
+    'doudou',
+    'zob',
+    'ouiche',
+    'doudou',
+  ];
+
+  const lists = [art, health, test]; // stocke les deux listes à afficher
   const maxSlide = lists.length - 1;
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === maxSlide ? 0 : prev + 1));

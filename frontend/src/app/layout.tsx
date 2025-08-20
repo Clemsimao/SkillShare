@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode; // n’importe quel élément React (composants/pages)
 }>) {
   return (
-    <html lang="fr" data-theme="retro">
+    <html lang="fr" >
       {/* Définir la balise <body> de toutes tes pages. */}
       <body
         // applique les variable CSS des 2 fonts google avec la classe Tailwind `antialiased` (lissage du texte)
