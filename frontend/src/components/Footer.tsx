@@ -6,14 +6,14 @@ import Link from "next/link";
 // Icônes Lucide 
 import { Twitter, Youtube, Facebook, Instagram } from "lucide-react";
 
-// Composant footer
+// -- Composant footer --
 export default function Footer() {
   return (
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
       {/* Bloc branding */}
       <aside>
-        <span className="text-lg font-bold">SkillShare.</span>
-        <p className="text-sm opacity-80">
+        <p className="text-lg font-bold">SKILSHARE <span className="text-sm">© All rights reserved</span> </p>
+        <p className="text-sm opacity-70">
           Plateforme de partage des connaissance
         </p>
       </aside>
