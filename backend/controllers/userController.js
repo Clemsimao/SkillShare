@@ -174,8 +174,6 @@ export const getExampleProfiles = async (req, res) => {
   }
 };
 
-// Extension pour controllers/userController.js
-// À ajouter aux fonctions existantes
 
 import { skillService } from '../services/skillService.js';
 
