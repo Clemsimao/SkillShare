@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPublicProfile, updateProfile, deleteProfile, getExampleProfiles } from '../controllers/userController.js';
+import { getPublicProfile, updateProfile, deleteProfile, getExampleProfiles, addUserSkill, removeUserSkill, addUserInterest, removeUserInterest } from '../controllers/userController.js';
 import { authMiddleware } from '../middlewares/auth.js';
 
 const router = express.Router();
@@ -36,5 +36,35 @@ router.put('/profile', authMiddleware, updateProfile);
  * Protégé - authMiddleware requis
  */
 router.delete('/profile', authMiddleware, deleteProfile);
+
+/**
+ * POST /api/users/skills
+ * Ajouter une compétence à son profil
+ * Route protégée (authMiddleware requis)
+ * Body: { "skillId": 123 }
+ */
+router.post('/skills', authMiddleware, addUserSkill);
+
+/**
+ * DELETE /api/users/skills/:skillId
+ * Retirer une compétence de son profil
+ * Route protégée (authMiddleware requis)
+ */
+router.delete('/skills/:skillId', authMiddleware, removeUserSkill);
+
+/**
+ * POST /api/users/interests
+ * Ajouter un intérêt à son profil
+ * Route protégée (authMiddleware requis)
+ * Body: { "skillId": 123 }
+ */
+router.post('/interests', authMiddleware, addUserInterest);
+
+/**
+ * DELETE /api/users/interests/:skillId
+ * Retirer un intérêt de son profil
+ * Route protégée (authMiddleware requis)
+ */
+router.delete('/interests/:skillId', authMiddleware, removeUserInterest);
 
 export default router;

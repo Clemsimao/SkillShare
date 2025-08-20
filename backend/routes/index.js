@@ -1,14 +1,18 @@
 import express from 'express';
 import authRoutes from './auth.js';
 import userRoutes from './users.js'; 
+import skillRoutes from './skills.js'; 
 
 const router = express.Router();
 
-// Monter les routes d'auth sur /auth
+// Routes d'authentification
 router.use('/auth', authRoutes);
 
 // Routes utilisateurs (CRUD profils)
 router.use('/users', userRoutes);
+
+// Routes compétences/catégories (données de référence)
+router.use('/skills', skillRoutes);
 
 // Route de santé
 router.get('/health', (req, res) => {
@@ -31,11 +35,19 @@ router.get('/', (req, res) => {
         logout: 'POST /api/auth/logout',
         profile: 'GET /api/auth/profil'
       },
+      skills: {                              
+        list: 'GET /api/skills',
+        categories: 'GET /api/skills/categories'
+      },
       users: {                              
         examples: 'GET /api/users/examples',
         publicProfile: 'GET /api/users/profile/:id',
         updateProfile: 'PUT /api/users/profile',
-        deleteProfile: 'DELETE /api/users/profile'
+        deleteProfile: 'DELETE /api/users/profile',
+        addSkill: 'POST /api/users/skills',      
+        removeSkill: 'DELETE /api/users/skills/:id',
+        addInterest: 'POST /api/users/interests',    
+        removeInterest: 'DELETE /api/users/interests/:id' 
       },
       utils: {
         health: 'GET /api/health'

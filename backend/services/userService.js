@@ -155,22 +155,6 @@ export const userService = {
    */
   async deleteUserAccount(userId) {
     try {
-      // TODO ÉQUIPE : Décision sur la gestion des relations
-      // 
-      // QUESTIONS À VALIDER :
-      // 1. Tutoriels de l'utilisateur → supprimer ou anonymiser ?
-      // 2. Commentaires → supprimer ou remplacer par "Utilisateur supprimé" ?
-      // 3. Évaluations données/reçues → supprimer ?
-      // 4. Follows → CASCADE DELETE automatique ?
-      //
-      // OPTIONS :
-      // - CASCADE DELETE dans la BDD (contraintes FK)
-      // - Logique applicative (anonymisation)
-      // - Suppression manuelle des relations avant User
-      //
-      // IMPLÉMENTATION TEMPORAIRE : suppression directe
-      // ⚠️ Peut échouer si relations existent sans CASCADE
-
       const deletedRows = await User.destroy({
         where: { user_id: userId }
       });
