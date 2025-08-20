@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0); // 0 = skills, 1 = test
+  const [currentSlide, setCurrentSlide] = useState(0); // 0 = art, 1 = test, etc
 
   const art = [
     'Chant',
@@ -19,12 +19,6 @@ export default function Home() {
     'Sculpture',
   ];
 
-  const test = [
-    'zob',
-    'ouiche',
-    'doudou',
-  ];
-
   const health = [
     'zob',
     'ouiche',
@@ -34,7 +28,14 @@ export default function Home() {
     'doudou',
   ];
 
-  const lists = [art, health, test]; // stocke les deux listes à afficher
+  const test = [
+    'zob',
+    'ouiche',
+    'doudou',
+  ];
+
+
+  const lists = [art, health, test]; // stocke les listes à afficher
   const maxSlide = lists.length - 1;
 
   const nextSlide = () => setCurrentSlide((prev) => (prev === maxSlide ? 0 : prev + 1));
@@ -43,8 +44,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-base-100 flex flex-col items-center justify-between px-4 pt-4 pb-20">
       <Header />
-     
-      {/* Selection d'une catégorie dans la liste */}
+        {/* Selection d'une catégorie dans la liste */}
       <div className="dropdown dropdown-bottom dropdown-center">
       <div tabIndex={0} role="button" className="btn m-1">Catégorie ⬇️</div>
         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">

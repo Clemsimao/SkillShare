@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
       {/* Bloc branding */}
       <aside>
-        <p className="text-lg font-bold">SKILSHARE <span className="text-sm">© All rights reserved</span> </p>
+        <p className="text-lg font-bold">SKILLSHARE <span className="text-sm">© All rights reserved</span> </p>
         <p className="text-sm opacity-70">
           Plateforme de partage des connaissance
         </p>
