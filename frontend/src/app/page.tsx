@@ -50,17 +50,23 @@ export default function Home() {
         {/* ---------- DROPDOWN (menu déroulant catégories) ---------- */}
         {/* Selection d'une catégorie dans la liste */}
       <div className="dropdown dropdown-bottom dropdown-center hidden md:block">
-      <div tabIndex={0} role="button" className="btn m-1">Choisissez une catégorie !</div>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-          <li><a>Art</a></li>
-          <li><a>Bien être / Santé</a></li>
-          <li><a>Environnement</a></li>
-          <li><a>Multiculturalisme</a></li>
-          <li><a>Sciences et éducation</a></li>
-          <li><a>Technologie</a></li>
-          <li><a>Vie Pratique</a></li>
-        </ul>
-      </div>
+  <div tabIndex={0} role="button" className="btn m-1 md:btn-wide">
+    Choisissez une catégorie !
+  </div>
+  <ul
+    tabIndex={0}
+    className="dropdown-content menu bg-base-100 rounded-box z-1 w-72 md:w-64 p-2 shadow-md"
+  >
+    <li><a className="text-sm md:text-base">Art</a></li>
+    <li><a className="text-sm md:text-base">Bien être / Santé</a></li>
+    <li><a className="text-sm md:text-base">Environnement</a></li>
+    <li><a className="text-sm md:text-base">Multiculturalisme</a></li>
+    <li><a className="text-sm md:text-base">Sciences et éducation</a></li>
+    <li><a className="text-sm md:text-base">Technologie</a></li>
+    <li><a className="text-sm md:text-base">Vie Pratique</a></li>
+  </ul>
+</div>
+
 
       {/* ---------- SLIDER (la zone avec la liste des compétences) ---------- */}
       <section className="w-full relative max-w-xl mx-auto">
@@ -89,7 +95,7 @@ export default function Home() {
         </button>
       </section>
       
-      {/* ---------- INDICATEURS d'état(les petits points) ---------- */}
+      {/* ---------- INDICATEURS d'état (les petits points) ---------- */}
       <div className="flex gap-2 mb-6">
         {lists.map((_, i) => (
           <div

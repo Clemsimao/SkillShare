@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function LoginModal() {
   return (
-    <dialog id="my_modal" className="modal">
+    <dialog id="login_modal" className="modal">
       <div className="modal-box flex flex-col items-center justify-center gap-6 pb-16">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -24,9 +24,9 @@ export default function LoginModal() {
         </button>
 
         <div className="flex items-center w-full my-4">
-          <div className="flex-grow border-t border-base-300"></div>
+          <div className="flex-grow border-t border-base-400"></div>
           <span className="fieldset-legend mx-4 text-sm text-base-content/70">OU</span>
-          <div className="flex-grow border-t border-base-300"></div>
+          <div className="flex-grow border-t border-base-400"></div>
         </div>
 
           <label className="label">Email</label>
@@ -37,7 +37,7 @@ export default function LoginModal() {
           <legend className="fieldset italic">Option de connexion</legend>
           <label className="label flex items-center justify-between w-full">
             <span className='legend'>Se souvenir de moi...?</span>
-            <input type="checkbox" defaultChecked className="toggle" />
+            <input type="checkbox" defaultChecked={false} className="toggle" />
           </label>
         </fieldset>
           <button className="btn btn-neutral mt-4">Se connecter</button>
@@ -50,7 +50,7 @@ export default function LoginModal() {
           </div>
           
           <button className="btn btn-accent">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
         </svg>
         Créer un compte</button>
