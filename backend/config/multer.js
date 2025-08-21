@@ -14,7 +14,7 @@ const tutorialStorage = new CloudinaryStorage({
   }),
 });
 
-const uploadTutorial = multer({
+const uploadImageTutorial = multer({
   storage: tutorialStorage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max pour des visuels de tuto
   fileFilter: (req, file, cb) => {
@@ -46,4 +46,4 @@ const uploadAvatar = multer({
   }
 });
 
-export { uploadTutorial, uploadAvatar };
+export { uploadImageTutorial, uploadAvatar };

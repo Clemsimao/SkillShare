@@ -99,6 +99,49 @@ export const updateProfile = async (req, res) => {
 };
 
 /**
+ * Upload / mettre à jour la photo de profil
+ * POST /api/users/profile/picture
+ * Route protégée (authMiddleware requis)
+ * Body: form-data -> field "avatar" (type File)
+ */
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const imageUrl = req.file.path;
+
+    if (!req.file?.path) {
+      return res.status(400).json({
+        success: false,
+        message: 'Aucun fichier reçu'
+      });
+    }
+
+    const updatedUser = await userService.updateUserProfile(userId, {
+      profile_picture: req.file.path
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Photo de profil mise à jour',
+      url: imageUrl
+    });
+
+  } catch (error) {
+    console.error('❌ Erreur uploadProfilePicture:', error);
+
+    if (error.message === 'Utilisateur non trouvé') {
+      return res.status(404).json({ success: false, message: error.message });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la mise à jour de la photo de profil'
+    });
+  }
+};
+
+
+/**
  * Supprimer son compte utilisateur
  * DELETE /api/users/profile
  * Route protégée (authMiddleware requis)
