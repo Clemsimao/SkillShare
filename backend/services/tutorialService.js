@@ -6,7 +6,6 @@ export const tutorialService = {
    * Récupère tous les tutoriels publiés
    * @returns {Array} Liste des tutoriels
    */
-
   async getAllTutorials() {
     try {
       const tutorials = await Tutorial.findAll({
