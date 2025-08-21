@@ -29,7 +29,7 @@ Valider l'installation des différentes dépendances (yes/no)
 - [x] Séparer server/client components: à voir avec l'équipe back => (placer "use client" en tête des composants client)
 - [x] Centraliser les variables d'env => (créer .env.local, n'exposer que via NEXT_PUBLIC_ si nécessaire) => Action faite (valider en check front-back)
 
-## Design system & theming
+## Etape 3: Design system & theming
 
 - [ ] **Activer daisyUI dans Tailwind**  
   (ajouter require('daisyui') dans tailwind.config.js → plugins: [require('daisyui'), ...])
@@ -45,7 +45,7 @@ Valider l'installation des différentes dépendances (yes/no)
 - [ ] **Gérer le dark mode via data-theme**  
   (utiliser document.documentElement.setAttribute('data-theme','dark|light'))
 
-## Accessibilité (a11y)
+## Etape 4: Accessibilité (a11y)
 
 - [ ] **Vérifier le contraste**  
   (Chrome Lighthouse ou axe DevTools)
