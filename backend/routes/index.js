@@ -1,9 +1,10 @@
 import express from 'express';
 import multer from 'multer';
 import authRoutes from './auth.js';
-import userRoutes from './users.js'; 
-import skillRoutes from './skills.js'; 
+import userRoutes from './users.js';
+import skillRoutes from './skills.js';
 import tutoRoutes from './tutorial.js';
+import searchRoutes from './search.js';  // NOUVEAU : Routes de recherche
 
 const router = express.Router();
 
@@ -18,6 +19,9 @@ router.use('/skills', skillRoutes);
 
 // Routes tutoriels (upload images, etc.)
 router.use('/tutorials', tutoRoutes);
+
+// Routes de recherche (protégées)
+router.use('/search', searchRoutes);
 
 // Route de santé
 router.get('/health', (req, res) => {
@@ -40,7 +44,7 @@ router.get('/', (req, res) => {
         logout: 'POST /api/auth/logout',
         profile: 'GET /api/auth/profil'
       },
-      skills: {                              
+      skills: {
         list: 'GET /api/skills',
         categories: 'GET /api/skills/categories'
       },
@@ -49,13 +53,17 @@ router.get('/', (req, res) => {
         publicProfile: 'GET /api/users/profile/:id',
         updateProfile: 'PUT /api/users/profile',
         deleteProfile: 'DELETE /api/users/profile',
-        addSkill: 'POST /api/users/skills (body: {skillId})',   
-        removeSkill: 'DELETE /api/users/skills/:skillId',            
-        addInterest: 'POST /api/users/interests (body: {skillId})',  
-        removeInterest: 'DELETE /api/users/interests/:skillId' 
+        addSkill: 'POST /api/users/skills (body: {skillId})',
+        removeSkill: 'DELETE /api/users/skills/:skillId',
+        addInterest: 'POST /api/users/interests (body: {skillId})',
+        removeInterest: 'DELETE /api/users/interests/:skillId'
       },
       tutorials: {
         uploadImage: 'POST /api/tutorials/:id/image'
+      },
+      search: {
+        users: 'GET /api/search/users?skillId={ID}&page=1 (Auth required)',
+        tutorials: 'GET /api/search/tutorials?skillId={ID}&page=1 (Auth required)'
       },
       utils: {
         health: 'GET /api/health'
