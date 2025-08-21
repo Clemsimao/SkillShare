@@ -109,12 +109,13 @@
 
 - [x] `profile/` – dossier des composants profil
   - [x] `ProfileHeader.tsx` – avatar, pseudo, stats (tutos, abonnés, abonnements)
-  - [x] `ProfileTabs.tsx` – onglets locaux (About / Favoris)
+  - [x] `ProfileInfoList.tsx` : liste “Nom/Prénom, Âge, Sexe, Localisation”.
   - [x] `ProfileAbout.tsx` – bloc "About me" (aperçu)
   - [x] `ProfileFavorites.tsx` – liste courte de tutos favoris (aperçu)
   - [x] `ProfileCounters.tsx` – Abonnements / Abonnées boutons-compteurs
   - [x] `index.ts` – ré-export
 
+ 
 ### **DOSSIER LIB:**------------------------------------
 `src/lib/` - Utilitaires & logique métier:  boîte à outils “non-UI” : tout ce qui n’est ni composant React, ni style, mais qui porte la logique réutilisable et indépendante de l’interface.
 
