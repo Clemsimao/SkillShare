@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
-
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0); // 0 = art, 1 = test, etc
-
   const art = [
     'Chant',
     'Dessin',
@@ -18,7 +16,6 @@ export default function Home() {
     'Photographie',
     'Sculpture',
   ];
-
   const health = [
     'Activités physique et sportive',
     'Beauté et mode',
@@ -28,7 +25,6 @@ export default function Home() {
     '',
     '',
   ];
-
   const test = [
     'gloups',
     'ouiche',
@@ -53,7 +49,7 @@ export default function Home() {
 
         {/* ---------- DROPDOWN (menu déroulant catégories) ---------- */}
         {/* Selection d'une catégorie dans la liste */}
-      <div className="dropdown dropdown-bottom dropdown-center">
+      <div className="dropdown dropdown-bottom dropdown-center hidden md:block">
       <div tabIndex={0} role="button" className="btn m-1">Choisissez une catégorie !</div>
         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
           <li><a>Art</a></li>
@@ -71,7 +67,7 @@ export default function Home() {
         {/* Chevrons de navigation */}
         <button
           onClick={prevSlide}
-          className="absolute -left-4 top-2/5  btn btn-ghost btn-circle"
+          className="absolute -left-4 top-2/5 btn btn-ghost btn-circle md:hidden"
         >
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
@@ -87,7 +83,7 @@ export default function Home() {
 
         <button
           onClick={nextSlide}
-          className="absolute -right-2 top-2/5 btn btn-ghost btn-circle"
+          className="absolute -right-2 top-2/5 btn btn-ghost btn-circle md:hidden"
         >
           <ChevronRightIcon className="w-6 h-6" />
         </button>
