@@ -71,6 +71,7 @@ CREATE TABLE comments (
     content VARCHAR(500) NOT NULL,           -- Contenu du commentaire (limité à 500 chars)
     user_id INTEGER NOT NULL,                -- FK vers user - auteur du commentaire
     tutorial_id INTEGER NOT NULL,            -- FK vers tutorial - tutoriel commenté
+    is_author BOOLEAN NOT NULL DEFAULT false, -- TRUE si l'auteur du tutoriel commente
     created_at TIMESTAMP DEFAULT NOW(),      -- Date de création
     updated_at TIMESTAMP DEFAULT NOW(),      -- Dernière modification
     published_at TIMESTAMP DEFAULT NOW(),    -- Date de publication

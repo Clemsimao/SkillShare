@@ -4,6 +4,7 @@ import authRoutes from './auth.js';
 import userRoutes from './users.js';
 import skillRoutes from './skills.js';
 import tutoRoutes from './tutorial.js';
+import commentRoutes from './comments.js';
 import searchRoutes from './search.js';  // NOUVEAU : Routes de recherche
 
 const router = express.Router();
@@ -19,6 +20,9 @@ router.use('/skills', skillRoutes);
 
 // Routes tutoriels (upload images, etc.)
 router.use('/tutorials', tutoRoutes);
+
+// Routes commentaires (CRUD)
+router.use('/comments', commentRoutes);
 
 // Routes de recherche (protégées)
 router.use('/search', searchRoutes);
@@ -60,6 +64,12 @@ router.get('/', (req, res) => {
       },
       tutorials: {
         uploadImage: 'POST /api/tutorials/:id/image'
+      },
+      comments: {
+        listByTutorial: 'GET /api/comments/tutorial/:tutorialId',
+        create: 'POST /api/comments (body: { tutorial_id, content })',
+        update: 'PUT /api/comments/:id (body: { content })',
+        delete: 'DELETE /api/comments/:id'
       },
       search: {
         users: 'GET /api/search/users?skillId={ID}&page=1 (Auth required)',

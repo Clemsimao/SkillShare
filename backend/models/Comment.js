@@ -21,6 +21,11 @@ Comment.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    is_author: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -41,4 +46,3 @@ Comment.init({
     tableName: 'comments',
     timestamps: false
 });
-
