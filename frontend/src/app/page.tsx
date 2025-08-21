@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0); // 0 = art, 1 = test, etc
@@ -20,20 +20,24 @@ export default function Home() {
   ];
 
   const health = [
-    'zob',
-    'ouiche',
-    'doudou',
-    'zob',
-    'ouiche',
-    'doudou',
+    'Activités physique et sportive',
+    'Beauté et mode',
+    'Bien-être mental et relaxation',
+    'Nutrition',
+    '',
+    '',
+    '',
   ];
 
   const test = [
-    'zob',
+    'gloups',
     'ouiche',
-    'doudou',
+    'doudoudidon',
+    '',
+    '',
+    '',
+    '',
   ];
-
 
   const lists = [art, health, test]; // stocke les listes à afficher
   const maxSlide = lists.length - 1;
@@ -46,7 +50,7 @@ export default function Home() {
       <Header />
         {/* Selection d'une catégorie dans la liste */}
       <div className="dropdown dropdown-bottom dropdown-center">
-      <div tabIndex={0} role="button" className="btn m-1">Catégorie ⬇️</div>
+      <div tabIndex={0} role="button" className="btn m-1">Choisissez une catégorie !</div>
         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
           <li><a>Art</a></li>
           <li><a>Bien être / Santé</a></li>
@@ -62,13 +66,13 @@ export default function Home() {
         {/* Chevrons de navigation */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle"
+          className="absolute -left-4 top-2/5  btn btn-ghost btn-circle"
         >
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
 
         {/* Liste affichée */}
-        <ul className="list-disc ml-6 pr-8 space-y-1 mb-6 transition-all duration-300">
+        <ul className="list-none ml-6 pr-8 space-y-1 mb-6 transition-all duration-300">
           {lists[currentSlide].map((item, index) => (
             <li key={index} className="bg-base-200 p-2 rounded">
               {item}
@@ -78,7 +82,7 @@ export default function Home() {
 
         <button
           onClick={nextSlide}
-          className="absolute right-0 top-1/2 -translate-y-1/2 btn btn-ghost btn-circle"
+          className="absolute -right-2 top-2/5 btn btn-ghost btn-circle"
         >
           <ChevronRightIcon className="w-6 h-6" />
         </button>
