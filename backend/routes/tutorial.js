@@ -1,11 +1,11 @@
 import express from 'express';
-import upload from '../config/multer.js';
+import { uploadImageTutorial } from '../config/multer.js';
 import { Tutorial } from '../models/index.js';
 
 const router = express.Router();
 
 // Route POST /tutorials/:id/image
-router.post('/:id/image', upload.single('image'), async (req, res) => {
+router.post('/:id/image', uploadImageTutorial.single('image'), async (req, res) => {
     console.log('Route image appelée', req.params.id, req.file);
   try {
     const tutorialId = req.params.id;
