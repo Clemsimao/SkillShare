@@ -42,12 +42,16 @@ export default function Home() {
   const lists = [art, health, test]; // stocke les listes à afficher
   const maxSlide = lists.length - 1;
 
+  // ---------- FONCTIONS DE NAVIGATION ----------
   const nextSlide = () => setCurrentSlide((prev) => (prev === maxSlide ? 0 : prev + 1));
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? maxSlide : prev - 1));
 
+  // ---------- RENDU (HTML JSX) ----------
   return (
     <main className="min-h-screen bg-base-100 flex flex-col items-center justify-between px-4 pt-4 pb-20">
       <Header />
+
+        {/* ---------- DROPDOWN (menu déroulant catégories) ---------- */}
         {/* Selection d'une catégorie dans la liste */}
       <div className="dropdown dropdown-bottom dropdown-center">
       <div tabIndex={0} role="button" className="btn m-1">Choisissez une catégorie !</div>
@@ -62,6 +66,7 @@ export default function Home() {
         </ul>
       </div>
 
+      {/* ---------- SLIDER (la zone avec la liste des compétences) ---------- */}
       <section className="w-full relative max-w-xl mx-auto">
         {/* Chevrons de navigation */}
         <button
@@ -87,8 +92,8 @@ export default function Home() {
           <ChevronRightIcon className="w-6 h-6" />
         </button>
       </section>
-
-      {/* Petits points indicateurs */}
+      
+      {/* ---------- INDICATEURS d'état(les petits points) ---------- */}
       <div className="flex gap-2 mb-6">
         {lists.map((_, i) => (
           <div
