@@ -47,3 +47,4 @@ const uploadAvatar = multer({
 });
 
 export { uploadImageTutorial, uploadAvatar };
+export default uploadImageTutorial;
