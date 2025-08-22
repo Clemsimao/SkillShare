@@ -58,6 +58,29 @@ export const updateProfile = async (req, res) => {
       });
     }
 
+    // VALIDATION CONTENT 
+    if (updateData.content !== undefined) {
+      if (typeof updateData.content !== 'string') {
+        return res.status(400).json({
+          success: false,
+          message: 'La description doit être du texte'
+        });
+      }
+      
+      if (updateData.content.length > 255) {
+        return res.status(400).json({
+          success: false,
+          message: 'La description ne peut pas dépasser 255 caractères'
+        });
+      }
+
+      // Convertir une description vide en null pour la base de données
+     // Évite d'avoir des strings vides "" et privilégie null (plus propre) 
+      if (updateData.content.trim().length === 0) {
+        updateData.content = null;
+      }
+    }
+
     const updatedUser = await userService.updateUserProfile(userId, updateData);
 
     res.status(200).json({

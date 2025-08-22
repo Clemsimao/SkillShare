@@ -47,6 +47,10 @@ User.init({
         type: DataTypes.STRING(255),
         allowNull: true
     },
+    content: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,

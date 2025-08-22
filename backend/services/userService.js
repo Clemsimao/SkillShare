@@ -45,6 +45,7 @@ export const userService = {
         firstName: user.first_name,
         lastName: user.last_name,
         username: user.username,
+        content: user.content,
         birthdate: user.birthdate,
         gender: user.gender,
         profilePicture: user.profile_picture,
@@ -83,6 +84,7 @@ export const userService = {
       if (updateData.lastName) allowedFields.last_name = updateData.lastName;
       if (updateData.username) allowedFields.username = updateData.username;
       if (updateData.email) allowedFields.email = updateData.email;
+      if (updateData.content) allowedFields.content = updateData.content;
       if (updateData.gender !== undefined) allowedFields.gender = updateData.gender;
       
       // Mise à jour automatique du timestamp
@@ -136,6 +138,7 @@ export const userService = {
         firstName: updatedUser.first_name,
         lastName: updatedUser.last_name,
         username: updatedUser.username,
+        content: updatedUser.content,
         birthdate: updatedUser.birthdate,
         gender: updatedUser.gender,
         profilePicture: updatedUser.profile_picture,
@@ -208,6 +211,7 @@ export const userService = {
         firstName: user.first_name,
         lastName: user.last_name,
         username: user.username,
+        content: user.content,
         profilePicture: user.profile_picture,
         skills: user.skills?.map(skill => ({
           id: skill.skill_id,

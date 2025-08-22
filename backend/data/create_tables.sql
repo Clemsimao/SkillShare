@@ -40,6 +40,7 @@ CREATE TABLE "user" (
     birthdate DATE,                          -- Date de naissance (optionnelle)
     gender VARCHAR(1) CHECK (gender IN ('M', 'F', 'A')), -- M=Masculin, F=Féminin, A=Autre
     profile_picture VARCHAR(255),            -- URL/chemin vers photo de profil
+    content VARCHAR(255), 
     created_at TIMESTAMP DEFAULT NOW(),      -- Date de création du compte
     updated_at TIMESTAMP DEFAULT NOW()       -- Dernière modification du profil
 );
