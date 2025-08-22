@@ -28,21 +28,26 @@ export default function ColorTheme() {
     <header className="w-full flex items-center justify-between mb-4">
       <LoginModal /> {/* Modale de connexion */}
 
-      <div className="flex items-center gap-2">
-        <Image
-          src="/logo.png"
-          alt="Logo SkillShare"
-          width={40}
-          height={40}
-          className="rounded"
-        />
-        <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold">
-          SKILLSHARE
+      <div className="flex items-center gap-1">
+        <div className="relative w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-24 xl:h-24">
+          <Image
+            src="/logo.png"
+            alt="Logo SkillShare"
+            layout="fill"
+            objectFit="contain"
+            className="rounded"
+          />
+        </div>
+        <h1 className="text-2xl font-extrabold text-base-700 dark:text-white sm:text-sm md:text-3xl lg:text-5xl xl:text-5xl">
+          SKILL
+          <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+            SHARE
+          </span>
         </h1>
       </div>
 
       {/* Groupe d'éléments alignés à droite */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* -- Label "toggle" clair/sombre -- */}
         <label className="swap swap-rotate">
           <input 
