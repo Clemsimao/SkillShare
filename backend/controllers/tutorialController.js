@@ -90,12 +90,19 @@ export const createTutorial = async (req, res) => {
     const userId = req.user.id; // Ici on récupère l'ID depuis le token JWT
     const { title, content, picture, video_link } = req.body;
 
-    // Vériffication du champs obligatoires
+    // Vériffication des champs obligatoires
 
     if (!title) {
       return res.status(400).json({
         success: false,
         message: "Le titre est obligatoire pour créer un tutoriel",
+      });
+    }
+
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        message: "Vous devez ajouter un contenu pour créer un tutoriel",
       });
     }
 
@@ -217,7 +224,7 @@ export const deleteTutorial = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({
         success: false,
-        message: "vous n'êtes pas autorisé à supprimer le tutoriel.",
+        message: "Vous n'êtes pas autorisé à supprimer le tutoriel.",
       });
     }
 

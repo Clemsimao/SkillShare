@@ -15,7 +15,7 @@ Tutorial.init({
     },
     content: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false
     },
     picture: {
         type: DataTypes.STRING(255),

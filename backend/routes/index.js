@@ -2,8 +2,12 @@ import express from "express";
 import authRoutes from "./auth.js";
 import userRoutes from "./users.js";
 import skillRoutes from "./skills.js";
-import tutorialRoutes from "./tutorials.js";
-import searchRoutes from "./search.js";
+import tutorialRoutes from "./tutorial.js";
+//import searchRoutes from "./search.js";
+
+const router = express.Router();
+
+
 
 // Routes d'authentification
 router.use("/auth", authRoutes);
@@ -18,7 +22,7 @@ router.use("/skills", skillRoutes);
 router.use("/tutorials", tutorialRoutes);
 
 // NOUVEAU : Routes de recherche (protégées)
-router.use("/search", searchRoutes);
+//router.use("/search", searchRoutes);
 
 // Route de santé
 router.get("/health", (req, res) => {
