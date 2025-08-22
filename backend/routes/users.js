@@ -1,6 +1,8 @@
 import express from 'express';
-import { getPublicProfile, updateProfile, deleteProfile, getExampleProfiles, addUserSkill, removeUserSkill, addUserInterest, removeUserInterest } from '../controllers/userController.js';
+import { getPublicProfile, updateProfile, deleteProfile, getExampleProfiles, addUserSkill, removeUserSkill, addUserInterest, removeUserInterest, uploadProfilePicture } from '../controllers/userController.js';
 import { authMiddleware } from '../middlewares/auth.js';
+
+import { uploadAvatar } from '../config/multer.js';
 
 const router = express.Router();
 
@@ -29,6 +31,19 @@ router.get('/profile/:id', getPublicProfile);
  * Protégé - authMiddleware requis
  */
 router.put('/profile', authMiddleware, updateProfile);
+
+/**
+ * POST /api/users/profile/picture
+ * Upload / mettre à jour la photo de profil
+ * Protégé - authMiddleware requis
+ * Body (form-data): key "avatar" (type File)
+ */
+router.post(
+  '/profile/picture',
+  authMiddleware,
+  uploadAvatar.single('avatar'),
+  uploadProfilePicture
+);
 
 /**
  * DELETE /api/users/profile

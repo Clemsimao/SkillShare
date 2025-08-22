@@ -1,13 +1,17 @@
-import express from "express";
-import authRoutes from "./auth.js";
-import userRoutes from "./users.js";
-import skillRoutes from "./skills.js";
-import tutorialRoutes from "./tutorial.js";
-//import searchRoutes from "./search.js";
+import express from 'express';
+import multer from 'multer';
+import authRoutes from './auth.js';
+import userRoutes from './users.js';
+import skillRoutes from './skills.js';
+
+import tutorialRoutes from "./tutorial.js"; // Modification PR
+
+// import tutoRoutes from './tutorial.js'; 
+
+import commentRoutes from './comments.js';
+import searchRoutes from './search.js';
 
 const router = express.Router();
-
-
 
 // Routes d'authentification
 router.use("/auth", authRoutes);
@@ -22,7 +26,16 @@ router.use("/skills", skillRoutes);
 router.use("/tutorials", tutorialRoutes);
 
 // NOUVEAU : Routes de recherche (protégées)
-//router.use("/search", searchRoutes);
+router.use("/search", searchRoutes);
+
+// Routes tutoriels (upload images, etc.)
+// router.use('/tutorials', tutoRoutes);
+
+// Routes commentaires (CRUD)
+router.use('/comments', commentRoutes);
+
+// Routes de recherche (protégées)
+router.use('/search', searchRoutes);
 
 // Route de santé
 router.get("/health", (req, res) => {
@@ -46,6 +59,7 @@ router.get("/", (req, res) => {
         profile: "GET /api/auth/profil",
       },
       skills: {
+
         list: "GET /api/skills",
         categories: "GET /api/skills/categories",
       },
@@ -68,10 +82,19 @@ router.get("/", (req, res) => {
         delete: "DELETE /api/tutorials/:id",
         uploadImage: "POST /api/tutorials/:id/image",
       },
+      
       search: {
-        users: "GET /api/search/users?skillId={ID}&page=1",
-        tutorials: "GET /api/search/tutorials?skillId={ID}&page=1",
+        users: 'GET /api/search/users?skillId={ID}&page=1 (Auth required)',
+        tutorials: 'GET /api/search/tutorials?skillId={ID}&page=1 (Auth required)'
       },
+      
+        comments: {
+        listByTutorial: 'GET /api/comments/tutorial/:tutorialId',
+        create: 'POST /api/comments (body: { tutorial_id, content })',
+        update: 'PUT /api/comments/:id (body: { content })',
+        delete: 'DELETE /api/comments/:id'
+      },
+
       utils: {
         health: "GET /api/health",
       },
@@ -80,3 +103,16 @@ router.get("/", (req, res) => {
 });
 
 export default router;
+// Gestion des erreurs d'upload
+router.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // Une erreur de Multer est survenue lors de l'upload
+    console.error('Erreur Multer:', err);
+    return res.status(500).json({ success: false, message: 'Erreur lors de l\'upload de l\'image' });
+  } else if (err) {
+    // Une erreur inconnue est survenue
+    console.error('Erreur serveur:', err);
+    return res.status(500).json({ success: false, message: 'Erreur serveur' });
+  }
+  next();
+});
