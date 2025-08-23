@@ -9,6 +9,8 @@ import { UserInterest } from './UserInterest.js';
 import { UserFollow } from './UserFollow.js';
 import { UserRating } from './UserRating.js';
 import { TutorialRating } from './TutorialRating.js';
+import { Conversation } from './Conversation.js';
+import { Message } from './Message.js';
 
 // =====================================================
 // ASSOCIATIONS - Relations entre les modèles
@@ -139,6 +141,56 @@ Tutorial.belongsToMany(User, {
 });
 
 
+// -----------------------------------------------
+// 3. RELATIONS MESSAGERIE INSTANTANÉE
+// -----------------------------------------------
+
+// User -> Conversation (participant 1) - un user peut être user1 dans plusieurs conversations
+User.hasMany(Conversation, {
+    foreignKey: 'user1_id',
+    as: 'conversationsAsUser1',
+    onDelete: 'CASCADE'
+});
+Conversation.belongsTo(User, {
+    foreignKey: 'user1_id', 
+    as: 'participant1'
+});
+
+// User -> Conversation (participant 2) - un user peut être user2 dans plusieurs conversations  
+User.hasMany(Conversation, {
+    foreignKey: 'user2_id',
+    as: 'conversationsAsUser2',
+    onDelete: 'CASCADE'
+});
+Conversation.belongsTo(User, {
+    foreignKey: 'user2_id',
+    as: 'participant2'
+});
+
+// Conversation -> Message (une conversation a plusieurs messages)
+// CASCADE DELETE : supprime messages quand conversation supprimée
+Conversation.hasMany(Message, {
+    foreignKey: 'conversation_id',
+    as: 'messages',
+    onDelete: 'CASCADE'
+});
+Message.belongsTo(Conversation, {
+    foreignKey: 'conversation_id',
+    as: 'conversation'
+});
+
+// User -> Message (un utilisateur peut envoyer plusieurs messages)
+// CASCADE DELETE : supprime messages quand user supprimé
+User.hasMany(Message, {
+    foreignKey: 'sender_id', 
+    as: 'sentMessages',
+    onDelete: 'CASCADE'
+});
+Message.belongsTo(User, {
+    foreignKey: 'sender_id',
+    as: 'sender'
+});
+
 export {
     sequelize,
     User,
@@ -150,5 +202,7 @@ export {
     UserInterest,
     UserFollow,
     UserRating,
-    TutorialRating
+    TutorialRating,
+    Conversation, 
+    Message    
 };
