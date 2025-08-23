@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { sequelize } from './models/index.js';
+import http from 'http'; // Module Node.js pour créer un serveur HTTP compatible avec Socket.io
+import { initializeSocket } from './socket/socketServer.js';
 
 import apiRoutes from './routes/index.js';
 
@@ -63,9 +65,15 @@ app.use('*', (req, res) => {
 // Démarrage du serveur
 async function startServer() {
   await initDatabase();
+
+  // Créer le serveur HTTP (nécessaire pour Socket.io)
+  const server = http.createServer(app);
+
+  // Initialiser WebSocket avec socketServer.js
+  const { io } = initializeSocket(server);
   
-  app.listen(PORT, () => {
-    console.log(`Serveur démarré sur le port ${PORT}`);
+  server.listen(PORT, () => {
+    console.log(`Serveur HTTP + WebSocket démarré sur le port ${PORT}`);
     console.log(`URL: http://localhost:${PORT}`);
   });
 }
