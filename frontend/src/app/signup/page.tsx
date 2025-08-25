@@ -23,61 +23,61 @@ export default function SigninPage() {
               {/* --- Section informations personnelles --- */}
             <div className="space-y-4">
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text-bold">Prénom</span>
+                <label className="label md:justify-between md:items-center">
+                  <span className="label-text">Prénom</span>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Jean" />
                 </label>
-                <input type="text" className="input italic opacity-50 input-bordered-" placeholder="Jean" />
               </div>
               
               <div className="form-control">
-                <label className="label">
+                <label className="label md:justify-between md:items-center">
                   <span className="label-text">Nom</span>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Dupont" />
                 </label>
-                <input type="text" className="input italic opacity-50 input-bordered" placeholder="Dupont" />
               </div>
               
               <div className="form-control">
-                <label className="label">
+                <label className="label md:justify-between md:items-center">
                   <span className="label-text">Âge</span>
+                  <input type="number" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="25" min="13" max="120" />
                 </label>
-                <input type="number" className="input italic opacity-50 input-bordered" placeholder="25" min="13" max="120" />
               </div>
               
               <div className="form-control">
-                <label className="label">
+                <label className="label md:justify-between md:items-center">
                   <span className="label-text">Pseudo</span>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="mon_pseudo" />
                 </label>
-                <input type="text" className="input italic opacity-50 input-bordered" placeholder="mon_pseudo" />
               </div>
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label md:justify-between md:items-center">
                 <span className="label-text">Localisation</span>
+                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Paris, France" />
               </label>
-              <input type="text" className="input italic opacity-50 input-bordered" placeholder="Paris, France" />
             </div>
 
               {/* --- Section libre about me --- */}
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">À propos de moi</span>
+                <label className="label md:justify-between md:items-start">
+                  <span className="label-text md:pt-3">À propos de moi</span>
+                  <textarea 
+                    className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-64 md:ml-4" 
+                    placeholder="Parlez-nous de vous, vos passions, vos centres d'intérêts..."
+                  ></textarea>
                 </label>
-                <textarea 
-                  className="textarea italic opacity-50 textarea-bordered h-24" 
-                  placeholder="Parlez-nous de vous, vos passions, vos centres d'intérêts..."
-                ></textarea>
               </div>
 
-              {/* --- Section stats abo --- */}
-              <div className="stats stats-horizontal shadow mt-4">
-                <div className="stat">
-                  <div className="stat-value text-primary">127</div>
-                  <div className="stat-desc">Abonnés</div>
+              {/* --- Section stats abo avec largeur fixe --- */}
+              <div className="stats stats-horizontal shadow mt-8">
+                <div className="stat text-center flex-1">
+                  <div className="stat-value text-primary">34</div>
+                  <div className="stat-desc px-4">Abonnés</div>
                 </div>
-                <div className="stat">
-                  <div className="stat-value text-primary">89</div>
-                  <div className="stat-desc">Abonnements</div>
+                <div className="stat text-center flex-1">
+                  <div className="stat-value text-primary">12</div>
+                  <div className="stat-desc px-1">Abonnements</div>
                 </div>
               </div>
 

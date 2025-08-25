@@ -12,7 +12,7 @@
 ## Structure de dossiers
 
 ### **DOSSIER APP:**------------------------------------
-`src/app/` - Contient les pages accessibles via des URLs: `/login, /signup, /skills, etc.`
+`src/app/` - Contient les PAGES accessibles via des URLs: `/login, /signup, /skills, etc.`
 
 #### Fichiers racine
 - [x] `favicon.ico`
