@@ -10,6 +10,7 @@ import tutorialRoutes from "./tutorial.js"; // Modification PR
 
 import commentRoutes from './comments.js';
 import searchRoutes from './search.js';
+import ratingRoutes from './rating.js';
 
 const router = express.Router();
 
@@ -34,8 +35,9 @@ router.use("/search", searchRoutes);
 // Routes commentaires (CRUD)
 router.use('/comments', commentRoutes);
 
-// Routes de recherche (protégées)
-router.use('/search', searchRoutes);
+
+// Routes évaluations (notes utilisateurs + likes/dislikes tutoriels)
+router.use('/ratings', ratingRoutes);
 
 // Route de santé
 router.get("/health", (req, res) => {
@@ -93,6 +95,14 @@ router.get("/", (req, res) => {
         create: 'POST /api/comments (body: { tutorial_id, content })',
         update: 'PUT /api/comments/:id (body: { content })',
         delete: 'DELETE /api/comments/:id'
+      },
+
+      ratings: {
+        rateUser: 'POST /api/ratings/users/:id/rate (body: { rating: 1..5 })',
+        userRatingsList: 'GET /api/ratings/users/:id/ratings',
+        userRatingAverage: 'GET /api/ratings/users/:id/rating',
+        rateTutorial: 'POST /api/ratings/tutorials/:id/rate (body: { isLiked: boolean })',
+        tutorialRatings: 'GET /api/ratings/tutorials/:id/ratings'
       },
 
       utils: {
