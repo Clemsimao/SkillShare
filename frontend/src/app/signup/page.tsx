@@ -24,14 +24,14 @@ export default function SigninPage() {
             <div className="space-y-4">
               <div className="form-control">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                  <label className="label-text font-bold">Pseudo *</label>
+                  <label className="label-text font-bold">Pseudo <span className='text-sm text-accent'>*</span></label>
                   <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="RingBearer1337" />
                 </div>
               </div>
 
               <div className="form-control">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                  <label className="label-text font-bold">Email *</label>
+                  <label className="label-text font-bold">Email <span className='text-sm text-accent'>*</span></label>
                   <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="FrodoBaggins@lotr.com" />
                 </div>
               </div>
@@ -75,17 +75,22 @@ export default function SigninPage() {
                   ></textarea>
                 </div>
               </div>
-
+              
               {/* --- Section stats abo avec largeur fixe --- */}
               <div className="stats stats-horizontal shadow mt-8">
                 <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">344</div>
+                  <div className="stat-value text-primary">233</div>
                   <div className="stat-desc px-4">Abonnés</div>
                 </div>
                 <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">12</div>
+                  <div className="stat-value text-primary">17</div>
                   <div className="stat-desc px-1">Abonnements</div>
                 </div>
+              </div>
+
+              {/* --- Indication champs obligatoires --- */}
+              <div className="text-sm italic text-accent mt-6 mb-4">
+                * Champs obligatoires
               </div>
 
               {/* --- Section d'assaut brr brr nan je deconne c'est une simu des 2 boutons --- */}
