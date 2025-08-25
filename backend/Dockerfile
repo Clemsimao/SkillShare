@@ -1,4 +1,7 @@
-FROM node:20-alpine 
+FROM node:20
+
+# Installer netcat pour l'attente Postgres qui n' est pas present dans node:20
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

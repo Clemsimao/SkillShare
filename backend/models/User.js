@@ -15,11 +15,11 @@ User.init({
         allowNull: false
     },
     first_name: {
-        type:DataTypes.STRING(50),
+        type: DataTypes.STRING(50),
         allowNull: false
     },
     username: {
-        type:DataTypes.STRING(25),
+        type: DataTypes.STRING(25),
         allowNull: false,
         unique: true
     },
@@ -54,12 +54,12 @@ User.init({
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: literal ('NOW()') //literal nous permet d'insérer du SQL brut 
+        defaultValue: literal('NOW()') //literal nous permet d'insérer du SQL brut 
     },
     updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: literal ('NOW()') 
+        defaultValue: literal('NOW()') 
     }
 },
 
