@@ -89,7 +89,7 @@ export default function SigninPage() {
               </div>
 
               {/* --- Indication champs obligatoires --- */}
-              <div className="text-sm italic text-accent mt-6 mb-4">
+              <div className="text-sm italic text-accent mt-6">
                 * Champs obligatoires
               </div>
 
