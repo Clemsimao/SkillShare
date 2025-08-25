@@ -4,7 +4,7 @@ import { followService } from "../services/followService.js";
 
 export const toggleFollow = async (req, res) => {
   try {
-    const followerId = req.user.user_id; // Ici l'ID de l'utilisateur connecté
+    const followerId = req.user.id; // Ici l'ID de l'utilisateur connecté
     const followedId = Number.parseInt(req.params.id, 10); // ID de l'utilisateur ciblé. 10 pour lire la chaîne comme un nombre décimal (en base 10).”
 
     const result = await followService.toggleFollow(followerId, followedId);
@@ -29,7 +29,7 @@ export const toggleFollow = async (req, res) => {
 
 export const getFollowing = async (req, res) => {
   try {
-    const userId = req.user.user_id;
+    const userId = req.user.id;
     const followingList = await followService.getFollowing(userId);
 
     return res.status(200).json({
@@ -50,7 +50,7 @@ export const getFollowing = async (req, res) => {
 
 export const getFollowers = async (req, res) => {
   try {
-    const userId = req.user.user_id;
+    const userId = req.user.id;
     const followersList = await followService.getFollowers(userId);
 
     return res.status(200).json({

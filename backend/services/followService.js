@@ -1,4 +1,4 @@
-import { User, UserFollow } from "../models.index.js";
+import { User, UserFollow } from "../models/index.js";
 
 export const followService = {
   /**
@@ -12,7 +12,7 @@ export const followService = {
     try {
       if (followerId === followedId) {
         throw new Error(
-          "T'abonner à toi même n'est pas la solution, fais plus de contenus bro"
+          "Impossible de s'abonner à soi même"
         );
       }
 
@@ -112,3 +112,4 @@ export const followService = {
     }
   },
 };
+
