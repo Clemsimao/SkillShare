@@ -8,19 +8,19 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js",
-    "seeds": "node seeds/index.js",
-    "test:db": "node -e \"import('./config/database.js').then(db => db.default.authenticate()).then(() => console.log('✅ DB OK')).catch(e => console.error('❌ DB Error:', e))\"",
-    "docker:build": "docker-compose build",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f",
-    "reset:db": "npm run docker:down && docker volume rm skillswap_postgres_data && npm run docker:up",
-    "lint": "eslint . --ext .js",
-    "format": "prettier --write .",
-    "test": "jest",
-    "test:watch": "jest --watch"
+  "dev": "nodemon app.js",
+  "start": "node app.js",
+  "seeds": "node seeds/index.js",
+  "test:db": "node -e \"import('./config/database.js').then(db => db.default.authenticate()).then(() => console.log('✅ DB OK')).catch(e => console.error('❌ DB Error:', e))\"",
+  "docker:build": "docker-compose build",
+  "docker:up": "docker-compose up -d",
+  "docker:down": "docker-compose down",
+  "docker:logs": "docker-compose logs -f",
+  "reset:db": "npm run docker:down && docker volume rm skillswap_postgres_data && npm run docker:up",
+  "lint": "eslint . --ext .js",
+  "format": "prettier --write .",
+  "test": "docker exec skillshare_back node --experimental-vm-modules node_modules/jest/bin/jest.js",
+  "test:watch": "docker exec skillshare_back node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },
   "keywords": [
     "skillshare",
@@ -54,9 +54,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "transform": {},
     "testMatch": ["**/tests/**/*.test.js"],
-    "setupFilesAfterEnv": ["<rootDir>/tests/setup/jest.setup.js"],
-    "testTimeout": 10000
+    "testTimeout": 10000,
+    "setupFilesAfterEnv": ["<rootDir>/tests/setUp/jest.setup.js"]
   }
 }

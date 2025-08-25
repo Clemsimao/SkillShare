@@ -148,7 +148,7 @@ export const conversationService = {
 
     } catch (error) {
       console.error('❌ Erreur getConversationsByUser:', error);
-      throw new Error('Erreur lors de la récupération des conversations');
+      throw error; // Relancer l'erreur originale pour tests précis
     }
   },
 
@@ -165,9 +165,12 @@ export const conversationService = {
       }
 
       const [affectedRows] = await Conversation.update(
-        { last_message_at: new Date() }, // Utiliser new Date() comme userService
-        { where: { conversation_id: conversationId } }
-      );
+      { last_message_at: new Date() }, // Utiliser new Date() comme userService
+      { 
+        where: { conversation_id: conversationId },
+        validate: false  // Désactiver validations pour UPDATE simple
+      }
+    );
 
       if (affectedRows === 0) {
         throw new Error('Conversation non trouvée');

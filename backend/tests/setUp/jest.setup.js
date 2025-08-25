@@ -1,22 +1,14 @@
-/**
- * =====================================================
- * SETUP GLOBAL JEST
- * =====================================================
- * 
- * Fichier exécuté AVANT tous les tests
- * - Configure les variables d'environnement pour tests
- * - Switch automatiquement vers la DB test
- * - Setup global pour tous les fichiers de test
- * =====================================================
- */
+import { testDb } from './testDb.js';
 
-// Forcer l'utilisation de la DB test pour tous les tests
-process.env.NODE_ENV = 'test';
+// Setup global avant tous les tests
+beforeAll(async () => {
+  await testDb.setup();
+});
 
-// Remplacer l'URL de la DB par la version test
-process.env.DATABASE_URL = 'postgresql://skillshare:skillshare@postgres:5432/skillshare_test';
+// Nettoyage global après tous les tests  
+afterAll(async () => {
+  await testDb.teardown();
+});
 
-// Autres configs spécifiques aux tests
-process.env.JWT_SECRET = 'test_jwt_secret_key';
-
-console.log('Configuration test activée - DB: skillshare_test');
+// Configuration Jest - pas de jest.setTimeout() dans setup files
+// Le timeout est géré dans package.json: "testTimeout": 10000
