@@ -1,4 +1,3 @@
-// controllers/authController.js
 import { authService } from '../services/authService.js';
 import { User } from '../models/index.js';
 
@@ -45,6 +44,7 @@ export const register = async (req, res) => {
       birthdate
     });
     
+
     const token = authService.generateAccessToken({
       id: newUser.user_id,      // ← user_id au lieu de id
       email: newUser.email

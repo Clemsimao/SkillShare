@@ -11,11 +11,33 @@ const PORT = process.env.PORT || 8000;
 
 // Middlewares de sécurité
 app.use(helmet());
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
-    : 'http://localhost:3000',
-  credentials: true
+  // ORIGINS AUTORISÉS
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL  // Production : utilise la variable d'env
+    : [                         // Développement : tableau d'URLs autorisées
+        'http://localhost:3000',    // Next.js standard
+        'http://127.0.0.1:3000'     // Alternative localhost (certains navigateurs)
+      ],
+  
+  // COOKIES & AUTHENTIFICATION
+  credentials: true,            // Permet l'envoi de cookies/JWT avec les requêtes
+  
+  // MÉTHODES HTTP AUTORISÉES
+  methods: [                    // Liste explicite des méthodes permises
+    'GET',                      // Lecture des données
+    'POST',                     // Création de nouvelles ressources
+    'PUT',                      // Mise à jour complète
+    'DELETE',                   // Suppression
+    'OPTIONS'                   // Requêtes preflight (automatiques du navigateur)
+  ],
+  
+  // HEADERS AUTORISÉS DANS LES REQUÊTES
+  allowedHeaders: [
+    'Content-Type',             // Type de contenu (application/json, etc.)
+    'Authorization',            // CRUCIAL : pour envoyer "Bearer <token>"
+  ]
 }));
 
 // Middlewares de parsing
