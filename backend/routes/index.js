@@ -1,12 +1,13 @@
-import express from "express";
-import multer from "multer";
-import authRoutes from "./auth.js";
-import userRoutes from "./users.js";
-import skillRoutes from "./skills.js";
-import tutorialRoutes from "./tutorial.js"; 
-import commentRoutes from "./comments.js";
-import searchRoutes from "./search.js";
-import followRoutes from "./follow.js";
+import express from 'express';
+import multer from 'multer';
+import authRoutes from './auth.js';
+import userRoutes from './users.js';
+import skillRoutes from './skills.js';
+import tutorialRoutes from "./tutorial.js";
+import commentRoutes from './comments.js';
+import searchRoutes from './search.js';
+import followRoutes from './follow.js';
+import ratingRoutes from './rating.js';
 
 const router = express.Router();
 
@@ -28,6 +29,8 @@ router.use("/comments", commentRoutes);
 // Routes follow (protégées)
 router.use("/follow", followRoutes);
 
+// Routes évaluations (notes utilisateurs + likes/dislikes tutoriels)
+router.use('/ratings', ratingRoutes);
 // Routes de recherche (protégées)
 router.use("/search", searchRoutes);
 
@@ -96,6 +99,14 @@ router.get("/", (req, res) => {
           "GET /api/follow/following (Auth required) - Liste des utilisateurs suivis",
         followers:
           "GET /api/follow/followers (Auth required) - Liste des abonnés",
+      },
+
+      ratings: {
+        rateUser: 'POST /api/ratings/users/:id/rate (body: { rating: 1..5 })',
+        userRatingsList: 'GET /api/ratings/users/:id/ratings',
+        userRatingAverage: 'GET /api/ratings/users/:id/rating',
+        rateTutorial: 'POST /api/ratings/tutorials/:id/rate (body: { isLiked: boolean })',
+        tutorialRatings: 'GET /api/ratings/tutorials/:id/ratings'
       },
 
       utils: {
