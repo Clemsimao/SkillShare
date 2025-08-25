@@ -3,35 +3,24 @@ import multer from "multer";
 import authRoutes from "./auth.js";
 import userRoutes from "./users.js";
 import skillRoutes from "./skills.js";
-
-import tutorialRoutes from "./tutorial.js"; // Modification PR
-
-// import tutoRoutes from './tutorial.js';
-
+import tutorialRoutes from "./tutorial.js"; 
 import commentRoutes from "./comments.js";
 import searchRoutes from "./search.js";
-
 import followRoutes from "./follow.js";
 
 const router = express.Router();
 
-// Routes d'authentification
+// Route d'authentification
 router.use("/auth", authRoutes);
 
-// Routes utilisateurs (CRUD profils)
+// Route utilisateurs (CRUD profils)
 router.use("/users", userRoutes);
 
-// Routes compétences/catégories (données de référence)
+// Route compétences/catégories (données de référence)
 router.use("/skills", skillRoutes);
 
-// NOUVEAU : Routes tutoriels (CRUD + upload)
+// Route tutoriels (CRUD + upload)
 router.use("/tutorials", tutorialRoutes);
-
-// NOUVEAU : Routes de recherche (protégées)
-router.use("/search", searchRoutes);
-
-// Routes tutoriels (upload images, etc.)
-// router.use('/tutorials', tutoRoutes);
 
 // Routes commentaires (CRUD)
 router.use("/comments", commentRoutes);
