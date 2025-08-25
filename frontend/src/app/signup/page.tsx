@@ -61,7 +61,7 @@ export default function SigninPage() {
             <div className="form-control">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                 <label className="label-text">Localisation</label>
-                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="La Comté, Terres du milieu" />
+                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="La Comté, Terres du Milieu" />
               </div>
             </div>
 
@@ -83,7 +83,7 @@ export default function SigninPage() {
                   <div className="stat-desc px-4">Abonnés</div>
                 </div>
                 <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">17</div>
+                  <div className="stat-value text-primary">174</div>
                   <div className="stat-desc px-1">Abonnements</div>
                 </div>
               </div>
