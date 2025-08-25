@@ -1,7 +1,7 @@
 // Fichier username/page.tsx
 import Link from "next/link";
 
-// ---------- Sections réutilisables (profil) ----------
+// ---------- Sections réutilisables (pour le composant profil) ----------
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileInfoList from "@/components/profile/ProfileInfoList";
 import ProfileAbout from "@/components/profile/ProfileAbout";
@@ -14,7 +14,7 @@ type PageProps = { params: { username: string } };
 export default async function ProfilePage( { params }: PageProps) {
     const { username } = params; 
 
-    // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts)
+    // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts = connexion front > back)
     const user = {
         name: "Mathieu Dupont",
         avatarURL: undefined as string | undefined,

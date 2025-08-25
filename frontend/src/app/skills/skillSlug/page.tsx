@@ -50,7 +50,7 @@ export default async function SkillListPage({
   const totalPages = calcTotalPages(total, PAGE_SIZE);
 
 
-  // -----------------Render principal - retourner la structure de la page-----------------
+  // --------Render principal - retourner la structure de la page----------- 
   return (
     <main className="max-w-5xl mx-auto w-full px-4 py-6 space-y-6">
       {/* Entête de page: afficher le nom du skill (catégorie choisie)*/}
