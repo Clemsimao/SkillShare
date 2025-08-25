@@ -10,7 +10,7 @@ import { getSkillBySlug, getTutorialsBySkill } from "@/lib/api-client";
 const PAGE_SIZE = 6;
 
  
-//--------  Helpers de pagination - fonctions pures et simples------------
+//-------- Helpers de pagination - fonctions pures et simples------------
  
 // calculer le nombre total de pages
 function calcTotalPages(totalItems: number, pageSize: number) {
@@ -94,7 +94,7 @@ export default async function SkillListPage({
                 <div className="w-full aspect-video rounded-md bg-base-100 flex items-center justify-center">
                   {/* Afficher une image si disponible, sinon un pictogramme simple */}
                   {tuto.coverUrl ? (
-                    // Laisser Next/Image pour plus tard si besoin d'optimisation
+                    // OPTIONNEL => Laisser Next/Image pour plus tard si besoin d'optimisation
                     // <Image src={tuto.coverUrl} alt="" fill className="object-cover rounded-md" />
                     <img
                       src={tuto.coverUrl}
