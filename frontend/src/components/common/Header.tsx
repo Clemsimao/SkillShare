@@ -38,7 +38,7 @@ export default function ColorTheme() {
             className="rounded"
           />
         </div>
-        <h1 className="text-2xl font-extrabold text-base-700 dark:text-white sm:text-md md:text-3xl lg:text-5xl xl:text-5xl">
+        <h1 className="text-2xl font-extrabold text-base-700 sm:text-md md:text-3xl lg:text-5xl xl:text-5xl">
           SKILL
           <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
             SHARE

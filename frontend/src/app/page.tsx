@@ -73,7 +73,7 @@ export default function Home() {
         {/* Chevrons de navigation */}
         <button
           onClick={prevSlide}
-          className="absolute -left-4 top-2/5 btn btn-ghost btn-circle md:hidden"
+          className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
         >
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
@@ -89,7 +89,7 @@ export default function Home() {
 
         <button
           onClick={nextSlide}
-          className="absolute -right-2 top-2/5 btn btn-ghost btn-circle md:hidden"
+          className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
         >
           <ChevronRightIcon className="w-6 h-6" />
         </button>
