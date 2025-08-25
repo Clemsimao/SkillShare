@@ -23,56 +23,63 @@ export default function SigninPage() {
               {/* --- Section informations personnelles --- */}
             <div className="space-y-4">
               <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Prénom</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Jean" />
-                </label>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                  <label className="label-text font-bold">Pseudo *</label>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="RingBearer1337" />
+                </div>
+              </div>
+
+              <div className="form-control">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                  <label className="label-text font-bold">Email *</label>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="FrodoBaggins@lotr.com" />
+                </div>
+              </div>
+
+              <div className="form-control">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                  <label className="label-text">Prénom</label>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="Frodo" />
+                </div>
               </div>
               
               <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Nom</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Dupont" />
-                </label>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                  <label className="label-text">Nom</label>
+                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="Baggins" />
+                </div>
               </div>
               
               <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Âge</span>
-                  <input type="number" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="25" min="13" max="120" />
-                </label>
-              </div>
-              
-              <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Pseudo</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="mon_pseudo" />
-                </label>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                  <label className="label-text">Âge</label>
+                  <input type="number" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="106" min="13" max="120" />
+                </div>
               </div>
             </div>
 
             <div className="form-control">
-              <label className="label md:justify-between md:items-center">
-                <span className="label-text">Localisation</span>
-                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Paris, France" />
-              </label>
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                <label className="label-text">Localisation</label>
+                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64" placeholder="La Comté, Terres du milieu" />
+              </div>
             </div>
 
               {/* --- Section libre about me --- */}
               <div className="form-control">
-                <label className="label md:justify-between md:items-start">
-                  <span className="label-text md:pt-3">À propos de moi</span>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
+                  <label className="label-text md:pt-3">À propos de moi</label>
                   <textarea 
-                    className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-64 md:ml-4" 
+                    className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-64" 
                     placeholder="Parlez-nous de vous, vos passions, vos centres d'intérêts..."
                   ></textarea>
-                </label>
+                </div>
               </div>
 
               {/* --- Section stats abo avec largeur fixe --- */}
               <div className="stats stats-horizontal shadow mt-8">
                 <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">34</div>
+                  <div className="stat-value text-primary">344</div>
                   <div className="stat-desc px-4">Abonnés</div>
                 </div>
                 <div className="stat text-center flex-1">
@@ -92,7 +99,7 @@ export default function SigninPage() {
                 {!isLoggedIn ? (
                   <button className="btn btn-neutral w-full">Créer le compte</button>
                 ) : (
-                  <button className="btn btn-outline btn-primary w-full">Éditer le profil</button>
+                  <button className="btn btn-outline btn-primary flex-1">Éditer le profil</button>
                 )}
               </div> */}
 
