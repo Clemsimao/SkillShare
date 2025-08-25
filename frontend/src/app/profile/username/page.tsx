@@ -16,22 +16,22 @@ export default async function ProfilePage( { params }: PageProps) {
 
     // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts)
     const user = {
-        name: "Joe Jackson",
+        name: "Mathieu Dupont",
         avatarURL: undefined as string | undefined,
-        location: "Paris",
-        stats: { tutorials: 8, followers: 51, foloowing: 12 },
+        location: "Lyon, France",
+        stats: { tutorials: 8, followers: 51, following: 12 },
         about:
-            "Artiste et formatrice passionnée par l’illustration et la photo.",
+            "Artiste et formateur passionné par l’illustration et la photo.",
         favorites: [{ id: "t1", title: "Tuto 1" }, { id: "t2", title: "Tuto 2" }, { id: "t3", title: "Tuto 3" }],
-        info: { fullname: "Amina Benali", age: 26, gender: "Femme", city: "Paris" },
+        info: { fullname: "Mathieu Dupond", age: 37, gender: "Homme", city: "Lyon" },
     };
 
     return (
-        <main className="mx-auto max-w-md p-4 md:max-w-3xl">
-            <h1 className="font-poppins text-2xl md:text-3xl mb-3">Mon profil</h1>
+        <main className="mx-auto max-w-[1100px] p-4 md:p-6 lg:p-8">
+            <h1 className="font-poppins text-2xl md:text-3xl mb-4 text-center md:text-left">Mon profil</h1>
 
             {/* Layout mobile → 2 colonnes à partir de md */}
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-[300px_1fr]">
                 {/* Colonne gauche */}
                 <div className="space-y-3">
                     <ProfileHeader
@@ -49,21 +49,23 @@ export default async function ProfilePage( { params }: PageProps) {
                         city={user.info.city}
                     />
 
-                    <Link
-                        href={`/profile/${username}/about`}
-                        className="btn btn-outline w-full"
-                    >
-                        Edit profil
-                    </Link>
-
                     <ProfileCounters
                         followers={user.stats.followers}
                         following={user.stats.following}
                     />
-                </div>
+                 <Link
+                        href={`/profile/${username}/about`}
+                        className="btn w-full text-white 
+                                    dark:bg-[#19362D] dark:hover:bg-[#145242] 
+                                    dark:border-none"
+                    >
+                        Éditer profil
+                    </Link>
+
+                                 </div>
 
                 {/* Colonne droite (2 colonnes: haut / bas) */}
-                <div className="md:col-span-2 space-y-3">
+                <div className="md:col-span-1 md:col-start-2 space-y-4">
                     <ProfileAbout
                         username={user.username}
                         about={user.about}
