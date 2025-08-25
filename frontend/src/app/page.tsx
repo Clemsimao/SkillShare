@@ -1,46 +1,107 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0); // 0 = art, 1 = test, etc
-  const art = [
-    'Chant',
-    'Dessin',
-    'Écriture',
-    'Musique',
-    'Peinture',
-    'Photographie',
-    'Sculpture',
-  ];
-  const health = [
-    'Activités physique et sportive',
-    'Beauté et mode',
-    'Bien-être mental et relaxation',
-    'Nutrition',
-    '',
-    '',
-    '',
-  ];
-  const test = [
-    'gloups',
-    'ouiche',
-    'doudoudidon',
-    '',
-    '',
-    '',
-    '',
-  ];
+  const [currentSlide, setCurrentSlide] = useState(0); // 0 = art, 1 = health, 2 = environment
+  
+  // Données des catégories avec leurs listes
+  const categories = {
+    'Art': [
+      'Chant',
+      'Dessin',
+      'Écriture',
+      'Musique',
+      'Peinture',
+      'Photographie',
+      'Sculpture',
+    ],
+    'Bien être / Santé': [
+      'Activités physique et sportive',
+      'Beauté et mode',
+      'Bien-être mental et relaxation',
+      'Nutrition',
+      'Massage et thérapies',
+      'Méditation',
+      'Yoga et pilates',
+    ],
+    'Environnement': [
+      'Agriculture durable',
+      'Énergies renouvelables',
+      'Jardinage écologique',
+      'Recyclage et upcycling',
+      'Zéro déchet',
+      'Permaculture',
+      'Éco-construction',
+    ]
+  };
 
-  const lists = [art, health, test]; // stocke les listes à afficher
+  // États pour gérer la catégorie sélectionnée
+  const [selectedCategory, setSelectedCategory] = useState<keyof typeof categories | null>(null);
+  const [dropdownLabel, setDropdownLabel] = useState('Choisissez une catégorie !');
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détection de la taille d'écran et initialisation
+  useEffect(() => {
+    const checkIsMobile = () => {
+      const mobile = window.innerWidth < 768; // md breakpoint
+      setIsMobile(mobile);
+      
+      // Si on est sur mobile et qu'aucune catégorie n'est sélectionnée
+      if (mobile && selectedCategory === null) {
+        setSelectedCategory('Art');
+        // On garde le label dropdown par défaut pour desktop
+      }
+      // Si on passe en desktop et qu'Art était sélectionné par défaut
+      else if (!mobile && selectedCategory === 'Art') {
+        // Optionnel : remettre à null pour forcer la sélection
+        // setSelectedCategory(null);
+        // setDropdownLabel('Choisissez une catégorie !');
+      }
+    };
+
+    // Check initial
+    checkIsMobile();
+
+    // Écouter les changements de taille
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, [selectedCategory]);
+
+  // Conversion en tableau pour la navigation par slider
+  const categoryNames = Object.keys(categories);
+  const lists = categoryNames.map(name => categories[name]);
   const maxSlide = lists.length - 1;
 
   // ---------- FONCTIONS DE NAVIGATION ----------
-  const nextSlide = () => setCurrentSlide((prev) => (prev === maxSlide ? 0 : prev + 1));
-  const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? maxSlide : prev - 1));
+  const nextSlide = () => {
+    const nextIndex = currentSlide === maxSlide ? 0 : currentSlide + 1;
+    setCurrentSlide(nextIndex);
+    const newCategory = categoryNames[nextIndex];
+    setSelectedCategory(newCategory);
+    setDropdownLabel(newCategory);
+  };
+
+  const prevSlide = () => {
+    const prevIndex = currentSlide === 0 ? maxSlide : currentSlide - 1;
+    setCurrentSlide(prevIndex);
+    const newCategory = categoryNames[prevIndex];
+    setSelectedCategory(newCategory);
+    setDropdownLabel(newCategory);
+  };
+
+  // Fonction pour gérer la sélection depuis le dropdown
+  const handleCategorySelect = (categoryName: keyof typeof categories) => {
+    if (categories[categoryName]) {
+      setSelectedCategory(categoryName);
+      setDropdownLabel(categoryName);
+      setCurrentSlide(categoryNames.indexOf(categoryName));
+    }
+  };
 
   // ---------- RENDU (HTML JSX) ----------
   return (
@@ -55,59 +116,104 @@ export default function Home() {
         {/* ---------- DROPDOWN (menu déroulant catégories) ---------- */}
         {/* Selection d'une catégorie dans la liste */}
         <div className="dropdown dropdown-bottom dropdown-center hidden md:block mb-8">
-          <div tabIndex={0} role="button" className="btn m-1 md:btn-wide">
-            Choisissez une catégorie !
+          <div tabIndex={0} role="button" className="btn btn-accent btn-soft m-1 md:btn-wide">
+            {dropdownLabel}
           </div>
           <ul
             tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-1 w-72 md:w-64 p-2 shadow-md"
           >
-            <li><a className="text-sm md:text-base">Art</a></li>
-            <li><a className="text-sm md:text-base">Bien être / Santé</a></li>
-            <li><a className="text-sm md:text-base">Environnement</a></li>
-            <li><a className="text-sm md:text-base">Multiculturalisme</a></li>
-            <li><a className="text-sm md:text-base">Sciences et éducation</a></li>
-            <li><a className="text-sm md:text-base">Technologie</a></li>
-            <li><a className="text-sm md:text-base">Vie Pratique</a></li>
+            <li>
+              <a 
+                className="text-sm md:text-base" 
+                onClick={() => handleCategorySelect('Art')}
+              >
+                Art
+              </a>
+            </li>
+            <li>
+              <a 
+                className="text-sm md:text-base" 
+                onClick={() => handleCategorySelect('Bien être / Santé')}
+              >
+                Bien être / Santé
+              </a>
+            </li>
+            <li>
+              <a 
+                className="text-sm md:text-base" 
+                onClick={() => handleCategorySelect('Environnement')}
+              >
+                Environnement
+              </a>
+            </li>
+            <li><a className="text-sm md:text-base opacity-50 cursor-not-allowed">Multiculturalisme</a></li>
+            <li><a className="text-sm md:text-base opacity-50 cursor-not-allowed">Sciences et éducation</a></li>
+            <li><a className="text-sm md:text-base opacity-50 cursor-not-allowed">Technologie</a></li>
+            <li><a className="text-sm md:text-base opacity-50 cursor-not-allowed">Vie Pratique</a></li>
           </ul>
         </div>
 
         {/* ---------- SLIDER (la zone avec la liste des compétences) ---------- */}
-        <section className="w-full relative max-w-xl mx-auto mb-8">
-          {/* Chevrons de navigation */}
-          <button
-            onClick={prevSlide}
-            className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </button>
+        {selectedCategory ? (
+          <section className="w-full relative max-w-xl mx-auto mb-8">
+            {/* Titre de la catégorie actuelle (visible sur mobile) */}
+            <div className="flex justify-center mb-4 md:hidden">
+              <h2 className="btn btn-accent pointer-events-none text-center w-50">
+                {selectedCategory}
+              </h2>
+            </div>
 
-          {/* Liste affichée */}
-          <ul className="list-none ml-6 pr-8 space-y-1 mb-6 transition-all duration-300">
-            {lists[currentSlide].map((item, index) => (
-              <li key={index} className="bg-base-200 p-2 rounded">
-                {item}
-              </li>
-            ))}
-          </ul>
+            {/* Chevrons de navigation */}
+            <button
+              onClick={prevSlide}
+              className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
+            >
+              <ChevronLeftIcon className="w-6 h-6" />
+            </button>
 
-          <button
-            onClick={nextSlide}
-            className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
-          >
-            <ChevronRightIcon className="w-6 h-6" />
-          </button>
-        </section>
+            {/* Liste affichée */}
+            <ul className="list-none ml-6 pr-8 space-y-1 mb-6 transition-all duration-300">
+              {categories[selectedCategory].map((item, index) => (
+                <li key={index} className="bg-base-200 p-2 rounded">
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={nextSlide}
+              className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
+            >
+              <ChevronRightIcon className="w-6 h-6" />
+            </button>
+          </section>
+        ) : (
+          <section className="w-full max-w-xl mx-auto mb-8 text-center">
+            <div className="bg-base-200 p-8 rounded-lg">
+              {/* SVG centré */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-20 h-20 mx-auto mb-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+              </svg>
+
+              <p className="text-sm text-base-content/60">
+                Sélectionnez une catégorie ci-dessus
+              </p>
+            </div>
+          </section>
+        )}
         
         {/* ---------- INDICATEURS d'état (les petits points) ---------- */}
-        <div className="flex gap-2">
-          {lists.map((_, i) => (
-            <div
-              key={i}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-neutral' : 'bg-neutral/40'}`}
-            />
-          ))}
-        </div>
+        {selectedCategory && (
+          <div className="flex gap-2">
+            {categoryNames.map((_, i) => (
+              <div
+                key={i}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-neutral' : 'bg-neutral/40'}`}
+              />
+            ))}
+          </div>
+        )}
 
       </main>
 
