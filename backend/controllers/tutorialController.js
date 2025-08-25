@@ -53,14 +53,14 @@ export const getTutorialById = async (req, res) => {
     const { id } = req.params;
 
     //Validation ID
-    if (!id || isNaN(parseInt(id))) {
+    if (!id || Number.isNaN(Number.parseInt(id))) {
       return res.status(400).json({
         success: false,
         message: "ID tutorial invalide",
       });
     }
 
-    const tutorial = await tutorialService.getTutorialById(parseInt(id));
+    const tutorial = await tutorialService.getTutorialById(Number.parseInt(id));
 
     if (!tutorial) {
       return res.status(404).json({
@@ -150,7 +150,7 @@ export const updateTutorial = async (req, res) => {
     const { title, content, picture, video_link } = req.body;
 
     //validation ID
-    if (!id || isNaN(parseInt(id))) {
+    if (!id || Number.isNaN(Number.parseInt(id))) {
       return res.status(400).json({
         success: false,
         message: "ID tutorial invalide",
@@ -159,7 +159,7 @@ export const updateTutorial = async (req, res) => {
 
     // Vérifier que le tutoriel existe et appartient à l'utilisateur
     const existingTutorial = await tutorialService.getTutorialById(
-      parseInt(id)
+      Number.parseInt(id)
     );
     if (!existingTutorial) {
       return res.status(404).json({
@@ -184,12 +184,15 @@ export const updateTutorial = async (req, res) => {
     }
 
     // Appel service
-    const updatedTutorial = await tutorialService.updateTutorial(parseInt(id), {
-      title,
-      content,
-      picture,
-      video_link,
-    });
+    const updatedTutorial = await tutorialService.updateTutorial(
+      Number.parseInt(id),
+      {
+        title,
+        content,
+        picture,
+        video_link,
+      }
+    );
 
     if (!updatedTutorial) {
       return res.status(500).json({
