@@ -6,6 +6,16 @@ import LoginModal from './LoginModal'; // Ajuste le chemin si on restructure - F
 
 export default function ColorTheme() {
   const [isDark, setIsDark] = useState(false);
+  
+  // État de connexion - à adapter selon votre système d'auth
+  // Exemples possibles de conditions - à check les back:
+  // const { user, isLoggedIn } = useAuth(); // Context
+  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn); // Redux
+  // const { data: session } = useSession(); // NextAuth
+  // const isLoggedIn = !!session;
+  
+  // Simulation temporaire - à remplacer par votre vraie logique d'auth
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // (1/2) Cette fonction permet de basculer entre les thèmes "forest" et "retro" en modifiant l'attribut data-theme du document HTML et en stockant le thème sélectionné dans localStorage.
   useEffect(() => {
@@ -23,6 +33,14 @@ export default function ColorTheme() {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     setIsDark(!isDark);
+  };
+
+  // Fonction pour aller vers la page profil
+  const goToProfile = () => {
+    // Navigation vers la page profil - à adapter selon votre router
+    // router.push('/profil'); // Next.js router
+    // navigate('/profil'); // React router
+    console.log('Redirection vers la page profil');
   };
 
   return (
@@ -43,7 +61,7 @@ export default function ColorTheme() {
           <h1 className="text-2xl font-extrabold text-base-700 sm:text-md md:text-3xl lg:text-5xl xl:text-5xl">
             SKILL
             <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
-              SHARE
+            SHARE
             </span>
           </h1>
       </div>
@@ -78,9 +96,30 @@ export default function ColorTheme() {
             dialog?.showModal();
           }}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
           </svg>
         </button>
+
+        {/* -- Bouton conditionnel : Connexion OU Profil -- */}
+        {!isLoggedIn ? (
+          // Bouton de connexion (non connecté)
+          <button className="btn btn-circle" onClick={()=>{
+              const dialog = document.getElementById('login_modal') as HTMLDialogElement | null;
+              dialog?.showModal();
+            }}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+            </svg>
+          </button>
+        ) : (
+          // Bouton profil (connecté)
+          <button className="btn btn-circle" onClick={goToProfile}>
+            {/* Placeholder pour l'icône profil - vous pourrez insérer votre picto ici */}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </button>
+        )}
 
         {/* -- Menu burger -- */}
         <div className="dropdown dropdown-end">
