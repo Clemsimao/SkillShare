@@ -31,10 +31,10 @@ Valider l'installation des différentes dépendances (yes/no)
 
 ## Etape 3: Design system & theming
 
-- [ ] **Activer daisyUI dans Tailwind**  
+- [x] **Activer daisyUI dans Tailwind**  
   (ajouter require('daisyui') dans tailwind.config.js → plugins: [require('daisyui'), ...])
 
-- [ ] **Ajouter les thèmes daisyUI**  
+- [x] **Ajouter les thèmes daisyUI**  
   (définir daisyui: { themes: ['light','dark','cupcake', ...] } dans tailwind.config.js)
 
 - [ ] **Installer une lib d'icônes complémentaire (facultatif)**  
@@ -42,7 +42,7 @@ Valider l'installation des différentes dépendances (yes/no)
   npm i @phosphor-icons/react
   ```
 
-- [ ] **Gérer le dark mode via data-theme**  
+- [x] **Gérer le dark mode via data-theme**  
   (utiliser document.documentElement.setAttribute('data-theme','dark|light'))
 
 ## Etape 4: Accessibilité (a11y)
@@ -139,7 +139,7 @@ Valider l'installation des différentes dépendances (yes/no)
 - [ ] **Valider les entrées côté client**  
   (valider avec Zod/RHF avant envoi)
 
-- 
+-
 ## Internationalisation (si nécessaire)
 
 - [ ] **Installer next-intl (App Router friendly)**  

@@ -24,7 +24,7 @@ export default function Home() {
     ]
   };
 
-  // -- États pour gérer la catégorie sélectionnée --
+  // États pour gérer la catégorie sélectionnée
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof categories | null>(null);
   const [dropdownLabel, setDropdownLabel] = useState('Choisissez une catégorie !');
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -32,7 +32,7 @@ export default function Home() {
   const categoryNames = Object.keys(categories) as (keyof typeof categories)[];
   const maxSlide = categoryNames.length - 1;
 
-  // -- Fonction de détection de la taille d'écran et initialisation --
+  // --- Fonction de détection de la taille d'écran et initialisation ---
   useEffect(() => {
     const checkIsMobile = () => {
       const mobile = window.innerWidth < 768; // md breakpoint

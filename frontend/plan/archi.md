@@ -5,7 +5,7 @@
 - Sur la **Landing (`/`)** : affichage du menu déroulant de catégories et des **skills dynamiques** sur la même page.
 - Clic sur un **skill** → navigation vers `/skills/[skillSlug]` qui affiche la liste des tutos liés.
 - Clic sur un **tuto** → navigation vers `/tutorials/[id]` (page détail).  
-- ⚠️ **Commentaires** : **affichés sous le contenu du tuto** sur `/tutorials/[id]` (pas de route séparée).
+- **Commentaires** : **affichés sous le contenu du tuto** sur `/tutorials/[id]` (pas de route séparée).
 
 ---
 
@@ -31,10 +31,12 @@
   - [x] `[skillSlug]/`
     - [x] `page.tsx` <!-- Cette page récupère tous les tutos liés à un skill cliqué depuis la landing -->
 
-#### Routes tutos
-- [ ] `tutorials/`
-  - [ ] `[id]/`
-    - [ ] `page.tsx` (Écran détail d’un tuto **avec bloc "Commentaires" en dessous du contenu**)
+#### Routes tutorials
+- [x] `tutorials/`
+  - [x] `[id]/`
+    - [x] `page.tsx` (Écran détail d’un tuto **avec bloc "Commentaires" en dessous du contenu**)
+  - [x] `new/`
+    - [x] `page.tsx` (Écran création d'un tutorial)
 
 #### Routes profil
 - [x] `profile/`
@@ -44,6 +46,12 @@
       - [x] `page.tsx` (Écran "À propos")
     - [x] `favorites/`
       - [x] `page.tsx` (Écran "Favoris")
+
+#### Routes catégories
+- [x] `categories/`
+  - [x] `[categoriesSlug]/`
+    - [x] `page.tsx` (Écran Profil)
+- [x] `page.tsx` (Écran "À propos")
 
 #### Routes galerie
 - [x] `gallery/`
