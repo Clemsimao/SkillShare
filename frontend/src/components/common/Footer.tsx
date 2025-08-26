@@ -88,10 +88,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
-        {renderBranding()}
-        {renderSocialLinks()}
-      </div>
       <FormContactModal /> 
     </footer>
   );

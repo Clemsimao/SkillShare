@@ -206,7 +206,6 @@ export default function Home() {
           </div>
         )}
       </main>
-
       <div className="p-4">
         <ContentPreview />
       </div>
