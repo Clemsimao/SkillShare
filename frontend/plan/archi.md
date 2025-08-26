@@ -32,9 +32,9 @@
     - [x] `page.tsx` <!-- Cette page récupère tous les tutos liés à un skill cliqué depuis la landing -->
 
 #### Routes tutos
-- [ ] `tutorials/`
-  - [ ] `[id]/`
-    - [ ] `page.tsx` (Écran détail d’un tuto **avec bloc "Commentaires" en dessous du contenu**)
+- [x] `tutorials/`
+  - [x] `[id]/`
+    - [x] `page.tsx` (Écran détail d’un tuto **avec bloc "Commentaires" en dessous du contenu**)
 
 #### Routes profil
 - [x] `profile/`
@@ -44,6 +44,12 @@
       - [x] `page.tsx` (Écran "À propos")
     - [x] `favorites/`
       - [x] `page.tsx` (Écran "Favoris")
+
+#### Routes catégories
+- [x] `categories/`
+  - [x] `[categoriesSlug]/`
+    - [x] `page.tsx` (Écran Profil)
+- [x] `page.tsx` (Écran "À propos")
 
 #### Routes galerie
 - [x] `gallery/`
