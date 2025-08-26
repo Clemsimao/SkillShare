@@ -24,7 +24,7 @@ export default function ContentPreview({
     <section className="w-full max-w-5xl mx-auto px-4">
       {/* Bloc preview d'un tuto */}
       <div className="rounded-xl bg-base-200 shadow-lg p-4 mb-4 border"
-           style={{ borderColor: ACCENT }}>
+          style={{ borderColor: ACCENT }}>
         <h2 className="text-base font-semibold mb-3" style={{ color: ACCENT }}>
           {title}
         </h2>
@@ -35,7 +35,7 @@ export default function ContentPreview({
 
       {/* Bloc profils */}
       <div className="rounded-xl bg-base-200 shadow-lg p-4 border"
-           style={{ borderColor: ACCENT }}>
+          style={{ borderColor: ACCENT }}>
         <h3 className="text-sm font-medium mb-3">Profils que vous pourriez apprécier…</h3>
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {profiles.slice(0, 3).map((p) => (

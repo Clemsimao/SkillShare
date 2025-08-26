@@ -13,7 +13,7 @@ export default function ProfileHeader(props:  {
     location?: string;
     stats: Stats;
 }) {
-    const { name, username, avatarURL, location, stats } = props;
+    const { name, username, avatarUrl, location, stats } = props;
 
     // ---------- Rendu JSX ----------
     return (
@@ -27,7 +27,7 @@ export default function ProfileHeader(props:  {
           <div className="w-16 rounded-full ring ring-base-300 ring-offset-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={avatarURL ?? `https://api.dicebear.com/9.x/initials/svg?seed=${username}`}
+              src={avatarUrl ?? `https://api.dicebear.com/9.x/initials/svg?seed=${username}`}
               alt={`Avatar de ${name}`}
             />
           </div>

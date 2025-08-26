@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import "./globals.css"; // Styles Tailwind + DaisyUI
 
 // --- Import Fonts ---
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Schoolbell} from "next/font/google";
 
 // --- Import Components ---
 import ClientLayout from "@/components/ClientLayout";
@@ -24,6 +24,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const schoolbell = Schoolbell({
+  subsets: ['latin'],
+  weight: ["400"],
+});
+
 // --- METADATA (SEO) ---
 export const metadata: Metadata = {
   title: "Skill Share",
@@ -31,14 +36,13 @@ export const metadata: Metadata = {
 };
 
 // --- ROOT LAYOUT (Serveur) ---
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html
+      lang="fr"
+      className={`${schoolbell.className} ${geistSans.variable} ${geistMono.variable}`}
+    >
+      <body className="antialiased">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
