@@ -2,7 +2,7 @@
 
 import { notFound } from "next/navigation";
 
-// Mock de données pour tester sans backend
+// Type données pour tester sans backend
 
 type Tutorial = {
   id: string;
@@ -26,7 +26,7 @@ const MOCK_TUTORIALS: Tutorial[] = [
   {
     id: "1",
     title: "Tuto 1",
-    author: "Mathieu Dupont",
+    author: "Mathieu Dupond",
     summary: "Introduction au dessin",
     content:
       "Découvrir les bases: tenue du crayon, types de traits, échauffements. Travailler la régularité avec des exercices courts.",

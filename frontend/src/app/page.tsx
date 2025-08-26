@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
-import Header from "@/components/common/Header";
-
 import ContentPreview from '@/components/home/contentPreview';
-import Footer from "@/components/common/Footer";
 
 export default function Home() {
   // Données simulées des catégories avec leurs listes
@@ -166,12 +163,9 @@ export default function Home() {
     </section>
   );
 
-  // --- Structure Landing Page ---
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col px-4 pt-4">
-      <Header />
-
-      <main className="flex-1 flex flex-col items-center justify-center py-8">
+    <div className="px-4 pt-4">
+      <div className="flex flex-col items-center justify-center py-8">
         {/* --- Dropdown --- */}
         <div className="dropdown dropdown-bottom dropdown-center hidden md:block mb-8">
           <div 
@@ -194,7 +188,7 @@ export default function Home() {
         
         {/* --- Indicateur de navigation (les petits points) --- */}
         {selectedCategory && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-8">
             {categoryNames.map((_, i) => (
               <div
                 key={i}
@@ -205,12 +199,9 @@ export default function Home() {
             ))}
           </div>
         )}
-      </main>
-      <div className="p-4">
+
+        {/* --- ContentPreview intégré --- */}
         <ContentPreview />
-      </div>
-      <div className="p-4">
-        <Footer />
       </div>
     </div>
   );
