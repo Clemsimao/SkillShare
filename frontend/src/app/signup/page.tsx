@@ -97,7 +97,7 @@ export default function SigninPage() {
       </div>
       <div className="stat text-center flex-1">
         <div className="stat-value text-primary">174</div>
-        <div className="stat-desc px-4">Abonnements</div>
+        <div className="stat-desc px-1">Abonnements</div>
       </div>
     </div>
   );
