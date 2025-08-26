@@ -6,7 +6,7 @@ import { API_CONFIG } from "./config";
 
 /**
  * Stocke le token JWT dans le localStorage. Rappel localStorage : c'est un espace de stockage intégré dans le navigateur.
- * @param token - Le token JWT reçu après login ou création de profil
+ //* @param token - Le token JWT reçu après login ou création de profil
  */
 
 /*------------------------------enregistrer le token JWT-----------------------------------------------------
