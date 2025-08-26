@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Twitter, Youtube, Facebook, Instagram } from "lucide-react";
+import FormContactModal from "@/components/common/FormContactModal";
 
 export default function Footer() {
   const socialLinks = [
@@ -18,6 +19,15 @@ export default function Footer() {
             SKILLSHARE <span className="text-sm">© All rights reserved</span>
           </p>
           <p className="text-sm opacity-70">Plateforme de partage des connaissances</p>
+          <button
+            onClick={() => {
+              const dlg = document.getElementById('formcontact_modal') as HTMLDialogElement | null;
+              dlg?.showModal();
+            }}
+            className="mt-2 text-sm underline hover:text-primary"
+          >
+            Contactez-nous
+          </button>
         </div>
 
         {/* Réseaux sociaux (centré en mobile) */}
@@ -39,6 +49,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <FormContactModal /> 
     </footer>
   );
 }
