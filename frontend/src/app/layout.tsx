@@ -1,23 +1,22 @@
-'use client';
+// Fichier app/layout.tsx: Layout serveur avec metadata
 
-// ----------- IMPORTS NEXT.JS -----------
+// --- Import NEXT.JS ---
 import type { Metadata } from "next";
 
-// ----------- IMPORTS STYLES -----------
+// --- Import Style ---
 import "./globals.css"; // Styles Tailwind + DaisyUI
 
-// ----------- IMPORTS FONTS -----------
+// --- Import Fonts ---
 import { Geist, Geist_Mono } from "next/font/google";
 
-// ----------- IMPORTS COMPOSANTS -----------
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
-import { use } from "react";
+// --- Import Components ---
+import ClientLayout from "@/components/ClientLayout";
+// Ca permet d'utiliser des composants client dans le layout serveur [FF]
 
-// ----------- CONFIG FONTS -----------
+// --- CONFIG FONTS ---
 const geistSans = Geist({
-  variable: "--font-geist-sans",  
-  subsets: ["latin"],             
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
@@ -25,13 +24,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// ----------- METADATA (SEO) -----------
+// --- METADATA (SEO) ---
 export const metadata: Metadata = {
-  title: "Skill Share",            
-  description: "Plateforme de partage des connaissances",  
+  title: "Skill Share",
+  description: "Plateforme de partage des connaissances",
 };
 
-// ----------- ROOT LAYOUT -----------
+// --- ROOT LAYOUT (Serveur) ---
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,15 +39,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen bg-base-100 flex flex-col">
-          <Header />
-          
-          <main className="flex-1">
-            {children}
-          </main>
-          
-          <Footer />
-        </div>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
