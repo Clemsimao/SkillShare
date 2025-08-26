@@ -1,294 +1,86 @@
-import axios, {
-  type AxiosInstance,
-  type AxiosResponse,
-  type AxiosError,
-  type AxiosRequestConfig,
-} from "axios";
-import { API_CONFIG, DEFAULT_HEADERS, HTTP_STATUS, ENV } from "./config";
+import axios, { AxiosInstance, AxiosError } from 'axios';
+import { API_CONFIG } from './config';
 
-// 🔐 Token utilities (sera détaillé dans token.ts)
-// Import temporaire - sera remplacé par import depuis token.ts
+// GESTION DU TOKEN JWT
+// Ces fonctions gèrent le stockage du token d'authentification
 const getStoredToken = (): string | null => {
-  if (typeof globalThis.window === "undefined") return null;
-  try {
-    return globalThis.localStorage.getItem(API_CONFIG.TOKEN_KEY);
-  } catch {
-    return null;
-  }
+  // Vérification côté serveur - localStorage n'existe pas sur le serveur
+  if (typeof window === 'undefined') return null;
+  // Récupère le token depuis le localStorage du navigateur
+  return localStorage.getItem(API_CONFIG.TOKEN_KEY);
 };
 
 const removeStoredToken = (): void => {
-  if (typeof globalThis.window === "undefined") return;
-  try {
-    globalThis.localStorage.removeItem(API_CONFIG.TOKEN_KEY);
-  } catch (error) {
-    console.warn("Failed to remove token:", error);
-  }
+  if (typeof window === 'undefined') return;
+  // Supprime le token du localStorage (lors de la déconnexion)
+  localStorage.removeItem(API_CONFIG.TOKEN_KEY);
 };
 
 const isTokenExpired = (token: string): boolean => {
   try {
-    const [, payload] = token.split(".");
-    const decoded = JSON.parse(globalThis.atob(payload));
-    return decoded.exp * 1000 < Date.now();
+    // Décode la partie payload du JWT (format: header.payload.signature)
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    // Compare la date d'expiration (exp) avec l'heure actuelle
+    return payload.exp * 1000 < Date.now(); // exp est en secondes, Date.now() en millisecondes
   } catch {
+    // Si décodage échoue, considère le token comme expiré
     return true;
   }
 };
 
-//  Factory function pour créer l'instance Axios
+// CRÉATION DE L'INSTANCE AXIOS
 const createHttpClient = (): AxiosInstance => {
   const client = axios.create({
-    baseURL: API_CONFIG.BASE_URL,
-    timeout: API_CONFIG.TIMEOUT,
-    headers: DEFAULT_HEADERS,
+    baseURL: API_CONFIG.BASE_URL,     // URL de base (http://localhost:8000)
+    timeout: API_CONFIG.TIMEOUT,      // Timeout de 10 secondes
+    headers: {
+      'Content-Type': 'application/json', // Toutes les requêtes en JSON
+    },
   });
 
-  // 📤REQUEST INTERCEPTOR - Ajoute automatiquement le JWT
-  client.interceptors.request.use(
-    (config) => {
-      //  Auto-injection du token JWT si disponible et valide
-      const token = getStoredToken();
-      if (token && !isTokenExpired(token)) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-
-      //  Debug en développement
-      if (ENV.DEVELOPMENT) {
-        console.log(` ${config.method?.toUpperCase()} ${config.url}`, {
-          headers: config.headers,
-          data: config.data,
-        });
-      }
-
-      return config;
-    },
-    (error) => {
-      console.error(" Request interceptor error:", error);
-      return Promise.reject(error);
+  // INTERCEPTEUR DE REQUÊTE - Ajoute automatiquement le JWT
+  client.interceptors.request.use((config) => {
+    const token = getStoredToken();
+    // Si token existe ET n'est pas expiré, l'ajouter aux headers
+    if (token && !isTokenExpired(token)) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  );
+    return config; // Continuer avec la requête modifiée
+  });
 
-  //  RESPONSE INTERCEPTOR - Gère les erreurs automatiquement
+  // INTERCEPTEUR DE RÉPONSE - Gère les erreurs automatiquement
   client.interceptors.response.use(
-    //  Succès - Log en développement
-    (response: AxiosResponse) => {
-      if (ENV.DEVELOPMENT) {
-        console.log(
-          ` ${response.status} ${response.config.url}`,
-          response.data
-        );
-      }
-      return response;
-    },
-
-    //  Erreur - Gestion automatique selon le status code
+    (response) => response, // Si succès, passer la réponse telle quelle
     (error: AxiosError) => {
-      const status = error.response?.status;
-      const url = error.config?.url;
-
-      //  401 Unauthorized - Token expiré ou invalide
-      if (status === HTTP_STATUS.UNAUTHORIZED) {
-        console.warn("🔐 Token expired or invalid, redirecting to login...");
-        removeStoredToken();
-
-        // Redirection vers login (uniquement côté client)
-        if (typeof globalThis.window !== "undefined") {
-          // Éviter la redirection infinie si on est déjà sur la page de login
-          if (!globalThis.window.location.pathname.includes("/auth/login")) {
-            globalThis.window.location.replace("/auth/login");
-          }
+      // Si erreur 401 (Unauthorized) = token expiré/invalide
+      if (error.response?.status === 401) {
+        removeStoredToken();           // Supprimer le token invalide
+        if (typeof window !== 'undefined') {
+          window.location.href = '/auth/login'; // Rediriger vers login
         }
       }
-
-      //  403 Forbidden - Accès refusé (différent de 401)
-      else if (status === HTTP_STATUS.FORBIDDEN) {
-        console.warn(" Access forbidden for:", url);
-      }
-
-      //  404 Not Found - Ressource non trouvée
-      else if (status === HTTP_STATUS.NOT_FOUND) {
-        console.warn(" Resource not found:", url);
-      }
-
-      // ⚡ 409 Conflict - Conflit (ex: email déjà utilisé)
-      else if (status === HTTP_STATUS.CONFLICT) {
-        console.warn("⚡ Conflict detected:", url, error.response?.data);
-      }
-
-      //  500+ Server errors - Erreur serveur
-      else if (status && status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
-        console.error(" Server error:", status, url, error.response?.data);
-      }
-
-      //  Network errors - Pas de réponse du serveur
-      else if (!status) {
-        console.error(" Network error - Server unreachable:", url);
-      }
-
-      //  Log complet en développement
-      if (ENV.DEVELOPMENT) {
-        console.error("API Error Details:", {
-          status,
-          url,
-          method: error.config?.method?.toUpperCase(),
-          data: error.response?.data,
-          message: error.message,
-        });
-      }
-
-      return Promise.reject(error);
+      return Promise.reject(error);    // Propager l'erreur pour gestion locale
     }
   );
 
   return client;
 };
 
-//  Instance principale HTTP - Singleton pattern
+// INSTANCE PRINCIPALE - Créée une seule fois (singleton pattern)
 export const httpClient = createHttpClient();
 
-//  Types pour les méthodes HTTP
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-
-//  Generic request wrapper - Fonction utilitaire moderne
-//  Simplifie l'utilisation d'Axios avec TypeScript strict
-export const request = async <TResponse = unknown>(
-  method: HttpMethod,
-  url: string,
-  data?: unknown,
-  config?: AxiosRequestConfig
-): Promise<TResponse> => {
-  const response: AxiosResponse<TResponse> = await httpClient.request({
+// FONCTION UTILITAIRE - Simplifie l'utilisation d'Axios
+export const request = async <T = unknown>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE', // Méthodes HTTP supportées
+  url: string,                               // URL de l'endpoint
+  data?: unknown                            // Données à envoyer (pour POST/PUT)
+): Promise<T> => {
+  // Fait la requête avec httpClient (qui a déjà les intercepteurs)
+  const response = await httpClient.request({
     method,
     url,
-    ...(data && { data }),
-    ...config,
+    data, // Axios ignore automatiquement 'data' pour GET/DELETE
   });
-
-  return response.data;
+  
+  return response.data; // Retourne seulement les données (pas les headers, status, etc.)
 };
-
-//  Méthodes de convenance - Raccourcis pour les opérations courantes
-export const api = {
-  //  GET - Récupération de données
-  get: <TResponse = unknown>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<TResponse> => request<TResponse>("GET", url, undefined, config),
-
-  // POST - Création de nouvelles ressources
-  post: <TResponse = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<TResponse> => request<TResponse>("POST", url, data, config),
-
-  //  PUT - Mise à jour complète
-  put: <TResponse = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<TResponse> => request<TResponse>("PUT", url, data, config),
-
-  //  PATCH - Mise à jour partielle
-  patch: <TResponse = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<TResponse> => request<TResponse>("PATCH", url, data, config),
-
-  //  DELETE - Suppression
-  delete: <TResponse = unknown>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<TResponse> => request<TResponse>("DELETE", url, undefined, config),
-} as const;
-
-//  Utilities pour les cas spéciaux
-export const apiUtils = {
-  //  Upload de fichiers avec FormData
-  uploadFile: async <TResponse = unknown>(
-    url: string,
-    file: File,
-    fieldName = "file",
-    additionalData?: Record<string, string>
-  ): Promise<TResponse> => {
-    const formData = new FormData();
-    formData.append(fieldName, file);
-
-    // Ajouter des données supplémentaires si nécessaires
-    if (additionalData) {
-      Object.entries(additionalData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-    }
-
-    return request<TResponse>("POST", url, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      timeout: API_CONFIG.TIMEOUT * 3, // Plus de temps pour les uploads
-    });
-  },
-
-  //  Retry automatique pour les requêtes importantes
-  requestWithRetry: async <TResponse = unknown>(
-    method: HttpMethod,
-    url: string,
-    data?: unknown,
-    maxRetries = API_CONFIG.RETRY_ATTEMPTS
-  ): Promise<TResponse> => {
-    let lastError: Error;
-
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        return await request<TResponse>(method, url, data);
-      } catch (error) {
-        lastError = error as Error;
-
-        // Ne pas retry sur certaines erreurs (401, 403, 404, etc.)
-        if (error instanceof Error && "response" in error) {
-          const axiosError = error as AxiosError;
-          const status = axiosError.response?.status;
-
-          if (
-            status &&
-            [
-              HTTP_STATUS.UNAUTHORIZED,
-              HTTP_STATUS.FORBIDDEN,
-              HTTP_STATUS.NOT_FOUND,
-              HTTP_STATUS.CONFLICT,
-            ].includes(status)
-          ) {
-            throw error;
-          }
-        }
-
-        // Délai exponentiel entre les tentatives
-        if (attempt < maxRetries) {
-          const delay = Math.pow(2, attempt - 1) * 1000; // 1s, 2s, 4s...
-          await new Promise((resolve) => setTimeout(resolve, delay));
-          console.warn(`🔄 Retry attempt ${attempt}/${maxRetries} for ${url}`);
-        }
-      }
-    }
-
-    throw lastError!;
-  },
-} as const;
-
-//  Helper pour les tests - Mock des requêtes
-export const createMockClient = () => {
-  if (!ENV.TEST) {
-    throw new Error("Mock client can only be used in test environment");
-  }
-
-  // Configuration pour les tests unitaires
-  return axios.create({
-    baseURL: "http://localhost:3000/api",
-    timeout: 1000,
-  });
-};
-
-//  Export des types pour usage externe
-export type { AxiosResponse, AxiosError, AxiosRequestConfig };
