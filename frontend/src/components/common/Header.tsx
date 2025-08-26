@@ -14,7 +14,7 @@ export default function ColorTheme() {
   // const { data: session } = useSession(); // NextAuth
   // const isLoggedIn = !!session;
   
-  // Simulation temporaire - à remplacer par l'auth
+  // Simulation temporaire - à remplacer par votre vraie logique d'auth
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // (1/2) Cette fonction permet de basculer entre les thèmes "forest" et "retro" en modifiant l'attribut data-theme du document HTML et en stockant le thème sélectionné dans localStorage.
@@ -33,14 +33,6 @@ export default function ColorTheme() {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     setIsDark(!isDark);
-  };
-
-  // Fonction pour aller vers la page profil
-  const goToProfile = () => {
-    // Navigation vers la page profil - à adapter selon votre router
-    // router.push('/profil'); // Next.js router
-    // navigate('/profil'); // React router
-    console.log('Redirection vers la page profil');
   };
 
   // Fonction pour ouvrir la modale de connexion
@@ -80,12 +72,44 @@ export default function ColorTheme() {
     </svg>
   );
 
-  // Menu items
-  const menuItems = [
-    { label: 'Profil', href: '#' },
-    { label: 'Mes tutos', href: '#' },
-    { label: 'Mes favoris', href: '#' },
-    { label: 'Déconnexion', href: '#' }
+  // Menu items pour profil dropdown
+  const profileMenuItems = [
+    { label: 'Profil', href: '#', icon: null },
+    { label: 'Déconnexion', href: '#', icon: null }
+  ];
+
+  // Menu items pour burger menu
+  const burgerMenuItems = [
+    { 
+      label: 'Mes tutos', 
+      href: '#',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+      ),
+      disabled: false 
+    },
+    { 
+      label: 'Mes favoris',
+      href: '#',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+        </svg>
+      ),
+      disabled: false 
+    },
+    { 
+      label: 'Messagerie',
+      href: '#',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+        </svg>
+      ),
+      disabled: true 
+    }
   ];
 
   return (
@@ -112,33 +136,71 @@ export default function ColorTheme() {
         </div>
       </Link>
 
-      {/* --- Groupe d'éléments alignés à droite --- */}
+      {/* Groupe d'éléments alignés à droite */}
       <div className="flex items-center gap-2">
-        {/* --- Toggle thème --- */}
+        {/* Toggle thème */}
         <label className="swap swap-rotate">
           <input type="checkbox" checked={isDark} onChange={toggleTheme} />
           <SunIcon />
           <MoonIcon />
         </label>
 
-        {/* --- Bouton conditionnel : Connexion OU Profil --- */}
-        <button 
-          className="btn btn-circle" 
-          onClick={isLoggedIn ? goToProfile : openLoginModal}
-          aria-label={isLoggedIn ? "Aller au profil" : "Se connecter"}
-        >
-          {isLoggedIn ? <ProfileIcon /> : <LoginIcon />}
-        </button>
+        {/* Bouton conditionnel : Connexion OU Profil avec dropdown - suffit de retirer le ! pour tester le profil btn en attendant le back [FF] */}
+        {isLoggedIn ? (
+          <button 
+            className="btn btn-circle" 
+            onClick={openLoginModal}
+            aria-label="Se connecter"
+          >
+            <LoginIcon />
+          </button>
+        ) : (
+          <div className="dropdown dropdown-end">
+            <div 
+              tabIndex={0} 
+              role="button" 
+              className="btn btn-circle" 
+              aria-label="Menu profil"
+            >
+              <ProfileIcon />
+            </div>
+            <ul 
+              tabIndex={0} 
+              className="dropdown-content menu bg-base-100 rounded-box z-10 w-48 p-2 shadow"
+            >
+              {profileMenuItems.map((item, index) => (
+                <li key={index}>
+                  <a href={item.href} className="flex items-center gap-2">
+                    {item.icon && <span className="w-4 h-4">{item.icon}</span>}
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        {/* --- Menu burger --- */}
+        {/* Menu burger */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-circle" aria-label="Menu">
             <BurgerIcon />
           </div>
-          <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow">
-            {menuItems.map((item, index) => (
+          <ul 
+            tabIndex={0} 
+            className="dropdown-content menu bg-base-100 rounded-box z-10 w-48 p-2 shadow"
+          >
+            {burgerMenuItems.map((item, index) => (
               <li key={index}>
-                <a href={item.href}>{item.label}</a>
+                <a 
+                  href={item.href} 
+                  className={`flex items-center gap-2 ${
+                    item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                  onClick={item.disabled ? (e) => e.preventDefault() : undefined}
+                >
+                  {item.icon && <span className="w-4 h-4">{item.icon}</span>}
+                  {item.label}
+                </a>
               </li>
             ))}
           </ul>
