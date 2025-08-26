@@ -16,7 +16,7 @@ export default async function ProfilePage( { params }: PageProps) {
 
     // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts = connexion front > back)
     const user = {
-        name: "Mathieu Dupont",
+        name: "Mathieu Dupond",
         avatarURL: undefined as string | undefined,
         location: "Lyon, France",
         stats: { tutorials: 8, followers: 51, following: 12 },
@@ -32,6 +32,7 @@ export default async function ProfilePage( { params }: PageProps) {
 
             {/* Layout mobile → 2 colonnes à partir de md */}
             <div className="grid gap-6 md:grid-cols-[300px_1fr]">
+
                 {/* Colonne gauche */}
                 <div className="space-y-3">
                     <ProfileHeader

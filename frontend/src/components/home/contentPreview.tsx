@@ -9,11 +9,12 @@ const ACCENT = "#19362D";
 type Profile = { id: string; name: string; avatarUrl?: string };
 
 type Props = {
-  title?: string;            // titre au-dessus du visuel
+  title?: string;             
   posterUrl?: string;        // image du preview (sinon fallback)
   profiles?: Profile[];      // 3 profils max
 };
 
+// --- Composant contentPreview ------
 export default function ContentPreview({
   title = "Preview d’un tuto",
   posterUrl = "https://source.unsplash.com/960x540/?learning",
@@ -21,7 +22,7 @@ export default function ContentPreview({
 }: Props) {
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
-      {/* Bloc preview */}
+      {/* Bloc preview d'un tuto */}
       <div className="rounded-xl bg-base-200 shadow-lg p-4 mb-4 border"
            style={{ borderColor: ACCENT }}>
         <h2 className="text-base font-semibold mb-3" style={{ color: ACCENT }}>
