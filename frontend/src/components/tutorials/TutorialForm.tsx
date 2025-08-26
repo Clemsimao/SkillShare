@@ -1,5 +1,5 @@
 // Fichier src/components/tutorials/TutorialForm.tsx
-// ce composant est exécuter côté navigateur (car usage des onChange, onClick...)
+// Composant exécuter côté navig. (car gestion des fonctionalités interactives: events...)
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
