@@ -1,3 +1,7 @@
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+// Inserer Header et footer
+
 // Avatar + pseudo + stats (tutos, abonnés, abonnements)
 type Stats = { tutorials: number;  followers: number; following: number };
 
@@ -13,6 +17,7 @@ export default function ProfileHeader(props:  {
 
     // ---------- Rendu JSX ----------
     return (
+      
   <section className="card bg-base-200 shadow-sm">
     <div className="card-body p-4">
 
@@ -22,7 +27,7 @@ export default function ProfileHeader(props:  {
           <div className="w-16 rounded-full ring ring-base-300 ring-offset-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={avatarUrl ?? `https://api.dicebear.com/9.x/initials/svg?seed=${username}`}
+              src={avatarURL ?? `https://api.dicebear.com/9.x/initials/svg?seed=${username}`}
               alt={`Avatar de ${name}`}
             />
           </div>

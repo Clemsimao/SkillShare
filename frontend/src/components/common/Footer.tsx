@@ -51,7 +51,6 @@ export default function Footer() {
 
   return (
     <footer className="footer bg-neutral text-neutral-content p-10">
-
       <div className="w-full flex flex-col sm:flex-row justify-between items-center sm:items-center text-center sm:text-left">
         {/* Branding (centré en mobile) */}
         <div className="mb-6 sm:mb-0">
@@ -88,11 +87,10 @@ export default function Footer() {
             ))}
           </div>
         </div>
-
+            </div>
       <div className="w-full flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
         {renderBranding()}
         {renderSocialLinks()}
-
       </div>
       <FormContactModal /> 
     </footer>

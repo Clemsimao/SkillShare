@@ -149,7 +149,8 @@ export default async function TutorialDetailPage({
             ))}
           </ul>
         )}
-
+        
+        {/* Placeholder formulaire (pour plus tard, côté backend) */}
         <div className="bg-base-200 rounded-xl p-4 border border-dashed border-[#19362D] shadow-inner">
           <p className="text-sm text-gray-500">
             Formulaire d’ajout de commentaire à intégrer (V1 backend).

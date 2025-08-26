@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import Header from "@/components/common/Header";
+
+import ContentPreview from '@/components/home/contentPreview';
 import Footer from "@/components/common/Footer";
 
 export default function Home() {
@@ -205,7 +207,10 @@ export default function Home() {
         )}
       </main>
 
-      <div className="pb-4">
+      <div className="p-4">
+        <ContentPreview />
+      </div>
+      <div className="p-4">
         <Footer />
       </div>
     </div>

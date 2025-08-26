@@ -35,7 +35,7 @@
 - [x] `tutorials/`
   - [x] `[id]/`
     - [x] `page.tsx` (Écran détail d’un tuto **avec bloc "Commentaires" en dessous du contenu**)
-  - [x] `new/`
+  - [x] `createTuto/`
     - [x] `page.tsx` (Écran création d'un tutorial)
 
 #### Routes profil
@@ -129,6 +129,12 @@
   - [x] `ProfileCounters.tsx` – Abonnements / Abonnées boutons-compteurs
   - [x] `index.ts` – ré-export
 
+
+#### Composants création tutorials
+- Ces composants est pour créer un tuto (composants réutilisables)
+- [ ] `tutorials/`
+  - [ ]  `TutorialCard.tsx`
+  - [ ]  `TutorialForm.tsx`
 ---
 
 ### **DOSSIER LIB:**------------------------------------
