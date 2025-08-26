@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Twitter, Youtube, Facebook, Instagram } from "lucide-react";
 
 export default function Footer() {
-  // Configuration des réseaux sociaux
+  // --- URL des réseaux sociaux ---
   const socialLinks = [
     { href: "https://twitter.com", icon: Twitter, label: "X / Twitter" },
     { href: "https://instagram.com", icon: Instagram, label: "Instagram" },
@@ -10,7 +10,7 @@ export default function Footer() {
     { href: "https://facebook.com", icon: Facebook, label: "Facebook" },
   ];
 
-  // Informations de branding
+  // --- Info branding ---
   const brandingInfo = {
     title: "SKILLSHARE",
     copyright: "© All rights reserved",
