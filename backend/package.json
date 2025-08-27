@@ -1,0 +1,50 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API REST pour la plateforme d'échange de compétences SkillShare",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "seeds": "node seeds/index.js",
+    "test:db": "node -e \"import('./config/database.js').then(db => db.default.authenticate()).then(() => console.log('✅ DB OK')).catch(e => console.error('❌ DB Error:', e))\"",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "reset:db": "npm run docker:down && docker volume rm skillswap_postgres_data && npm run docker:up",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "skillshare",
+    "api",
+    "express",
+    "postgresql"
+  ],
+  "author": "Team SkillShare",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.31.2",
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
+  }
+}
