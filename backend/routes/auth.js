@@ -14,7 +14,7 @@ router.post('/login', login);
 // POST /api/auth/logout - Déconnexion
 router.post('/logout', logout);
 
-// GET /api/auth/profil - Profil utilisateur (PROTÉGÉ)
-router.get('/profil', authMiddleware, getProfile);
+// GET /api/auth/profile - Profil utilisateur (PROTÉGÉ)
+router.get('/profile', authMiddleware, getProfile);
 
 export default router;

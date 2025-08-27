@@ -52,7 +52,7 @@ router.post('/:id/image', uploadImageTutorial.single('image'), async (req, res) 
 
     // Met à jour le tutoriel avec l’URL de l’image
     await Tutorial.update(
-      { image_url: imageUrl },
+      { picture: imageUrl },
       { where: { tutorial_id: tutorialId } }
     );
 

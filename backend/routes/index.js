@@ -47,7 +47,7 @@ router.get("/", (req, res) => {
         register: "POST /api/auth/register",
         login: "POST /api/auth/login",
         logout: "POST /api/auth/logout",
-        profile: "GET /api/auth/profil",
+        profile: "GET /api/auth/profile",
       },
       skills: {
 

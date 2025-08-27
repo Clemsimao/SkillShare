@@ -53,12 +53,12 @@ export const userService = {
         updatedAt: user.updated_at,
         skills: user.skills?.map(skill => ({
           id: skill.skill_id,
-          name: skill.title,
+          title: skill.title,
           category: skill.category
         })) || [],
         interests: user.interests?.map(interest => ({
           id: interest.skill_id,
-          name: interest.title,
+          title: interest.title,
           category: interest.category
         })) || []
       };
@@ -215,7 +215,7 @@ export const userService = {
         profilePicture: user.profile_picture,
         skills: user.skills?.map(skill => ({
           id: skill.skill_id,
-          name: skill.title,
+          title: skill.title,
           category: skill.category?.title
         })) || []
       }));

@@ -69,7 +69,7 @@ export const searchService = {
           profilePicture: user.profile_picture,
           skills: user.skills.map(skill => ({
             id: skill.skill_id,
-            name: skill.title,
+            title: skill.title,
             category: skill.category.title
           }))
         })),
