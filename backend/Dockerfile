@@ -1,19 +1,22 @@
-FROM node:20
+FROM node:20-bullseye-slim
 
-# Installer netcat pour l'attente Postgres qui n' est pas present dans node:20
-RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+# Installer les dépendances système nécessaires pour argon2
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    netcat \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-ENV NODE_ENV=development
-ENV PORT=8000
-
+# Copier les fichiers de dépendances
 COPY package*.json ./
 
-RUN npm i
+# Installer les dépendances avec rebuild pour l'architecture cible
+RUN npm ci && npm rebuild argon2
 
-RUN npm install -g nodemon
-
+# Copier le code source
 COPY . .
 
 EXPOSE 8000

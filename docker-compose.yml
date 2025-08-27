@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: skillshare_db 
+    container_name: skillshare_db
     environment:
       POSTGRES_DB: skillshare
       POSTGRES_USER: skillshare
@@ -12,10 +12,14 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./backend/data/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
       - ./backend/seeds/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-    restart: unless-stopped # Redémarre le conteneur sauf si on l'arrête manuellement
+    restart: unless-stopped
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      platforms:
+        - linux/amd64
+        - linux/arm64
     command: sh -c "until nc -z postgres 5432; do echo 'Waiting for Postgres...'; sleep 2; done; npm run dev"
     container_name: skillshare_back
     depends_on:
@@ -25,21 +29,9 @@ services:
     env_file:
       - ./backend/.env
     volumes:
-      - ./backend:/app 
-    restart: unless-stopped 
+      - ./backend:/app
+      - /app/node_modules  # Empêche l'écrasement des node_modules du conteneur
+    restart: unless-stopped
 
-  #frontend:
-    #build: . # Construit l'image à partir du Dockerfile à la racine
-    #container_name: skillshare_front
-    #ports:
-      #- "8000:8000" # Expose le port 8000 du conteneur sur le port 8000 de la machine hôte
-    #env_file:
-      #- .env # Charge les variables d'environnement depuis le fichier .env
-    #depends_on:
-      #- postgres # Démarre le service db avant l'app
-    #volumes:
-      #- .:/frontend # Monte le dossier du projet dans le conteneur pour le développement
-    #restart: unless-stopped # Redémarre le conteneur sauf si on l'arrête manuellement
-
-volumes: 
+volumes:
   db_data:
