@@ -18,8 +18,8 @@ export default function ProfileHeader(props:  {
     // ---------- Rendu JSX ----------
     return (
       
-  <section className="card bg-base-200 shadow-sm">
-    <div className="card-body p-4">
+    <section className="card bg-base-200 shadow-xl shadow-cyan-500/50 rounded-3x1">
+    <div className="card-body p-4 border border-cyan-500">
 
       {/* --- Bloc Avatar + Infos utilisateur --- */}
       <div className="flex items-center gap-3">
