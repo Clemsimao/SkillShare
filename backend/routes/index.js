@@ -3,9 +3,11 @@ import multer from 'multer';
 import authRoutes from './auth.js';
 import userRoutes from './users.js';
 import skillRoutes from './skills.js';
-import tutorialRoutes from "./tutorial.js"; 
+import tutorialRoutes from "./tutorial.js";
 import commentRoutes from './comments.js';
 import searchRoutes from './search.js';
+import followRoutes from './follow.js';
+import ratingRoutes from './rating.js';
 
 const router = express.Router();
 
@@ -21,12 +23,16 @@ router.use("/skills", skillRoutes);
 // Route tutoriels (CRUD + upload)
 router.use("/tutorials", tutorialRoutes);
 
+// Routes commentaires (CRUD)
+router.use("/comments", commentRoutes);
 
-// Route commentaires (CRUD)
-router.use('/comments', commentRoutes);
+// Routes follow (protégées)
+router.use("/follow", followRoutes);
 
-// Route de recherche (protégées)
-router.use('/search', searchRoutes);
+// Routes évaluations (notes utilisateurs + likes/dislikes tutoriels)
+router.use('/ratings', ratingRoutes);
+// Routes de recherche (protégées)
+router.use("/search", searchRoutes);
 
 // Route de santé
 router.get("/health", (req, res) => {
@@ -50,7 +56,6 @@ router.get("/", (req, res) => {
         profile: "GET /api/auth/profile",
       },
       skills: {
-
         list: "GET /api/skills",
         categories: "GET /api/skills/categories",
       },
@@ -73,17 +78,35 @@ router.get("/", (req, res) => {
         delete: "DELETE /api/tutorials/:id",
         uploadImage: "POST /api/tutorials/:id/image",
       },
-      
+
       search: {
-        users: 'GET /api/search/users?skillId={ID}&page=1 (Auth required)',
-        tutorials: 'GET /api/search/tutorials?skillId={ID}&page=1 (Auth required)'
+        users: "GET /api/search/users?skillId={ID}&page=1 (Auth required)",
+        tutorials:
+          "GET /api/search/tutorials?skillId={ID}&page=1 (Auth required)",
       },
-      
-        comments: {
-        listByTutorial: 'GET /api/comments/tutorial/:tutorialId',
-        create: 'POST /api/comments (body: { tutorial_id, content })',
-        update: 'PUT /api/comments/:id (body: { content })',
-        delete: 'DELETE /api/comments/:id'
+
+      comments: {
+        listByTutorial: "GET /api/comments/tutorial/:tutorialId",
+        create: "POST /api/comments (body: { tutorial_id, content })",
+        update: "PUT /api/comments/:id (body: { content })",
+        delete: "DELETE /api/comments/:id",
+      },
+
+      follow: {
+        toggle:
+          "POST /api/follow/:id (Auth required) - S'abonner ou se désabonner d'un utilisateur",
+        following:
+          "GET /api/follow/following (Auth required) - Liste des utilisateurs suivis",
+        followers:
+          "GET /api/follow/followers (Auth required) - Liste des abonnés",
+      },
+
+      ratings: {
+        rateUser: 'POST /api/ratings/users/:id/rate (body: { rating: 1..5 })',
+        userRatingsList: 'GET /api/ratings/users/:id/ratings',
+        userRatingAverage: 'GET /api/ratings/users/:id/rating',
+        rateTutorial: 'POST /api/ratings/tutorials/:id/rate (body: { isLiked: boolean })',
+        tutorialRatings: 'GET /api/ratings/tutorials/:id/ratings'
       },
 
       utils: {
@@ -98,12 +121,14 @@ export default router;
 router.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     // Une erreur de Multer est survenue lors de l'upload
-    console.error('Erreur Multer:', err);
-    return res.status(500).json({ success: false, message: 'Erreur lors de l\'upload de l\'image' });
+    console.error("Erreur Multer:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Erreur lors de l'upload de l'image" });
   } else if (err) {
     // Une erreur inconnue est survenue
-    console.error('Erreur serveur:', err);
-    return res.status(500).json({ success: false, message: 'Erreur serveur' });
+    console.error("Erreur serveur:", err);
+    return res.status(500).json({ success: false, message: "Erreur serveur" });
   }
   next();
 });
