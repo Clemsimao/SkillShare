@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: retro --default, forest --prefersdark;
+}
+
+.font-schoolbell {
+  font-family: "Schoolbell", sans-serif !important;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
