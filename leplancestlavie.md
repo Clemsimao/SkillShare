@@ -3,11 +3,11 @@
 ## **Phase 1 : Fondations & Landing Page**
 
 ### Tâches Backend
-- [ ] Transformation MPD SQL vers Modèles Sequelize + associations (user, category, skill, tutorial, comments)
-- [ ] Configuration Docker complète (docker-compose.yml, Dockerfiles) + Base PostgreSQL
-- [ ] Structure Express/MVC + middlewares (JWT, Argon2, Express Validator)
-- [ ] Seeds/fixtures de données test
-- [ ] Configuration Cloudinary
+- [X] Transformation MPD SQL vers Modèles Sequelize + associations (user, category, skill, tutorial, comments)
+- [X] Configuration Docker complète (docker-compose.yml, Dockerfiles) + Base PostgreSQL
+- [x] Structure Express/MVC + middlewares (JWT, Argon2, Express Validator)
+- [X] Seeds/fixtures de données test
+- [x] Configuration Cloudinary
 
 ### Tâches Frontend
 - [ ] Setup Next.js + TypeScript + structure dossiers + routing
@@ -16,10 +16,10 @@
 - [ ] Landing page avec présentation SkillShare (UC1)
 
 ### Objectifs Phase 1
-- [ ] **Modèles Sequelize complets** avec relations M:N (user_skills, user_interests, etc.)
+- [x] **Modèles Sequelize complets** avec relations M:N (user_skills, user_interests, etc.)
 - [ ] **Configuration Docker complète** (Frontend + Backend + PostgreSQL)
-- [ ] **Seeds de données test** pour développement
-- [ ] **Configuration Cloudinary** opérationnelle
+- [x] **Seeds de données test** pour développement
+- [x] **Configuration Cloudinary** opérationnelle
 - [ ] **UC1** : Landing page avec présentation claire
 - [ ] **Route d'authentification testée Frontend vers Backend**
 
@@ -28,11 +28,11 @@
 ## **Phase 2 : Authentification & Profils (UC3-UC9)**
 
 ### Tâches Backend
-- [ ] Routes auth (`/api/auth/inscription`, `/connexion`, `/deconnexion`) + UC3, UC4, UC5
-- [ ] CRUD utilisateurs + UC8, UC9 (mise à jour/suppression profil)
-- [ ] Relations user-skills/interests + UC6, UC7 (compétences/intérêts)
-- [ ] Upload photo de profil via Cloudinary
-- [ ] Route pour profils exemple (pour landing page)
+- [x] Routes auth (`/api/auth/inscription`, `/connexion`, `/deconnexion`) + UC3, UC4, UC5
+- [x] CRUD utilisateurs + UC8, UC9 (mise à jour/suppression profil)
+- [x] Relations user-skills/interests + UC6, UC7 (compétences/intérêts)
+- [x] Upload photo de profil via Cloudinary
+- [x] Route pour profils exemple (pour landing page)
 
 ### Tâches Frontend
 - [ ] Pages login/register + protection routes + gestion état auth (UC3, UC4, UC5)
@@ -52,10 +52,10 @@
 ## **Phase 3 : Recherche & Tutoriels (UC10-UC18)**
 
 ### Tâches Backend
-- [ ] Routes recherche (`/api/recherche?competence=`) + UC15, UC16 (recherche compétences)
-- [ ] CRUD tutoriels + UC10-UC14 (création, consultation, modification, suppression tutoriels)
-- [ ] Upload images illustratives tutoriels via Cloudinary
-- [ ] Routes profils + UC17, UC18 (visualisation profils et détails)
+- [x] Routes recherche (`/api/recherche?competence=`) + UC15, UC16 (recherche compétences)
+- [x] CRUD tutoriels + UC10-UC14 (création, consultation, modification, suppression tutoriels)
+- [x] Upload images illustratives tutoriels via Cloudinary
+- [x] Routes profils + UC17, UC18 (visualisation profils et détails)
 
 ### Tâches Frontend
 - [ ] Moteur recherche + page résultats + filtres (UC15-UC16)
@@ -74,7 +74,7 @@
 ## **Phase 4 : Contact, Suivi & Évaluations (UC19-UC28)**
 
 ### Tâches Backend
-- [ ] Système commentaires + UC19, UC20 (commentaires et réponses)
+- [x] Système commentaires + UC19, UC20 (commentaires et réponses)
 - [ ] Formulaire contact + UC21
 - [ ] Système suivis + UC22-UC24 (suivre, arrêter suivi, voir abonnés)
 - [ ] Système évaluations + UC25-UC28 (évaluer utilisateurs/tutoriels, consulter évaluations)
