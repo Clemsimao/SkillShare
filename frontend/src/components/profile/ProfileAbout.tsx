@@ -12,7 +12,6 @@ export default function ProfileAbout({
   showEditLink?: boolean;
 }) {
 
-
   return (
     <section className="card bg-base-200">
       <div className="card-body p-4">

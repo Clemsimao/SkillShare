@@ -28,7 +28,7 @@ export default function ProfileInfoList(props: {
       {/* Chaque ligne d'information utilise le sous-composant Row */}
       <Row label="Nom / Prénom" value={fullname} />
       <Row label="Âge" value={age} />
-      <Row label="Sexe" value={gender} />
+      <Row label="Genre" value={gender} />
       <Row label="Localisation" value={city} />
     </section>
   );
