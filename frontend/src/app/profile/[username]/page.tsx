@@ -8,7 +8,10 @@ import ProfileAbout from "@/components/profile/ProfileAbout";
 import ProfileFavourites from "@/components/profile/ProfileFavourites";
 import ProfileCounters from "@/components/profile/ProfileCounters";
 
-type PageProps = { params: { username: string } };
+type PageProps = { 
+    params: { 
+        username: string }
+};
 
 // ---------- Composant parent (page profil) ----------
 export default async function ProfilePage( { params }: PageProps) {
@@ -16,6 +19,7 @@ export default async function ProfilePage( { params }: PageProps) {
 
     // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts = connexion front > back)
     const user = {
+        username,
         name: "Mathieu Dupond",
         avatarURL: undefined as string | undefined,
         location: "Lyon, France",
