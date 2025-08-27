@@ -5,7 +5,7 @@ import Link from "next/link";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileInfoList from "@/components/profile/ProfileInfoList";
 import ProfileAbout from "@/components/profile/ProfileAbout";
-import ProfileFavorites from "@/components/profile/ProfileFavorites";
+import ProfileFavourites from "@/components/profile/ProfileFavourites";
 import ProfileCounters from "@/components/profile/ProfileCounters";
 
 type PageProps = { params: { username: string } };
@@ -72,7 +72,7 @@ export default async function ProfilePage( { params }: PageProps) {
                         about={user.about}
                     />
 
-                    <ProfileFavorites
+                    <ProfileFavourites
                         username={user.username}
                         items={user.favorites}
                     />

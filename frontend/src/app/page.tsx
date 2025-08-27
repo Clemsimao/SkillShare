@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import CategoryManager from '@/components/home/CategoryManager';
-import ContentPreview from '@/components/home/contentPreview';
+import ContentPreview from '@/components/home/ContentPreview';
 
 export default function Home() {
   // Données simulées des catégories avec leurs listes

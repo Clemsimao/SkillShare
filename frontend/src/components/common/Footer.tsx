@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 import { Twitter, Youtube, Facebook, Instagram } from "lucide-react";
-import FormContactModal from "@/components/common/FormContactModal";
+import FormContactModal from "@/components/contact/FormContactModal";
 
 export default function Footer() {
   const socialLinks = [

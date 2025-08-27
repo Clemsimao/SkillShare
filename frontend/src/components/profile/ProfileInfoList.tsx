@@ -1,11 +1,12 @@
 // composant qui affiche une liste d'informations de profil  
 export default function ProfileInfoList(props: {
+    username: string;  
     fullname: string;
     age: number | string;
     gender: string;
     city: string;
 })  {
- const { fullname, age, gender, city } = props;
+ const { username, fullname, age, gender, city } = props;
 // Sous-composant Row pour éviter la répétition de code 
    const Row = ({ label, value }: { label: string; value: string | number }) => (
     // Ce div est stylisé comme un bouton pour des raisons de design.
@@ -20,7 +21,9 @@ export default function ProfileInfoList(props: {
     // Section principale contenant les lignes d'informations
     <section className="space-y-2">
       {/* Ligne statique qui affiche le pseudo */}
-      <div className="btn w-full cursor-default">Pseudo</div>
+      <div className="btn w-full cursor-default">
+         <span className="opacity-80">@{username}</span>
+      </div>
 
       {/* Chaque ligne d'information utilise le sous-composant Row */}
       <Row label="Nom / Prénom" value={fullname} />
