@@ -1,5 +1,6 @@
 import { userService } from '../services/userService.js';
 import { skillService } from '../services/skillService.js';
+
 /**
  * Récupérer le profil public d'un utilisateur
  * GET /api/users/profile/:id
@@ -75,7 +76,7 @@ export const updateProfile = async (req, res) => {
       }
 
       // Convertir une description vide en null pour la base de données
-     // Évite d'avoir des strings vides "" et privilégie null (plus propre) 
+      // Évite d'avoir des strings vides "" et privilégie null (plus propre) 
       if (updateData.content.trim().length === 0) {
         updateData.content = null;
       }
@@ -162,7 +163,6 @@ export const uploadProfilePicture = async (req, res) => {
     });
   }
 };
-
 
 /**
  * Supprimer son compte utilisateur
@@ -265,7 +265,7 @@ export const addUserSkill = async (req, res) => {
       message: result.message,
       skill: {
         id: result.id,
-        name: result.name
+        title: result.title  // ✅ CORRIGÉ : "title" au lieu de "name"
       }
     });
 
@@ -361,7 +361,7 @@ export const addUserInterest = async (req, res) => {
       message: result.message,
       interest: {
         id: result.id,
-        name: result.name
+        title: result.title  // ✅ CORRIGÉ : "title" au lieu de "name"
       }
     });
 

@@ -87,8 +87,8 @@ export const deleteComment = async (req, res) => {
     // Appelle le service qui supprime le commentaire si l'utilisateur en est bien l'auteur
     await commentService.remove({ commentId, userId });
 
-    // Retourne un statut 204 (No Content) si la suppression a réussi
-    return res.status(204).send(); 
+    // Retourne une confirmation JSON de suppression
+    return res.status(200).json({ success: true, message: 'Comment deleted' });
   } catch (error) {
     console.error('❌ Error deleteComment:', error);
     if (error.message === 'Comment not found') {
