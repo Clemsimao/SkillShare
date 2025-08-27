@@ -30,7 +30,6 @@ const MOCK_TUTORIALS: Tutorial[] = [
     summary: "Introduction au dessin",
     content:
       "Découvrir les bases: tenue du crayon, types de traits, échauffements. Travailler la régularité avec des exercices courts.",
-   
   },
   {
     id: "2",
@@ -39,7 +38,6 @@ const MOCK_TUTORIALS: Tutorial[] = [
     summary: "Les proportions",
     content:
       "Comprendre les repères, la construction en formes simples, la mesure comparative et le négatif.",
- 
   },
 ];
 

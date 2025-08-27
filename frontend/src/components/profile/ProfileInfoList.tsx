@@ -19,10 +19,10 @@ export default function ProfileInfoList(props: {
 // Rendu final du composant.
   return (
     // Section principale contenant les lignes d'informations
-    <section className="space-y-2">
+    <section className="space-y-3 bg-base-200 rounded-lg border border-[#334155] p-5">
       {/* Ligne statique qui affiche le pseudo */}
       <div className="btn w-full cursor-default">
-         <span className="opacity-80">@{username}</span>
+         <span className="p-10 opacity-80">@{username}</span>
       </div>
 
       {/* Chaque ligne d'information utilise le sous-composant Row */}

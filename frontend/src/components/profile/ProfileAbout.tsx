@@ -13,23 +13,13 @@ export default function ProfileAbout({
 }) {
 
   return (
-    <section className="card bg-base-200">
-      <div className="card-body p-4">
+<section className="card bg-base-200 rounded-lg">
+  <div className="card-body p-10 border border-[#334155] rounded-lg">
         <div className="flex items-center justify-between">
-          <h2 className="font-poppins text-xl md:text-2xl">About me…</h2>
-          {/*Le lien "Éditer" est affiché uniquement si la variable `showEditLink` est "true"
-          pour des raisons de sécurité pour vérifier que c'est le bon utilisateur qui modifie ses infos*/}
-          {showEditLink && (
-            <Link
-              href={`/profile/${username}/about`}
-              className="link link-hover text-sm"
-            >
-              Éditer
-            </Link>
-          )}
+          <h2 className="font-schoolbell text-xl font-bold text-cyan-500 md:text-xl">About me…</h2>
         </div>
 
-        <p className="font-inter text-base leading-relaxed">
+        <p className="text-base leading-relaxed font-schoolbell">
           {about}
         </p>
       </div>

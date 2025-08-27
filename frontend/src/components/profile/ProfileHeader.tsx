@@ -18,8 +18,8 @@ export default function ProfileHeader(props:  {
     // ---------- Rendu JSX ----------
     return (
       
-    <section className="card bg-base-200 shadow-xl shadow-cyan-500/50 rounded-3x1">
-    <div className="card-body p-4 border border-cyan-500">
+    <section className="card bg-cyan-700 shadow-xl shadow-cyan-500/35 rounded-lg">
+    <div className="card-body p-6">
 
       {/* --- Bloc Avatar + Infos utilisateur --- */}
       <div className="flex items-center gap-3">
@@ -33,31 +33,34 @@ export default function ProfileHeader(props:  {
           </div>
         </div>
 
-        {/* --- Nom + Pseudo + Localisation --- */}
-        <div className="min-w-0">
-          <p className="font-poppins text-lg md:text-xl truncate">{name}</p>
-          <p className="text-sm opacity-70">@{username}{location ? ` · ${location}` : ""}</p>
-        </div>
+      {/* --- Nom + Pseudo + Localisation --- */}
+      <div className="min-w-0">
+        <p className="font-poppins text-lg md:text-xl truncate text-white">{name}</p>
+        <p className="text-lg text-white font-bold">@{username}{location ? ` · ${location}` : ""}</p>
+      </div>
       </div>
 
-      {/* --- Bloc Statistiques utilisateur (tutos, abonnés, abonnements) --- */}
-      <div className="stats stats-vertical md:stats-horizontal bg-transparent shadow-none mt-3">
-        {/* --- Nombre de tutos --- */}
-        <div className="stat">
-          <div className="stat-title">Tutos</div>
-          <div className="stat-value text-lg">{stats.tutorials}</div>
-        </div>
+      {/* --- Bloc Statistiques utilisateur (version DaisyUI optimisée) --- */}
+      <div className="stats bg-transparent shadow-none mt-2 w-full">
+        <div className="grid grid-cols-3 w-full sm:w-60">
 
-        {/* --- Nombre d’abonnés --- */}
-        <div className="stat">
-          <div className="stat-title">Abonnés</div>
-          <div className="stat-value text-lg">{stats.followers}</div>
-        </div>
+          {/* --- Nombre de tutos --- */}
+          <div className="stat place-items-center p-2">
+            <div className="text-white stat-title text-xs">Tutos</div>
+            <div className="stat-value text-lg text-white">{stats.tutorials}</div>
+          </div>
 
-        {/* --- Nombre d’abonnements --- */}
-        <div className="stat">
-          <div className="stat-title">Abonnements</div>
-          <div className="stat-value text-lg">{stats.following}</div>
+          {/* --- Nombre d'abonnés --- */}
+          <div className="stat place-items-center p-2">
+            <div className="text-white stat-title text-xs">Abonnés</div>
+            <div className="stat-value text-lg text-white">{stats.followers}</div>
+          </div>
+
+          {/* --- Nombre d'abonnements --- */}
+          <div className="stat place-items-center p-2">
+            <div className="text-white stat-title text-xs">Abonnements</div>
+            <div className="stat-value text-lg text-white">{stats.following}</div>
+          </div>
         </div>
       </div>
 
