@@ -19,7 +19,7 @@ export default async function ProfilePage( { params }: PageProps) {
 
     // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts = connexion front > back)
     const user = {
-        username,
+        username: "M.Dup",
         name: "Mathieu Dupond",
         avatarURL: undefined as string | undefined,
         location: "Lyon, France",
@@ -40,10 +40,8 @@ export default async function ProfilePage( { params }: PageProps) {
                 {/* Colonne gauche */}
                 <div className="space-y-3">
                     <ProfileHeader
-                        name={user.name}
                         username={user.username}
                         avatarUrl={user.avatarUrl}
-                        location={user.location}
                         stats={user.stats}
                     />
 
@@ -54,10 +52,7 @@ export default async function ProfilePage( { params }: PageProps) {
                         city={user.info.city}
                     />
 
-                    <ProfileCounters
-                        followers={user.stats.followers}
-                        following={user.stats.following}
-                    />
+                  
                  <Link
                         href={`/profile/${username}/about`}
                         className="btn w-full text-white 

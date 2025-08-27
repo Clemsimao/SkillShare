@@ -73,24 +73,24 @@ export default function CategoryManager({
 
   // Section avec liste des compétences
   const renderCategorySection = () => (
-    <section className="w-full relative max-w-xl mx-auto mb-8">
-      {/* Titre de la catégorie actuelle (mobile) */}
-      <div className="flex justify-center mb-4 md:hidden">
-        <h2 className="btn btn-accent pointer-events-none text-center w-50 font-schoolbell">
+    <section className="w-full relative max-w-xl mx-auto mb-8 px-8">
+      {/* Titre de la catégorie actuelle (mobile) - Largeur alignée sur la liste */}
+      <div className="flex justify-center mb-4 md:hidden ml-6 pr-8">
+        <h2 className="btn btn-accent pointer-events-none text-center w-full font-schoolbell">
           {selectedCategory}
         </h2>
       </div>
 
       {/* Navigation mobile "Swipe" */}
       <button
-        onClick={() => onNavigateSlide('prev')}  // <-- Correction ici
+        onClick={() => onNavigateSlide('prev')}
         className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
         aria-label="Catégorie précédente"
       >
         <ChevronLeftIcon className="w-6 h-6" />
       </button>
       <button
-        onClick={() => onNavigateSlide('next')}  // <-- Correction ici
+        onClick={() => onNavigateSlide('next')}
         className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
         aria-label="Catégorie suivante"
       >
@@ -138,3 +138,4 @@ export default function CategoryManager({
     )}
   </>
 );
+}
