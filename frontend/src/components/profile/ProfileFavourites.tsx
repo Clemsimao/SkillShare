@@ -1,10 +1,7 @@
 // Bloc : liste courte de tutos favoris (aperçu)
-// - Chaque item peut avoir un href spécifique; sinon on met un fallback.
-// - Le lien "Voir tous" envoie vers /profile/[username]/favorites.
-
 import Link from "next/link";
 
-// Structure type des données 
+// Structure type des données
 export type FavoriteItem = {
   id: string;
   title: string;
@@ -33,12 +30,9 @@ export default function ProfileFavorites({
           {items.map((t) => (
             <Link
               key={t.id}
-            //  utilisation du nullish coalescing (??) pour fournir une URL de secours
-            // Si le tuto a sa propre URL (t.href), elle est utilisé sinon page de gallery par défault
-            href={t.href ?? "/gallery"} // TODO: remplacer par l'URL réelle de tuto
+              href={t.href ?? "/gallery"} // Fallback vers "/gallery" si t.href n'est pas défini
               className="btn btn-outline w-full justify-between"
             >
-                {/* Afficher le titre du tutoriel */}
               <span className="truncate">{t.title}</span>
               <span aria-hidden>›</span>
             </Link>
@@ -46,9 +40,8 @@ export default function ProfileFavorites({
         </div>
 
         <div className="text-right mt-2">
-            {/* Le lien de navigation mène à la page complète des favoris de l'utilisateur. */}
           <Link
-            href={`/profile/${username}/favorites`}
+            href={`/profile/${username}/favourites`} // Lien vers la page complète des favoris de l'utilisateur
             className="link link-hover text-sm"
           >
             Voir tous les favoris

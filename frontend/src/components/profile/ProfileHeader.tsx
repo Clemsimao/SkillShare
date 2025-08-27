@@ -1,3 +1,7 @@
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+// Inserer Header et footer
+
 // Avatar + pseudo + stats (tutos, abonnés, abonnements)
 type Stats = { tutorials: number;  followers: number; following: number };
 
@@ -9,10 +13,11 @@ export default function ProfileHeader(props:  {
     location?: string;
     stats: Stats;
 }) {
-    const { name, username, avatarURL, location, stats } = props;
+    const { name, username, avatarUrl, location, stats } = props;
 
     // ---------- Rendu JSX ----------
     return (
+      
   <section className="card bg-base-200 shadow-sm">
     <div className="card-body p-4">
 

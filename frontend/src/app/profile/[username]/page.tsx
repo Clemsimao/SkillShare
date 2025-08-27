@@ -5,10 +5,13 @@ import Link from "next/link";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileInfoList from "@/components/profile/ProfileInfoList";
 import ProfileAbout from "@/components/profile/ProfileAbout";
-import ProfileFavorites from "@/components/profile/ProfileFavorites";
+import ProfileFavourites from "@/components/profile/ProfileFavourites";
 import ProfileCounters from "@/components/profile/ProfileCounters";
 
-type PageProps = { params: { username: string } };
+type PageProps = { 
+    params: { 
+        username: string }
+};
 
 // ---------- Composant parent (page profil) ----------
 export default async function ProfilePage( { params }: PageProps) {
@@ -16,7 +19,8 @@ export default async function ProfilePage( { params }: PageProps) {
 
     // TODO: récupérer les données par l'appel API (via src/lib/api-client.ts = connexion front > back)
     const user = {
-        name: "Mathieu Dupont",
+        username: "M.Dup",
+        name: "Mathieu Dupond",
         avatarURL: undefined as string | undefined,
         location: "Lyon, France",
         stats: { tutorials: 8, followers: 51, following: 12 },
@@ -32,13 +36,12 @@ export default async function ProfilePage( { params }: PageProps) {
 
             {/* Layout mobile → 2 colonnes à partir de md */}
             <div className="grid gap-6 md:grid-cols-[300px_1fr]">
+
                 {/* Colonne gauche */}
                 <div className="space-y-3">
                     <ProfileHeader
-                        name={user.name}
                         username={user.username}
                         avatarUrl={user.avatarUrl}
-                        location={user.location}
                         stats={user.stats}
                     />
 
@@ -49,10 +52,7 @@ export default async function ProfilePage( { params }: PageProps) {
                         city={user.info.city}
                     />
 
-                    <ProfileCounters
-                        followers={user.stats.followers}
-                        following={user.stats.following}
-                    />
+                  
                  <Link
                         href={`/profile/${username}/about`}
                         className="btn w-full text-white 
@@ -71,7 +71,7 @@ export default async function ProfilePage( { params }: PageProps) {
                         about={user.about}
                     />
 
-                    <ProfileFavorites
+                    <ProfileFavourites
                         username={user.username}
                         items={user.favorites}
                     />

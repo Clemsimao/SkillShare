@@ -2,7 +2,7 @@ import React from 'react';
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
-export default function SigninPage() {
+export default function SignUpPage() {
   // Récupérez l'état de connexion depuis notr système d'auth
   // Exemples possibles de conditions - à check les back:
   // const { user, isLoggedIn } = useAuth(); // Context
@@ -10,75 +10,127 @@ export default function SigninPage() {
   // const { data: session } = useSession(); // NextAuth
   // const isLoggedIn = !!session;
 
-    return (
-    <div className="min-h-screen bg-base-100 flex flex-col px-4 pt-4">
-      <Header />
+  // Définition des champs du formulaire
+  const formFields = [
+    {
+      name: 'pseudo',
+      label: 'Pseudo',
+      type: 'text',
+      placeholder: 'RingBearer1337',
+      required: true
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      placeholder: 'FrodoBaggins@lotr.com',
+      required: true
+    },
+    {
+      name: 'prenom',
+      label: 'Prénom',
+      type: 'text',
+      placeholder: 'Frodo',
+      required: false
+    },
+    {
+      name: 'nom',
+      label: 'Nom',
+      type: 'text',
+      placeholder: 'Baggins',
+      required: false
+    },
+    {
+      name: 'age',
+      label: 'Âge',
+      type: 'number',
+      placeholder: '106',
+      required: false,
+      min: 13,
+      max: 120
+    },
+    {
+      name: 'localisation',
+      label: 'Localisation',
+      type: 'text',
+      placeholder: 'La Comté, Terres du Milieu',
+      required: false
+    }
+  ];
 
-      {/* Main content qui prend tout l'espace dispo */}
+  // Définition du type pour les champs du formulaire
+  type FormField = {
+    name: string;
+    label: string;
+    type: string;
+    placeholder: string;
+    required: boolean;
+    min?: number;
+    max?: number;
+  };
+
+  // Rendu d'un champ de formulaire
+  const renderFormField = (field: FormField) => (
+    <div key={field.name} className="form-control">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+        <label className={`label-text ${field.required ? 'font-bold' : ''}`}>
+          {field.label}
+          {field.required && <span className="text-sm text-accent ml-1">*</span>}
+        </label>
+        <input
+          type={field.type}
+          className="input italic opacity-50 input-bordered w-full md:w-78"
+          placeholder={field.placeholder}
+          min={field.min}
+          max={field.max}
+        />
+      </div>
+    </div>
+  );
+
+  // Section statistiques
+  const renderStats = () => (
+    <div className="stats stats-horizontal shadow mt-8">
+      <div className="stat text-center flex-1">
+        <div className="stat-value text-primary">233</div>
+        <div className="stat-desc px-4">Abonnés</div>
+      </div>
+      <div className="stat text-center flex-1">
+        <div className="stat-value text-primary">174</div>
+        <div className="stat-desc px-1">Abonnements</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-base-100 flex flex-col px-4 pt-4">
       <main className="flex-1 flex items-center justify-center py-5">
         <div className="w-full max-w-2xl">
           <div className="card bg-base-200 shadow-xl">
             <div className="card-body">
-        
-              {/* --- Section informations personnelles --- */}
-            <div className="space-y-4">
-              <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Prénom</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Jean" />
-                </label>
-              </div>
-              
-              <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Nom</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Dupont" />
-                </label>
-              </div>
-              
-              <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Âge</span>
-                  <input type="number" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="25" min="13" max="120" />
-                </label>
-              </div>
-              
-              <div className="form-control">
-                <label className="label md:justify-between md:items-center">
-                  <span className="label-text">Pseudo</span>
-                  <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="mon_pseudo" />
-                </label>
-              </div>
-            </div>
 
-            <div className="form-control">
-              <label className="label md:justify-between md:items-center">
-                <span className="label-text">Localisation</span>
-                <input type="text" className="input italic opacity-50 input-bordered w-full md:w-64 md:ml-4" placeholder="Paris, France" />
-              </label>
-            </div>
+              {/* --- Section informations personnelles --- */}
+              <div className="space-y-4">
+                {formFields.map(renderFormField)}
+              </div>
 
               {/* --- Section libre about me --- */}
               <div className="form-control">
-                <label className="label md:justify-between md:items-start">
-                  <span className="label-text md:pt-3">À propos de moi</span>
-                  <textarea 
-                    className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-64 md:ml-4" 
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
+                  <label className="label-text md:pt-3">À propos de moi</label>
+                  <textarea
+                    className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-78"
                     placeholder="Parlez-nous de vous, vos passions, vos centres d'intérêts..."
-                  ></textarea>
-                </label>
+                  />
+                </div>
               </div>
 
               {/* --- Section stats abo avec largeur fixe --- */}
-              <div className="stats stats-horizontal shadow mt-8">
-                <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">34</div>
-                  <div className="stat-desc px-4">Abonnés</div>
-                </div>
-                <div className="stat text-center flex-1">
-                  <div className="stat-value text-primary">12</div>
-                  <div className="stat-desc px-1">Abonnements</div>
-                </div>
+              {renderStats()}
+
+              {/* --- Indication champs obligatoires --- */}
+              <div className="text-sm italic text-accent mt-6">
+                * Champs obligatoires
               </div>
 
               {/* --- Section d'assaut brr brr nan je deconne c'est une simu des 2 boutons --- */}
@@ -92,7 +144,7 @@ export default function SigninPage() {
                 {!isLoggedIn ? (
                   <button className="btn btn-neutral w-full">Créer le compte</button>
                 ) : (
-                  <button className="btn btn-outline btn-primary w-full">Éditer le profil</button>
+                  <button className="btn btn-outline btn-primary flex-1">Éditer le profil</button>
                 )}
               </div> */}
 
@@ -101,9 +153,6 @@ export default function SigninPage() {
         </div>
       </main>
 
-      <div className="pb-4">
-        <Footer />
-      </div>
     </div>
   );
 }
