@@ -143,7 +143,7 @@ export default function CategoryManager({
     <>
       {/* -- Version desktop -- */}
       <section className="w-full max-w-5xl mx-auto px-4">
-        <div className="hidden md:block rounded-xl bg-base-200 shadow-lg p-4 mb-4 border" style={{ borderColor: ACCENT }}>
+        <div className="hidden md:block rounded-xl bg-base-200 shadow-lg p-4 mb-4">
           {/* Dropdown desktop */}
           <div className="flex justify-center mb-8">
             <div className="dropdown dropdown-bottom dropdown-center w-full max-w-sm">
