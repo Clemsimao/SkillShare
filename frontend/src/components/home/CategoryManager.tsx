@@ -19,9 +19,6 @@ export default function CategoryManager({
   onCategorySelect,
   onNavigateSlide
 }: CategoryManagerProps) {
-  const categoryNames = Object.keys(categories);
-  const activeCategories = ['Art', 'Bien être / Santé', 'Environnement'];
-  const inactiveCategories = ['Multiculturalisme', 'Sciences et éducation', 'Technologie', 'Vie Pratique'];
   const ACCENT = "#19362D";
 
   // Icône flèche réutilisable
@@ -34,25 +31,15 @@ export default function CategoryManager({
   // --- Éléments du dropdown ---
   const renderDropdownItems = () => (
     <>
-      {/* Catégories actives */}
-      {activeCategories.map(category => (
-        <li key={category}>
+      {/* Catégories */}
+      {categories.map(category => (
+        <li key={category.id}>
           <a 
             className="text-sm md:text-base cursor-pointer font-schoolbell flex items-center gap-2" 
             onClick={() => onCategorySelect(category)}
           >
             <ArrowIcon />
-            {category}
-          </a>
-        </li>
-      ))}
-      
-      {/* Catégories inactives */}
-      {inactiveCategories.map(category => (
-        <li key={category}>
-          <a className="text-sm md:text-base opacity-50 cursor-not-allowed font-schoolbell flex items-center gap-2">
-            <ArrowIcon />
-            {category}
+            {category.title}
           </a>
         </li>
       ))}
@@ -103,7 +90,7 @@ export default function CategoryManager({
         {/* Titre de la catégorie (mobile uniquement) */}
         <div className="flex justify-center mb-4 md:hidden ml-6 pr-4">
           <h2 className="btn btn-accent pointer-events-none text-center w-full font-schoolbell">
-            {selectedCategory}
+            {selectedCategory.title}
           </h2>
         </div>
 
@@ -126,12 +113,12 @@ export default function CategoryManager({
 
         {/* --- Liste des compétences --- */}
         <ul className="list-none ml-6 pr-8 md:ml-0 md:pr-0 space-y-1 mb-6 transition-all duration-500 ease-in-out">
-          {selectedCategory && categories[selectedCategory]?.map((item, index) => (
+          {selectedCategory && selectedCategory.skills?.map((skill, index) => (
             <li key={index} className="bg-base-200 p-2 rounded hover:bg-base-300 flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
-              <span className="font-schoolbell">{item}</span>
+              <span className="font-schoolbell">{skill.title}</span>
             </li>
           ))}
         </ul>
@@ -167,7 +154,7 @@ export default function CategoryManager({
           {/* Indicateurs navigation (les gros points) */}
           {selectedCategory && (
             <div className="flex gap-2 mb-4 justify-center">
-              {categoryNames.map((_, i) => (
+              {categories.map((_, i) => (
                 <div 
                   key={i} 
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${

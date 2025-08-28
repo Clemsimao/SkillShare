@@ -1,29 +1,28 @@
-import 'dotenv/config';
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import { sequelize } from './models/index.js';
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import { sequelize } from './models/index.js'
 
-import apiRoutes from './routes/index.js';
+import apiRoutes from './routes/index.js'
 
-const app = express();
-const PORT = process.env.PORT || 8000;
+const app = express()
+const PORT = process.env.PORT || 8000
 
 // Middlewares de sécurité
-app.use(helmet());
+app.use(helmet())
 
 app.use(cors({
   // ORIGINS AUTORISÉS
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL  // Production : utilise la variable d'env
-    : [                         // Développement : tableau d'URLs autorisées
-        'http://localhost:3000',    // Next.js standard
-        'http://127.0.0.1:3000'     // Alternative localhost (certains navigateurs)
-      ],
-  
+  origin: process.env.FRONTEND_URL  // Production : utilise la variable d'env
+    || [                         // Développement : tableau d'URLs autorisées
+      'http://localhost:3000',    // Next.js standard
+      'http://127.0.0.1:3000'     // Alternative localhost (certains navigateurs)
+    ],
+
   // COOKIES & AUTHENTIFICATION
   credentials: true,            // Permet l'envoi de cookies/JWT avec les requêtes
-  
+
   // MÉTHODES HTTP AUTORISÉES
   methods: [                    // Liste explicite des méthodes permises
     'GET',                      // Lecture des données
@@ -32,35 +31,35 @@ app.use(cors({
     'DELETE',                   // Suppression
     'OPTIONS'                   // Requêtes preflight (automatiques du navigateur)
   ],
-  
+
   // HEADERS AUTORISÉS DANS LES REQUÊTES
   allowedHeaders: [
     'Content-Type',             // Type de contenu (application/json, etc.)
     'Authorization',            // CRUCIAL : pour envoyer "Bearer <token>"
   ]
-}));
+}))
 
 // Middlewares de parsing
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }))
+app.use(express.urlencoded({ extended: true }))
 
 // Initialisation de la base de données
 async function initDatabase() {
   try {
-    await sequelize.authenticate();
-    console.log('Connexion DB réussie');
-    
-    await sequelize.sync({ force: false });
-    console.log('Base de données synchronisée');
-    
+    await sequelize.authenticate()
+    console.log('Connexion DB réussie')
+
+    await sequelize.sync({ force: false })
+    console.log('Base de données synchronisée')
+
   } catch (error) {
-    console.error('Erreur DB:', error.message);
-    process.exit(1);
+    console.error('Erreur DB:', error.message)
+    process.exit(1)
   }
 }
 
 // Routes API
-app.use('/api', apiRoutes);
+app.use('/api', apiRoutes)
 
 
 // Routes
@@ -70,8 +69,8 @@ app.get('/', (req, res) => {
     message: 'SkillShare API - Backend opérationnel',
     version: '1.0.0',
     timestamp: new Date().toISOString()
-  });
-});
+  })
+})
 
 // Gestion des erreurs 404
 app.use('*', (req, res) => {
@@ -79,19 +78,19 @@ app.use('*', (req, res) => {
     success: false,
     message: 'Route non trouvée',
     data: null
-  });
-});
+  })
+})
 
 // Démarrage du serveur
 async function startServer() {
-  await initDatabase();
-  
+  await initDatabase()
+
   app.listen(PORT, () => {
-    console.log(`Serveur démarré sur le port ${PORT}`);
-    console.log(`URL: http://localhost:${PORT}`);
-  });
+    console.log(`Serveur démarré sur le port ${PORT}`)
+    console.log(`URL: http://localhost:${PORT}`)
+  })
 }
 
-startServer();
+startServer()
 
-export default app;
+export default app
