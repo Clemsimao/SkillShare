@@ -60,7 +60,7 @@ export default function CategoryManager({
 
   // Section avec SVG layout
   const SectionWithSVG = ({ children, maxWidth = "max-w-5xl" }: { children: React.ReactNode; maxWidth?: string }) => (
-    <section className={`w-full relative ${maxWidth} mx-auto mb-8 flex items-center`}>
+    <section className={`w-full relative ${maxWidth} mx-auto mb-8 flex items-end`}>
       <SideImage src="/collab.svg" alt="deux personnes collaborant" side="left" />
       {children}
       <SideImage src="/learn.svg" alt="Une personne en train d'apprendre en suivant un cours en ligne" side="right" />
@@ -114,7 +114,7 @@ export default function CategoryManager({
     <>
       {/* --- Conteneur harmonisé avec ContentPreview --- */}
       <section className="w-full max-w-5xl mx-auto px-4">
-        <div className="rounded-xl bg-base-200 shadow-lg p-4 mb-4 border" style={{ borderColor: ACCENT }}>
+        <div className="rounded-xl bg-base-200 shadow-lg p-4 mb-4 border h-110" style={{ borderColor: ACCENT }}>
           
           {/* --- Dropdown (desktop) --- */}
           <div className="dropdown dropdown-bottom dropdown-center hidden md:block mb-8 w-full max-w-sm mx-auto">
