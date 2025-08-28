@@ -61,15 +61,15 @@ export default function LoginModal() {
 
   return (
     <dialog id="login_modal" className="modal">
-      <div className="modal-box flex flex-col items-center justify-center gap-6 pb-16">
+      <div className="modal-box flex flex-col items-center justify-center gap-6 pb-16 max-w-md mx-auto">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
           </button>
         </form>
         
-        <form onSubmit={handleSubmit} className="w-full">
-          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm">
+          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 w-full">
             <legend className="fieldset-legend text-xl">Connexion</legend>
             
             <button type="button" className="btn bg-white text-black border-[#e5e5e5] w-full">
@@ -140,7 +140,7 @@ export default function LoginModal() {
               required
             />
             
-            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full er p-2 mt-4">
+            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-2 mt-4">
               <legend className="fieldset italic">Option de connexion</legend>
               <label className="label flex items-center justify-between w-full">
                 <span className="legend">Se souvenir de moi...?</span>
