@@ -8,7 +8,7 @@ import { PropsWithChildren } from "react";
 
 export default function ClientLayout({ children }: PropsWithChildren) {
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col">
+    <div className="min-h-screen bg-base-100 max-w-7xl mx-auto flex flex-col">
       <div className="px-6 pt-6"> {/* Padding pour Header */}
         <Header />
       </div>
