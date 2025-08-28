@@ -1,4 +1,4 @@
-// services/users.ts
+
 // Services de gestion des profils utilisateurs et compétences
 
 import { api, uploadFile } from "../lib/http-client";

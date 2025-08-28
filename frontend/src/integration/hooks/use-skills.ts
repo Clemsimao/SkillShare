@@ -1,4 +1,3 @@
-// hooks/use-skills.ts
 // Hook pour la gestion des compétences et catégories
 
 import { useState, useEffect, useCallback } from "react";
@@ -43,17 +42,15 @@ export const useSkills = (): UseSkillsReturn => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [skillsStatus, setSkillsStatus] = useState<ApiStatusType>("idle");
-  const [categoriesStatus, setCategoriesStatus] =
-    useState<ApiStatusType>("idle");
+  const [categoriesStatus, setCategoriesStatus] = useState<ApiStatusType>("idle");
 
-  // Hooks pour les actions utilisateur
+  // Hooks pour les actions utilisateur - maintenant compatibles avec useApi corrigé
   const addSkillApi = useApi(addUserSkill);
   const removeSkillApi = useApi(removeUserSkill);
   const addInterestApi = useApi(addUserInterest);
   const removeInterestApi = useApi(removeUserInterest);
 
-  const isLoading =
-    skillsStatus === "loading" || categoriesStatus === "loading";
+  const isLoading = skillsStatus === "loading" || categoriesStatus === "loading";
 
   /**
    * CHARGEMENT COMPÉTENCES - Récupérer toutes les compétences
