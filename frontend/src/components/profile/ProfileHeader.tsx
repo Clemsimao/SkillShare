@@ -3,17 +3,17 @@ import Footer from "@/components/common/Footer";
 // Inserer Header et footer
 
 // Avatar + pseudo + stats (tutos, abonnés, abonnements)
-type Stats = { tutorials: number;  followers: number; following: number };
+type Stats = { tutorials: number; followers: number; following: number };
 
 // ---------- Composant header du profil ----------
-export default function ProfileHeader(props:  {
-    name: string;
-    username: string;
-    avatarUrl?: string;
-    location?: string;
-    stats: Stats;
+export default function ProfileHeader(props: {
+  name: string;
+  username: string;
+  avatarUrl?: string;
+  location?: string;
+  stats: Stats;
 }) {
-    const { name, username, avatarUrl, location, stats } = props;
+  const { name, username, avatarUrl, location, stats } = props;
 
     // ---------- Rendu JSX ----------
     return (
@@ -40,12 +40,14 @@ export default function ProfileHeader(props:  {
             <div className="text-white stat-title text-xl">Tutoriels</div>
             <div className="stat-value text-lg text-white">{stats.tutorials}</div>
           </div>
-
-          {/* --- Nombre d'abonnés --- */}
-          <div className="stat place-items-center p-2">
-            <div className="text-white stat-title text-xl">Abonnés</div>
-            <div className="stat-value text-lg text-white">{stats.followers}</div>
-          </div>
+  
+            {/* --- Nombre d'abonnés --- */}
+            <div className="stat place-items-center p-2">
+              <div className="text-white stat-title text-xs">Abonnés</div>
+              <div className="stat-value text-lg text-white">
+                {stats.followers}
+              </div>
+            </div>
 
           {/* --- Nombre d'abonnements --- */}
           <div className="stat place-items-center p-2">
@@ -79,3 +81,4 @@ export default function ProfileHeader(props:  {
 </div>
 );
 }
+

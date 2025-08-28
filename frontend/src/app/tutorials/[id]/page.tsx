@@ -3,7 +3,6 @@
 import { notFound } from "next/navigation";
 
 // Type données pour tester sans backend
-
 type Tutorial = {
   id: string;
   title: string;
@@ -46,7 +45,7 @@ const MOCK_COMMENTS: Comment[] = [
   {
     id: "c1",
     tutorialId: "1",
-    author: "Nora",
+    author: "Benjamin",
     content: "Très clair, merci pour les exos d’échauffement !",
     createdAt: "2025-08-25T08:05:00.000Z",
   },
