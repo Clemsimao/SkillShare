@@ -43,7 +43,7 @@ export default function ProfileHeader(props: {
   
             {/* --- Nombre d'abonnés --- */}
             <div className="stat place-items-center p-2">
-              <div className="text-white stat-title text-xs">Abonnés</div>
+              <div className="text-white stat-title text-xl">Abonnés</div>
               <div className="stat-value text-lg text-white">
                 {stats.followers}
               </div>
