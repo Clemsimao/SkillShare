@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import LoginModal from '../logIn/LoginModal';
+import LoginModal from '../common/LoginModal';
 
 export default function Header() {
   const [isDark, setIsDark] = useState(false);
