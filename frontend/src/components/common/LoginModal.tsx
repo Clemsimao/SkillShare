@@ -174,7 +174,14 @@ export default function LoginModal() {
             </div>
           </div>
 
-          <Link href="/signup" className="btn btn-accent">
+          <Link 
+            href="/signup" 
+            className="btn btn-accent"
+            onClick={() => {
+              const modal = document.getElementById('login_modal') as HTMLDialogElement;
+              modal?.close();
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
