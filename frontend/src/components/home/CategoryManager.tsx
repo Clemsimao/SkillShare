@@ -160,7 +160,7 @@ export default function CategoryManager({
         </div>
         
         {/* -- Version mobile -- */}
-        <div className="md:hidden rounded-xl bg-base-200 shadow-lg p-4 mb-4 border" style={{ borderColor: ACCENT }}>
+        <div className="md:hidden rounded-xl bg-base-200 shadow-lg p-4 mb-4 ">
           {/* Contenu principal */}
           {selectedCategory ? renderCategorySection() : renderWelcomeSection()}
 
