@@ -119,7 +119,7 @@ export default function Header() {
         </label>
 
         {/* Bouton connexion/profil */} 
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
           // mettre ou retirer le "!" pour simuler connecté/déconnecté [Fab]
           <button 
             className="btn btn-circle" 
