@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
+// import { useSession } from "next-auth/react";
 
 export default function SignUpPage() {
   // Récupérez l'état de connexion depuis notr système d'auth

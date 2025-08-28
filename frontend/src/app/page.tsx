@@ -12,13 +12,13 @@ export default function Home() {
       'Peinture', 'Photographie', 'Sculpture'
     ],
     'Bien être / Santé': [
-      'Activités physique et sportive', 'Beauté et mode',
-      'Bien-être mental et relaxation', 'Nutrition',
-      'Massage et thérapies', 'Méditation', 'Yoga et pilates'
+      'Activités physique', 'Beauté et mode',
+      'Mindset', 'Nutrition',
+      'Herborisme', 'Méditation', 'Yoga et pilates'
     ],
     'Environnement': [
-      'Agriculture durable', 'Énergies renouvelables',
-      'Jardinage écologique', 'Recyclage et upcycling',
+      'Animaux', 'Énergies vertes',
+      'Éco-Jardinage', 'Upcycling',
       'Zéro déchet', 'Permaculture', 'Éco-construction'
     ]
   };
