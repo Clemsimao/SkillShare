@@ -16,7 +16,8 @@ import type {
  * LISTE COMPLÈTE - Récupérer tous les tutoriels publiés
  */
 export const getAllTutorials = async (): Promise<TutorialsResponse> => {
-  return api.get<TutorialsResponse>(ENDPOINTS.TUTORIALS.LIST);
+  const { data } = await api.get<TutorialsResponse>(ENDPOINTS.TUTORIALS.LIST);
+    return data;
 };
 
 /**
@@ -25,7 +26,8 @@ export const getAllTutorials = async (): Promise<TutorialsResponse> => {
 export const getTutorial = async (
   tutorialId: number
 ): Promise<TutorialResponse> => {
-  return api.get<TutorialResponse>(buildUrl.tutorialDetail(tutorialId));
+  const { data } = await api.get<TutorialResponse>(buildUrl.tutorialDetail(tutorialId));
+    return data;
 };
 
 /**
@@ -34,10 +36,11 @@ export const getTutorial = async (
 export const createTutorial = async (
   tutorialData: CreateTutorialRequest
 ): Promise<{ success: boolean; message: string; tutorial: Tutorial }> => {
-  return api.post<{ success: boolean; message: string; tutorial: Tutorial }>(
+  const { data } = await api.post<{ success: boolean; message: string; tutorial: Tutorial }>(
     ENDPOINTS.TUTORIALS.CREATE,
     tutorialData
   );
+    return data;
 };
 
 /**
@@ -47,10 +50,11 @@ export const updateTutorial = async (
   tutorialId: number,
   tutorialData: UpdateTutorialRequest
 ): Promise<{ success: boolean; message: string; tutorial: Tutorial }> => {
-  return api.put<{ success: boolean; message: string; tutorial: Tutorial }>(
+  const { data } = await api.put<{ success: boolean; message: string; tutorial: Tutorial }>(
     buildUrl.tutorialUpdate(tutorialId),
     tutorialData
   );
+    return data;
 };
 
 /**
@@ -59,7 +63,8 @@ export const updateTutorial = async (
 export const deleteTutorial = async (
   tutorialId: number
 ): Promise<ApiResponse> => {
-  return api.delete<ApiResponse>(buildUrl.tutorialDelete(tutorialId));
+  const { data } = await api.delete<ApiResponse>(buildUrl.tutorialDelete(tutorialId));
+    return data;
 };
 
 /**

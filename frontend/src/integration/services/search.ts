@@ -55,7 +55,10 @@ export const searchUsers = async (
     url += `&limit=${params.limit}`;
   }
 
-  return api.get<SearchUsersResponse>(url);
+  //return api.get<SearchUsersResponse>(url); a modifier 
+  // la modification : 
+  const {data} = await api.get<SearchUsersResponse>(url);
+  return data;
 };
 
 /**
@@ -84,7 +87,10 @@ export const searchTutorials = async (
     url += `&limit=${params.limit}`;
   }
 
-  return api.get<SearchTutorialsResponse>(url);
+  //return api.get<SearchTutorialsResponse>(url); a modifier 
+  // la modification :
+  const {data} = await api.get<SearchTutorialsResponse>(url);
+  return data;
 };
 
 /**

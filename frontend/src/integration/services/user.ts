@@ -16,9 +16,10 @@ import type {
 export const getUserProfile = async (
   userId: number
 ): Promise<{ success: boolean; message: string; user: User }> => {
-  return api.get<{ success: boolean; message: string; user: User }>(
+  const {data} = await api.get<{ success: boolean; message: string; user: User }>(
     buildUrl.userProfile(userId)
   );
+  return data;
 };
 
 /**
@@ -27,10 +28,11 @@ export const getUserProfile = async (
 export const updateProfile = async (
   userData: UpdateUserData
 ): Promise<{ success: boolean; message: string; user: User }> => {
-  return api.put<{ success: boolean; message: string; user: User }>(
-    ENDPOINTS.USERS.UPDATE_PROFILE,
-    userData
-  );
+  const {data} = await api.put<{ success: boolean; message: string; user: User }>(
+  ENDPOINTS.USERS.UPDATE_PROFILE,
+  userData
+);
+  return data;
 };
 
 /**
@@ -41,17 +43,20 @@ export const uploadProfilePicture = async (
 ): Promise<{ success: boolean; message: string; url: string }> => {
   const formData = new FormData();
   formData.append("avatar", imageFile);
-  return uploadFile<{ success: boolean; message: string; url: string }>(
+  
+  const data = await uploadFile<{ success: boolean; message: string; url: string }>(
     ENDPOINTS.USERS.UPLOAD_PICTURE,
     formData
   );
+  return data;
 };
 
 /**
  * SUPPRESSION COMPTE - Supprimer définitivement son compte
  */
 export const deleteAccount = async (): Promise<ApiResponse> => {
-  return api.delete<ApiResponse>(ENDPOINTS.USERS.DELETE_PROFILE);
+  const {data} = await api.delete<ApiResponse>(ENDPOINTS.USERS.DELETE_PROFILE);
+  return data;
 };
 
 /**
@@ -64,12 +69,13 @@ export const addUserSkill = async (
   message: string;
   skill: { id: number; title: string };
 }> => {
-  const data: AddSkillRequest = { skillId };
-  return api.post<{
+  const skillData: AddSkillRequest = { skillId };
+  const {data} = await api.post<{
     success: boolean;
     message: string;
     skill: { id: number; title: string };
-  }>(ENDPOINTS.USERS.ADD_SKILL, data);
+  }>(ENDPOINTS.USERS.ADD_SKILL, skillData);
+  return data;
 };
 
 /**
@@ -78,7 +84,8 @@ export const addUserSkill = async (
 export const removeUserSkill = async (
   skillId: number
 ): Promise<ApiResponse> => {
-  return api.delete<ApiResponse>(buildUrl.removeUserSkill(skillId));
+  const {data} = await api.delete<ApiResponse>(buildUrl.removeUserSkill(skillId));
+  return data;
 };
 
 /**
@@ -91,12 +98,13 @@ export const addUserInterest = async (
   message: string;
   interest: { id: number; title: string };
 }> => {
-  const data: AddSkillRequest = { skillId };
-  return api.post<{
+  const skillData: AddSkillRequest = { skillId };
+  const {data} = await api.post<{
     success: boolean;
     message: string;
     interest: { id: number; title: string };
-  }>(ENDPOINTS.USERS.ADD_INTEREST, data);
+  }>(ENDPOINTS.USERS.ADD_INTEREST, skillData);
+  return data;
 };
 
 /**
@@ -105,5 +113,6 @@ export const addUserInterest = async (
 export const removeUserInterest = async (
   skillId: number
 ): Promise<ApiResponse> => {
-  return api.delete<ApiResponse>(buildUrl.removeUserInterest(skillId));
+  const {data} = await api.delete<ApiResponse>(buildUrl.removeUserInterest(skillId));
+  return data;
 };

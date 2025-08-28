@@ -49,30 +49,8 @@ httpClient.interceptors.response.use(
   }
 );
 
-// Wrapper générique pour les requêtes avec typage TypeScript
-export const request = async <T>(
-  method: "GET" | "POST" | "PUT" | "DELETE",
-  url: string,
-  data?: any
-): Promise<T> => {
-  const response = await httpClient.request<T>({
-    method,
-    url,
-    data,
-  });
-  return response.data;
-};
-
-// Méthodes simplifiées avec types génériques
-export const api = {
-  get: <T>(url: string) => request<T>("GET", url),
-  post: <T>(url: string, data?: any) => request<T>("POST", url, data),
-  put: <T>(url: string, data?: any) => request<T>("PUT", url, data),
-  delete: <T>(url: string) => request<T>("DELETE", url),
-};
-
 // Upload de fichiers avec FormData
-export const uploadFile = async <T>(
+const uploadFile = async <T>(
   url: string,
   formData: FormData
 ): Promise<T> => {
@@ -84,4 +62,8 @@ export const uploadFile = async <T>(
   return response.data;
 };
 
-export { httpClient };
+
+export {
+  httpClient as api,
+  uploadFile
+}
