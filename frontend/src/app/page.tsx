@@ -1,86 +1,73 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import CategoryManager from '@/components/home/CategoryManager';
-import ContentPreview from '@/components/home/ContentPreview';
+import { useState, useEffect } from 'react'
+import CategoryManager from '@/components/home/CategoryManager'
+import ContentPreview from '@/components/home/ContentPreview'
+
+import { useSkills } from '@/integration/hooks/use-skills'
 
 export default function Home() {
-  // Données simulées des catégories avec leurs listes
-  const categories = {
-    'Art': [
-      'Chant', 'Dessin', 'Écriture', 'Musique', 
-      'Peinture', 'Photographie', 'Sculpture'
-    ],
-    'Bien être / Santé': [
-      'Activités physique', 'Beauté et mode',
-      'Mindset', 'Nutrition',
-      'Herborisme', 'Méditation', 'Yoga et pilates'
-    ],
-    'Environnement': [
-      'Animaux', 'Énergies vertes',
-      'Éco-Jardinage', 'Upcycling',
-      'Zéro déchet', 'Permaculture', 'Éco-construction'
-    ]
-  };
+
+  const { categories } = useSkills()
 
   // États pour gérer la catégorie sélectionnée
-  const [selectedCategory, setSelectedCategory] = useState<keyof typeof categories | null>(null);
-  const [dropdownLabel, setDropdownLabel] = useState('Choisissez une catégorie !');
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<keyof typeof categories | null>(null)
+  const [dropdownLabel, setDropdownLabel] = useState('Choisissez une catégorie !')
+  const [currentSlide, setCurrentSlide] = useState(0)
 
-  const categoryNames = Object.keys(categories) as (keyof typeof categories)[];
-  const maxSlide = categoryNames.length - 1;
+  const isMobile = () => (window.innerWidth < 768)
+  const [mobile, setMobile] = useState(isMobile())
 
-  // --- Fonction de détection de la taille d'écran et initialisation ---
-  useEffect(() => {
-    const checkIsMobile = () => {
-      const mobile = window.innerWidth < 768; // md breakpoint
-      
-      // Pour éviter d'avoir une liste vide sur mobile
-      if (mobile && selectedCategory === null) {
-        setSelectedCategory('Art');
-      }
-      // Si on passe en desktop et qu'Art était sélectionné par défaut
-      else if (!mobile && selectedCategory === 'Art') {
-        // Optionnel : remettre à null pour forcer la sélection
-        // setSelectedCategory(null);
-        // setDropdownLabel('Choisissez une catégorie !');
-      }
-    };
-
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, [selectedCategory]);
+  window.addEventListener('resize', () => {
+    setMobile(isMobile())
+  })
 
   // --- Fonctions de navigation ---
   const navigateSlide = (direction: 'next' | 'prev') => {
-    const newIndex = direction === 'next' 
-      ? (currentSlide === maxSlide ? 0 : currentSlide + 1)
-      : (currentSlide === 0 ? maxSlide : currentSlide - 1);
-    
-    setCurrentSlide(newIndex);
-    const newCategory = categoryNames[newIndex];
-    setSelectedCategory(newCategory);
-    setDropdownLabel(newCategory);
-  };
+    const maxSlide = categories.length - 1
 
-  const handleCategorySelect = (categoryName: keyof typeof categories) => {
-    if (categories[categoryName]) {
-      setSelectedCategory(categoryName);
-      setDropdownLabel(categoryName);
-      setCurrentSlide(categoryNames.indexOf(categoryName));
+    let newIndex;
+
+    if (direction === 'next') {
+      if (currentSlide === maxSlide) {
+        newIndex = 0
+      }
+      else {
+        newIndex = currentSlide + 1
+      }
     }
-  };
+    else { // if (direction === 'prev')
+      if (currentSlide === 0) {
+        newIndex = maxSlide
+      }
+      else {
+        newIndex = currentSlide - 1
+      }
+    }
+
+    setCurrentSlide(newIndex)
+  
+    const newCategory = categories[newIndex]
+    setSelectedCategory(newCategory)
+    setDropdownLabel(newCategory.title)
+  }
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category)
+    setDropdownLabel(category.title)
+    setCurrentSlide(categories.indexOf(category))
+
+    document.activeElement.blur()
+  }
 
   return (
     <div className="px-4 pt-4">
       <div className="flex flex-col items-center justify-center py-8">
-        
+
         {/* --- Gestionnaire de catégories --- */}
         <CategoryManager
           categories={categories}
-          selectedCategory={selectedCategory}
+          selectedCategory={selectedCategory || (mobile ? categories[0] : null)}
           dropdownLabel={dropdownLabel}
           currentSlide={currentSlide}
           onCategorySelect={handleCategorySelect}
@@ -88,8 +75,8 @@ export default function Home() {
         />
 
         <ContentPreview />
-        
+
       </div>
     </div>
-  );
+  )
 }

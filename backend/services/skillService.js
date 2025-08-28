@@ -41,12 +41,18 @@ export const skillService = {
   async getAllCategories() {
     try {
       const categories = await Category.findAll({
-        order: [['title', 'ASC']]
+        attributes: ['category_id', 'title'],
+        order: [['title', 'ASC']],
+        include: [{
+          association: 'skills',
+          attributes: ['skill_id', 'title']
+        }],
       });
 
       return categories.map(category => ({
         id: category.category_id,
-        title: category.title
+        title: category.title,
+        skills: category.skills,
       }));
 
     } catch (error) {
