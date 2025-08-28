@@ -1,4 +1,3 @@
-// hooks/use-api.ts
 // Hook générique pour appels API avec état de chargement
 
 import { useState, useCallback, useRef } from "react";
@@ -11,7 +10,7 @@ interface UseApiReturn<T> {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  execute: (...args: unknown[]) => Promise<T | null>;
+  execute: (...args: any[]) => Promise<T | null>; // Changé : any[] au lieu de unknown[]
   reset: () => void;
 }
 
@@ -20,7 +19,7 @@ interface UseApiReturn<T> {
  * Gère l'état de chargement, les données et les erreurs
  */
 export const useApi = <T>(
-  apiFunction: (...args: unknown[]) => Promise<T>
+  apiFunction: (...args: any[]) => Promise<T> // Changé : any[] au lieu de unknown[]
 ): UseApiReturn<T> => {
   const [data, setData] = useState<T | null>(null);
   const [status, setStatus] = useState<ApiStatusType>("idle");
@@ -38,7 +37,7 @@ export const useApi = <T>(
    * EXÉCUTION - Déclencher l'appel API
    */
   const execute = useCallback(
-    async (...args: unknown[]): Promise<T | null> => {
+    async (...args: any[]): Promise<T | null> => { // Changé : any[] au lieu de unknown[]
       // Éviter les appels multiples simultanés
       if (isExecutingRef.current) {
         return null;
@@ -50,14 +49,12 @@ export const useApi = <T>(
         setError(null);
 
         const result = await apiFunction(...args);
-
         setData(result);
         setStatus("success");
         return result;
       } catch (error: unknown) {
         const errorMessage =
           error instanceof Error ? error.message : "Erreur inconnue";
-
         setError(errorMessage);
         setStatus("error");
         return null;

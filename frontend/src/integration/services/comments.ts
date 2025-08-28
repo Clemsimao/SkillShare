@@ -35,12 +35,23 @@ export const getCommentsByTutorial = async (
   comments: Comment[];
   count: number;
 }> => {
-  return api.get<{
+  //A MODIFIER
+  // return api.get<{
+  //   success: boolean;
+  //   message: string;
+  //   comments: Comment[];
+  //   count: number;
+  // }>(buildUrl.commentsByTutorial(tutorialId));
+
+
+  // la modification
+  const {data} = await api.get<{
     success: boolean;
     message: string;
     comments: Comment[];
     count: number;
   }>(buildUrl.commentsByTutorial(tutorialId));
+  return data;
 };
 
 /**
@@ -50,11 +61,27 @@ export const getCommentsByTutorial = async (
  */
 export const createComment = async (
   commentData: CreateCommentRequest
-): Promise<{ success: boolean; message: string; comment: Comment }> => {
-  return api.post<{ success: boolean; message: string; comment: Comment }>(
-    ENDPOINTS.COMMENTS.CREATE,
+): Promise<{ 
+  success: boolean; 
+  message: string; 
+  comment: Comment 
+}> => {
+
+  // A MODIFIER
+  // return api.post<{ success: boolean; message: string; comment: Comment }>(
+  //   ENDPOINTS.COMMENTS.CREATE,
+  //   commentData
+  // );
+
+  //la modification
+  const {data} = await api.post<{
+    success: boolean;
+    message: string;
+    comment: Comment;
+  }>(ENDPOINTS.COMMENTS.CREATE, 
     commentData
   );
+  return data;
 };
 
 /**
@@ -66,11 +93,26 @@ export const createComment = async (
 export const updateComment = async (
   commentId: number,
   commentData: UpdateCommentRequest
-): Promise<{ success: boolean; message: string; comment: Comment }> => {
-  return api.put<{ success: boolean; message: string; comment: Comment }>(
-    buildUrl.updateComment(commentId),
-    commentData
+): Promise<{ 
+  success: boolean; 
+  message: string; 
+  comment: Comment 
+}> => {
+  //A MODIFIER
+  // return api.put<{ success: boolean; message: string; comment: Comment }>(
+  //   buildUrl.updateComment(commentId),
+  //   commentData
+  // );
+
+  // la modification :
+  const {data} = await api.put<{
+  success: boolean; 
+  message: string; 
+  comment: Comment
+  }>(buildUrl.updateComment(commentId),
+  commentData
   );
+  return data;
 };
 
 /**
@@ -80,10 +122,22 @@ export const updateComment = async (
  */
 export const deleteComment = async (
   commentId: number
-): Promise<{ success: boolean; message: string }> => {
-  return api.delete<{ success: boolean; message: string }>(
-    buildUrl.deleteComment(commentId)
+): Promise<{ 
+  success: boolean; 
+  message: string 
+}> => {
+
+  //A MODIFIER
+  // return api.delete<{ success: boolean; message: string }>(
+    // buildUrl.deleteComment(commentId)
+  // );
+
+  const {data} = await api.delete<{
+  success: boolean; 
+  message: string 
+  }> (buildUrl.deleteComment(commentId)
   );
+  return data;
 };
 
 /**

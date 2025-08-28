@@ -25,54 +25,95 @@ import type {
 
 /**
  * COMPÉTENCES - Récupérer toutes les compétences disponibles
- * @returns Liste des compétences avec leurs catégories
+ * @returns {Promise<SkillsResponse>} Liste des compétences avec leurs catégories
+ * @throws {Error} Si l'API est inaccessible ou retourne une erreur
+ * @example
+ * ```typescript
+ * const skills = await getSkills();
+ * console.log(skills.skills); // Array<Skill>
+ * ```
  */
 export const getSkills = async (): Promise<SkillsResponse> => {
-  return api.get<SkillsResponse>(ENDPOINTS.PUBLIC.SKILLS);
+  const {data} = await api.get<SkillsResponse>(ENDPOINTS.PUBLIC.SKILLS);
+  return data;
 };
 
 /**
  * CATÉGORIES - Récupérer toutes les catégories de compétences
- * @returns Liste des catégories
+ * @returns {Promise<CategoriesResponse>} Liste des catégories avec nombre de compétences
+ * @throws {Error} Si l'API est inaccessible ou retourne une erreur
+ * @example
+ * ```typescript
+ * const categories = await getCategories();
+ * console.log(categories.categories); // Array<Category>
+ * ```
  */
 export const getCategories = async (): Promise<CategoriesResponse> => {
-  return api.get<CategoriesResponse>(ENDPOINTS.PUBLIC.SKILLS_CATEGORIES);
+  const {data} = await api.get<CategoriesResponse>(ENDPOINTS.PUBLIC.SKILLS_CATEGORIES);
+  return data;
 };
 
 /**
  * TUTORIEL LANDING - Récupérer le tutoriel à afficher sur la landing page
- * @returns Le dernier tutoriel publié ou un tutoriel mis en avant
+ * @returns {Promise<TutorialResponse>} Le dernier tutoriel publié ou un tutoriel mis en avant
+ * @throws {Error} Si l'API est inaccessible ou aucun tutoriel disponible
+ * @example
+ * ```typescript
+ * const featuredTutorial = await getLandingTutorial();
+ * console.log(featuredTutorial.tutorial.title);
+ * ```
  */
 export const getLandingTutorial = async (): Promise<TutorialResponse> => {
-  return api.get<TutorialResponse>(ENDPOINTS.PUBLIC.TUTORIALS_LANDING);
+  const {data} = await api.get<TutorialResponse>(ENDPOINTS.PUBLIC.TUTORIALS_LANDING);
+  return data;
 };
 
 /**
  * PROFILS EXEMPLE - Récupérer des profils d'utilisateurs pour la landing page
- * @param limit - Nombre maximum de profils à récupérer (défaut: 6)
- * @returns Liste des profils exemple avec leurs compétences
+ * @param {number} [limit=6] - Nombre maximum de profils à récupérer (entre 1 et 20)
+ * @returns {Promise<{success: boolean, users: User[], count: number}>} Liste des profils exemple avec leurs compétences et nombre total
+ * @throws {Error} Si l'API est inaccessible ou le paramètre limit invalide
+ * @example
+ * ```typescript
+ * const profiles = await getExampleProfiles(4);
+ * console.log(profiles.users); // Array<User> avec 4 utilisateurs max
+ * ```
  */
 export const getExampleProfiles = async (
   limit: number = 6
 ): Promise<{ success: boolean; users: User[]; count: number }> => {
-  return api.get<{ success: boolean; users: User[]; count: number }>(
+  const {data} = await api.get<{ success: boolean; users: User[]; count: number }>(
     `${ENDPOINTS.PUBLIC.USERS_EXAMPLES}?limit=${limit}`
   );
+  return data;
 };
 
 /**
  * SANTÉ DE L'API - Vérifier que l'API fonctionne correctement
- * @returns Status de l'API avec timestamp
+ * @returns {Promise<ApiResponse & {timestamp: string}>} Status de l'API avec timestamp de la réponse
+ * @throws {Error} Si l'API est complètement inaccessible
+ * @example
+ * ```typescript
+ * const health = await getApiHealth();
+ * console.log(health.success); // true si API opérationnelle
+ * console.log(health.timestamp); // ISO timestamp
+ * ```
  */
-export const getApiHealth = async (): Promise<
-  ApiResponse & { timestamp: string }
-> => {
-  return api.get<ApiResponse & { timestamp: string }>(ENDPOINTS.PUBLIC.HEALTH);
+export const getApiHealth = async (): Promise<ApiResponse & { timestamp: string }> => {
+  const {data} = await api.get<ApiResponse & { timestamp: string }>(ENDPOINTS.PUBLIC.HEALTH);
+  return data;
 };
 
 /**
- * Helper : Vérifier si l'API est accessible
- * @returns true si l'API répond, false sinon
+ * HELPER - Vérifier si l'API est accessible (version silencieuse)
+ * @returns {Promise<boolean>} true si l'API répond correctement, false sinon
+ * @example
+ * ```typescript
+ * const isOnline = await checkApiAvailability();
+ * if (!isOnline) {
+ *   // Afficher message d'erreur offline
+ * }
+ * ```
  */
 export const checkApiAvailability = async (): Promise<boolean> => {
   try {
