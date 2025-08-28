@@ -23,8 +23,7 @@ const { username, fullname, age, gender, city } = props;
       {/* Ligne statique qui affiche le pseudo */}
       <div className="btn w-full cursor-default">
         <span className="p-10 opacity-80">@{username}</span>
-      </div>
-
+      </div>  
       {/* Chaque ligne d'information utilise le sous-composant Row */}
       <Row label="Nom / Prénom" value={fullname} />
       <Row label="Âge" value={age} />
