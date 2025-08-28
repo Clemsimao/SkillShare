@@ -1,5 +1,6 @@
 'use client';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 
 type CategoryManagerProps = {
   categories: Record<string, string[]>;
@@ -71,40 +72,68 @@ export default function CategoryManager({
     </section>
   );
 
-  // Section avec liste des compétences
+  // Section avec liste des compétences et SVG
   const renderCategorySection = () => (
-    <section className="w-full relative max-w-xl mx-auto mb-8 px-8">
-      {/* Titre de la catégorie actuelle (mobile) - Largeur alignée sur la liste */}
-      <div className="flex justify-center mb-4 md:hidden ml-6 pr-8">
-        <h2 className="btn btn-accent pointer-events-none text-center w-full font-schoolbell">
-          {selectedCategory}
-        </h2>
+    <section className="w-full relative max-w-5xl mx-auto mb-8 flex items-center">
+      
+      {/* SVG gauche - masqué en mobile */}
+      <div className="hidden md:flex flex-shrink-0 m-4 bg-base-200 p-4 rounded-lg">
+        <Image
+          src="/share.svg"
+          alt="deux personnes collaborant"
+          width={300}
+          height={300}
+          className="text-accent"
+        />
       </div>
 
-      {/* Navigation mobile "Swipe" */}
-      <button
-        onClick={() => onNavigateSlide('prev')}
-        className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
-        aria-label="Catégorie précédente"
-      >
-        <ChevronLeftIcon className="w-6 h-6" />
-      </button>
-      <button
-        onClick={() => onNavigateSlide('next')}
-        className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden"
-        aria-label="Catégorie suivante"
-      >
-        <ChevronRightIcon className="w-6 h-6" />
-      </button>
+      {/* Conteneur central avec le contenu */}
+      <div className="flex-1 max-w-sm mx-auto px-8 md:px-0">
+        
+        {/* Titre de la catégorie actuelle (mobile) */}
+        <div className="flex justify-center mb-4 md:hidden ml-6 pr-8">
+          <h2 className="btn btn-accent pointer-events-none text-center w-full font-schoolbell">
+            {selectedCategory}
+          </h2>
+        </div>
 
-      {/* Liste des compétences */}
-      <ul className="list-none ml-6 pr-8 space-y-1 mb-6 transition-all duration-500 ease-in-out">
-        {selectedCategory && categories[selectedCategory]?.map((item, index) => (
-          <li key={index} className="bg-base-200 p-2 rounded hover:bg-base-300">
-            <span className="font-schoolbell">{item}</span>
-          </li>
-        ))}
-      </ul>
+        {/* Navigation mobile "Swipe" */}
+        <button
+          onClick={() => onNavigateSlide('prev')}
+          className="absolute -left-4 top-2/5 btn btn-accent btn-soft btn-circle md:hidden z-10"
+          aria-label="Catégorie précédente"
+        >
+          <ChevronLeftIcon className="w-6 h-6" />
+        </button>
+        <button
+          onClick={() => onNavigateSlide('next')}
+          className="absolute -right-2 top-2/5 btn btn-accent btn-soft btn-circle md:hidden z-10"
+          aria-label="Catégorie suivante"
+        >
+          <ChevronRightIcon className="w-6 h-6" />
+        </button>
+
+        {/* Liste des compétences */}
+        <ul className="list-none ml-6 pr-8 md:ml-0 md:pr-0 space-y-1 mb-6 transition-all duration-500 ease-in-out">
+          {selectedCategory && categories[selectedCategory]?.map((item, index) => (
+            <li key={index} className="bg-base-200 p-2 rounded hover:bg-base-300">
+              <span className="font-schoolbell">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* SVG droite - masqué en mobile */}
+      <div className="hidden md:flex flex-shrink-0 m-4 bg-base-200 p-4 rounded-lg">
+        <Image
+          src="/learn.svg"
+          alt="Une personne en train d'apprendre en suivant un cours en ligne"
+          width={300}
+          height={300}
+          className="text-accent"
+        />
+      </div>
+      
     </section>
   );
 
