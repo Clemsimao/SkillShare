@@ -48,7 +48,7 @@ export default function ContentPreview({
       </div>
 
       {/* Bloc profils (en dessous, max 3) */}
-      <div className="rounded-xl bg-base-200 shadow-lg p-4 border border-[#334155] rounded-lg">
+      <div className="rounded-xl bg-base-200 shadow-lg p-4 rounded-lg">
         <h3 className="text-mdfont-medium mb-3 font-schoolbell text-cyan-500">
           Profils que vous pourriez apprécier…
         </h3>
