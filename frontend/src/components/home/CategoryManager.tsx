@@ -41,7 +41,7 @@ export default function CategoryManager({
 
   // SVG de bienvenue
   const BookIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-20 h-20 mx-auto mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-20 h-50 mx-auto mb-4">
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
     </svg>
   );
@@ -73,7 +73,7 @@ export default function CategoryManager({
       <div className="flex-1 max-w-xl mx-auto text-center">
         <div className="bg-base-200 p-8 rounded-lg">
           <BookIcon />
-          <p className="text-sm text-base-content/60 font-schoolbell">Sélectionnez une catégorie ci-dessus</p>
+          <p className="text-md text-base-content/60 font-schoolbell">Sélectionnez une catégorie ci-dessus</p>
         </div>
       </div>
     </SectionWithSVG>
