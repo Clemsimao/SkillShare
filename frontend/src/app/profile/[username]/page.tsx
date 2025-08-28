@@ -74,7 +74,7 @@ export default async function ProfilePage({ params }: PageProps) {
         </div>
 
         {/* Colonne droite (2 colonnes: haut / bas) */}
-        <div className="space-y-3 bg-base-200 rounded-lg border border-[#334155] p-5">
+        <div className="space-y-3 bg-base-200 rounded-lg p-10">
           <ProfileAbout username={user.username} about={user.about} />
 
           <ProfileFavourites username={user.username} items={user.favorites} />
