@@ -160,6 +160,8 @@ export default function Home() {
           summary={tutorial?.content}
           posterUrl={tutorial?.picture}
           profiles={profiles}
+          isLoggedIn={isLoggedIn}
+          onLoginClick={openLoginModal}
         />
       </div>
     </div>
