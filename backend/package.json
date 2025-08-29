@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "seeds": "node seeds/index.js",
+    "seeds": "node seeds/seed.js",
     "test:db": "node -e \"import('./config/database.js').then(db => db.default.authenticate()).then(() => console.log('✅ DB OK')).catch(e => console.error('❌ DB Error:', e))\"",
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up -d",

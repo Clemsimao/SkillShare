@@ -18,11 +18,11 @@ INSERT INTO skill (title, content, category_id) VALUES
 
 -- 3. Utilisateur
 INSERT INTO "user" (last_name, first_name, username, email, password, birthdate, gender, profile_picture) VALUES 
-('Doe', 'John', 'johndoe', 'john@example.com', 'hashedpassword', '1990-01-01', 'M', NULL),
-('Smith', 'Anna', 'annasmith', 'anna@example.com', 'hashedpassword', '1992-05-12', 'F', NULL),
-('Brown', 'Mike', 'mikebrown', 'mike@example.com', 'hashedpassword', '1988-09-23', 'M', NULL),
-('Lee', 'Sara', 'saralee', 'sara@example.com', 'hashedpassword', '1995-03-17', 'F', NULL),
-('Martin', 'Paul', 'paulmartin', 'paul@example.com', 'hashedpassword', '1993-07-30', 'M', NULL);
+('Doe', 'John', 'johndoe', 'john@example.com', '$argon2i$v=19$m=16,t=2,p=1$UmNNNXVXOW5mYVJLM2UwNw$KiXPKcImOA/q0tGNgBxTHQ', '1990-01-01', 'M', NULL),
+('Smith', 'Anna', 'annasmith', 'anna@example.com', '$argon2i$v=19$m=16,t=2,p=1$UmNNNXVXOW5mYVJLM2UwNw$KiXPKcImOA/q0tGNgBxTHQ', '1992-05-12', 'F', NULL),
+('Brown', 'Mike', 'mikebrown', 'mike@example.com', '$argon2i$v=19$m=16,t=2,p=1$UmNNNXVXOW5mYVJLM2UwNw$KiXPKcImOA/q0tGNgBxTHQ', '1988-09-23', 'M', NULL),
+('Lee', 'Sara', 'saralee', 'sara@example.com', '$argon2i$v=19$m=16,t=2,p=1$UmNNNXVXOW5mYVJLM2UwNw$KiXPKcImOA/q0tGNgBxTHQ', '1995-03-17', 'F', NULL),
+('Martin', 'Paul', 'paulmartin', 'paul@example.com', '$argon2i$v=19$m=16,t=2,p=1$UmNNNXVXOW5mYVJLM2UwNw$KiXPKcImOA/q0tGNgBxTHQ', '1993-07-30', 'M', NULL);
 
 -- 4. Tutoriel
 INSERT INTO tutorial (title, content, picture, video_link, user_id) VALUES 
