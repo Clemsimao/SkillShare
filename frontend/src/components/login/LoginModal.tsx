@@ -1,14 +1,14 @@
 "use client";
-
 import React, { useState } from "react";
 import Link from "next/link";
-
-// Import de vos services d'intégration
 import { login } from "@/integration/services/auth";
-import { useAuth } from "@/integration/hooks/use-auth";
 import type { LoginRequest } from "@/integration/types/api";
 
-export default function LoginModal() {
+interface LoginModalProps {
+  onLoginSuccess?: () => void;
+}
+
+export default function LoginModal({ onLoginSuccess }: LoginModalProps) {
   const [formData, setFormData] = useState<LoginRequest>({
     email: "",
     password: "",
@@ -17,15 +17,17 @@ export default function LoginModal() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Utilisation de votre hook d'authentification
-  const { login: authLogin, isLoggedIn, error: authError } = useAuth();
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    
+    // Effacer l'erreur quand l'utilisateur recommence à taper
+    if (error) {
+      setError(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,39 +42,81 @@ export default function LoginModal() {
         return;
       }
 
-      // Utilisation de votre service d'authentification
-      const success = await authLogin(formData);
+      // Validation email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        setError("Format d'email invalide");
+        return;
+      }
+
+      // Appel direct au service d'authentification
+      const response = await login(formData);
       
-      if (success) {
+      if (response.token && response.user) {
         // Fermer la modale en cas de succès
         const modal = document.getElementById('login_modal') as HTMLDialogElement;
         modal?.close();
         
-        // Optionnel : redirection ou autre action
-        console.log("Connexion réussie !");
+        // Reset du formulaire
+        setFormData({ email: "", password: "" });
+        setRememberMe(false);
+        
+        // Callback pour notifier le parent du succès
+        onLoginSuccess?.();
+        
+        // Recharger la page pour mettre à jour l'état d'auth global
+        window.location.reload();
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Erreur de connexion:", err);
-      setError("Erreur lors de la connexion");
+      
+      // Gestion des erreurs spécifiques
+      if (err.response?.status === 401) {
+        setError("Email ou mot de passe incorrect");
+      } else if (err.response?.status === 429) {
+        setError("Trop de tentatives. Réessayez plus tard");
+      } else if (err.message) {
+        setError(err.message);
+      } else {
+        setError("Erreur lors de la connexion. Vérifiez votre connexion internet");
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closeModal = () => {
+    const modal = document.getElementById('login_modal') as HTMLDialogElement;
+    modal?.close();
+    // Reset du formulaire à la fermeture
+    setFormData({ email: "", password: "" });
+    setRememberMe(false);
+    setError(null);
   };
 
   return (
     <dialog id="login_modal" className="modal">
       <div className="modal-box flex flex-col items-center justify-center gap-6 pb-16 max-w-md mx-auto">
         <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <button 
+            type="button"
+            onClick={closeModal}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
             ✕
           </button>
         </form>
-        
+
         <form onSubmit={handleSubmit} className="w-full max-w-sm">
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 w-full">
             <legend className="fieldset-legend text-xl">Connexion</legend>
             
-            <button type="button" className="btn bg-white text-black border-[#e5e5e5] w-full">
+            {/* Bouton Google (placeholder) */}
+            <button 
+              type="button" 
+              className="btn bg-white text-black border-[#e5e5e5] w-full opacity-50 cursor-not-allowed"
+              disabled
+            >
               <svg
                 aria-label="Google logo"
                 width="16"
@@ -100,7 +144,7 @@ export default function LoginModal() {
                   ></path>
                 </g>
               </svg>
-              Login with Google
+              Login with Google (bientôt)
             </button>
 
             <div className="flex items-center w-full my-4">
@@ -112,54 +156,71 @@ export default function LoginModal() {
             </div>
 
             {/* Affichage des erreurs */}
-            {(error || authError) && (
+            {error && (
               <div className="alert alert-error mb-4">
-                <span>{error || authError}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
-            <label className="label">Email</label>
-            <input 
-              type="email" 
-              name="email"
-              className="input italic w-full" 
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            
-            <label className="label">Password</label>
-            <input
-              type="password"
-              name="password"
-              className="input italic w-full"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
-            
-            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-2 mt-4">
-              <legend className="fieldset italic">Option de connexion</legend>
-              <label className="label flex items-center justify-between w-full">
-                <span className="legend">Se souvenir de moi...?</span>
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                className="input input-bordered w-full"
+                placeholder="votre-email@exemple.com"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text">Mot de passe</span>
+              </label>
+              <input
+                type="password"
+                name="password"
+                className="input input-bordered w-full"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                disabled={isLoading}
+                minLength={3}
+              />
+            </div>
+
+            <div className="form-control mt-4">
+              <label className="label cursor-pointer">
+                <span className="label-text">Se souvenir de moi</span>
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="toggle"
+                  className="checkbox"
+                  disabled={isLoading}
                 />
               </label>
-            </fieldset>
-            
-            <button 
-              type="submit" 
+            </div>
+
+            <button
+              type="submit"
               className="btn btn-neutral mt-4 w-full"
               disabled={isLoading}
             >
               {isLoading ? (
-                <span className="loading loading-spinner loading-sm"></span>
+                <>
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Connexion...
+                </>
               ) : (
                 "Se connecter"
               )}
@@ -167,20 +228,14 @@ export default function LoginModal() {
           </fieldset>
         </form>
 
-        <div className="tooltip tooltip-open tooltip-bottom" data-tip="hello">
-          <div className="tooltip-content">
-            <div className="animate-bounce text-yellow-400 -rotate-2 text-sm font-black">
-              inscris-toi !
-            </div>
+        <div className="text-center">
+          <div className="animate-bounce text-warning -rotate-2 text-sm font-black mb-2">
+            Pas encore inscrit ?
           </div>
-
-          <Link 
-            href="/signup" 
+          <Link
+            href="/signup"
             className="btn btn-accent"
-            onClick={() => {
-              const modal = document.getElementById('login_modal') as HTMLDialogElement;
-              modal?.close();
-            }}
+            onClick={closeModal}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
