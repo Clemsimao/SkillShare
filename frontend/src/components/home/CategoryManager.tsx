@@ -3,12 +3,23 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 
 type CategoryManagerProps = {
-  categories: Record<string, string[]>;
-  selectedCategory: string | null;
+  categories: Array<{
+    id: number;
+    title: string;
+    skills: Array<{skill_id: number; title: string}>;
+  }>;
+  selectedCategory: {
+    id: number;
+    title: string;
+    skills: Array<{skill_id: number; title: string}>;
+  } | null;
   dropdownLabel: string;
   currentSlide: number;
-  onCategorySelect: (category: string) => void;
+  onCategorySelect: (category: any) => void;
   onNavigateSlide: (direction: 'next' | 'prev') => void;
+  isLoggedIn: boolean;
+  onSkillClick: (skill: any) => void;
+  onLoginClick: () => void;
 };
 
 export default function CategoryManager({
@@ -17,7 +28,10 @@ export default function CategoryManager({
   dropdownLabel,
   currentSlide,
   onCategorySelect,
-  onNavigateSlide
+  onNavigateSlide,
+  isLoggedIn,
+  onSkillClick,
+  onLoginClick
 }: CategoryManagerProps) {
   const ACCENT = "#19362D";
 
@@ -28,10 +42,16 @@ export default function CategoryManager({
     </svg>
   );
 
+  // Icône verrou pour skills nécessitant une connexion
+  const LockIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 opacity-60">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+    </svg>
+  );
+
   // --- Éléments du dropdown ---
   const renderDropdownItems = () => (
     <>
-      {/* Catégories */}
       {categories.map(category => (
         <li key={category.id}>
           <a 
@@ -111,14 +131,44 @@ export default function CategoryManager({
           <ChevronRightIcon className="w-6 h-6" />
         </button>
 
+        {/* Message d'information si non connecté */}
+        {!isLoggedIn && selectedCategory && selectedCategory.skills.length > 0 && (
+          <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <LockIcon />
+              <span className="text-sm font-medium text-warning-content">
+                Connexion requise
+              </span>
+            </div>
+            <p className="text-xs text-base-content/70 mb-2">
+              Connectez-vous pour accéder aux profils et tutoriels de ces compétences
+            </p>
+            <button 
+              onClick={onLoginClick}
+              className="btn btn-xs btn-warning"
+            >
+              Se connecter
+            </button>
+          </div>
+        )}
+
         {/* --- Liste des compétences --- */}
         <ul className="list-none ml-6 pr-8 md:ml-0 md:pr-0 space-y-1 mb-6 transition-all duration-500 ease-in-out">
-          {selectedCategory && selectedCategory.skills?.map((skill, index) => (
-            <li key={index} className="bg-base-200 p-2 rounded hover:bg-base-300 flex items-center gap-2">
+          {selectedCategory && selectedCategory.skills?.map((skill) => (
+            <li 
+              key={skill.skill_id} 
+              className={`bg-base-200 p-2 rounded flex items-center gap-2 ${
+                isLoggedIn 
+                  ? 'hover:bg-base-300 cursor-pointer' 
+                  : 'opacity-75 cursor-not-allowed'
+              }`}
+              onClick={() => onSkillClick(skill)}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
-              <span className="font-schoolbell">{skill.title}</span>
+              <span className="font-schoolbell flex-1">{skill.title}</span>
+              {!isLoggedIn && <LockIcon />}
             </li>
           ))}
         </ul>
