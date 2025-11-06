@@ -1,0 +1,94 @@
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from '@jest/globals';
+import { Sequelize } from 'sequelize';
+import { searchService } from '../services/searchService.js';
+import { User } from '../models/User.js';
+import { Skill } from '../models/Skill.js';
+import { Category } from '../models/Category.js';
+import { UserSkill } from '../models/UserSkill.js';
+
+// Connexion à la DB de test (isolée de la DB de dev)
+const sequelize = new Sequelize('postgresql://skillshare:skillshare@postgres:5432/skillshare_test', {
+  logging: false // Pas de logs SQL pendant les tests
+});
+
+// Importer les associations des modèles
+import '../models/index.js';
+
+// SETUP : Créer les tables au démarrage
+beforeAll(async () => {
+  await sequelize.sync({ force: true });
+});
+
+// CLEANUP : Vider les tables entre chaque test (isolation)
+beforeEach(async () => {
+  await UserSkill.destroy({ where: {}, truncate: true });
+  await User.destroy({ where: {}, truncate: true });
+  await Skill.destroy({ where: {}, truncate: true });
+  await Category.destroy({ where: {}, truncate: true });
+});
+
+// TEARDOWN : Fermer la connexion à la fin
+afterAll(async () => {
+  await sequelize.close();
+});
+
+describe('searchService.searchUsers', () => {
+  
+  // TEST 1 : Recherche par skillId (cas nominal)
+  it('devrait trouver un user par skillId', async () => {
+    // Arrange : Créer les données de test
+    const category = await Category.create({ title: 'Dev' });
+    const skill = await Skill.create({ title: 'JavaScript', category_id: category.category_id });
+    const user = await User.create({
+      first_name: 'Grace',
+      last_name: 'Hopper',
+      username: 'gracehopper',
+      email: 'grace@test.com',
+      password: 'hash123',
+      birthdate: '1906-12-09'
+    });
+    // Créer le lien user ↔ skill dans la table de liaison
+    await UserSkill.create({ user_id: user.user_id, skill_id: skill.skill_id });
+    
+    // Act : Appeler le service
+    const result = await searchService.searchUsers({ skillId: skill.skill_id });
+    
+    // Assert : Vérifier le résultat
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0].username).toBe('gracehopper');
+    expect(result.pagination.totalCount).toBe(1);
+  });
+
+  // TEST 2 : Erreur sans paramètres (validation)
+  it('devrait rejeter une recherche sans skillId ni categoryId', async () => {
+    await expect(searchService.searchUsers({})).rejects.toThrow('skillId ou categoryId requis');
+  });
+
+  // TEST 3 : Pagination (cas complexe)
+  it('devrait paginer correctement les résultats', async () => {
+    // Arrange : Créer 15 users avec la même compétence
+    const category = await Category.create({ title: 'Dev' });
+    const skill = await Skill.create({ title: 'JavaScript', category_id: category.category_id });
+    
+    for (let i = 1; i <= 15; i++) {
+      const user = await User.create({
+        first_name: `User${i}`,
+        last_name: 'Test',
+        username: `user${i}`,
+        email: `user${i}@test.com`,
+        password: 'hash123',
+        birthdate: '1990-01-01'
+      });
+      await UserSkill.create({ user_id: user.user_id, skill_id: skill.skill_id });
+    }
+    
+    // Act : Chercher avec limit=10 (page 1)
+    const result = await searchService.searchUsers({ skillId: skill.skill_id, page: 1, limit: 10 });
+    
+    // Assert : Vérifier la pagination
+    expect(result.data).toHaveLength(10); // Seulement 10 résultats
+    expect(result.pagination.totalCount).toBe(15); // Mais 15 au total
+    expect(result.pagination.hasNext).toBe(true); // Il reste une page
+    expect(result.pagination.totalPages).toBe(2); // 2 pages au total
+  });
+});
