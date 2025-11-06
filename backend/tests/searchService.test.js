@@ -1,30 +1,18 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import { Sequelize } from 'sequelize';
+
+// IMPORTANT : Importer les modèles ET leurs associations AVANT tout
+import { User, Skill, Category, UserSkill } from '../models/index.js';
 import { searchService } from '../services/searchService.js';
-import { User } from '../models/User.js';
-import { Skill } from '../models/Skill.js';
-import { Category } from '../models/Category.js';
-import { UserSkill } from '../models/UserSkill.js';
 
 // Connexion à la DB de test (isolée de la DB de dev)
 const sequelize = new Sequelize('postgresql://skillshare:skillshare@postgres:5432/skillshare_test', {
   logging: false // Pas de logs SQL pendant les tests
 });
 
-// Importer les associations des modèles
-import '../models/index.js';
-
-// SETUP : Créer les tables au démarrage
+// SETUP : Créer les tables au démarrage (force: true = DROP et recrée)
 beforeAll(async () => {
   await sequelize.sync({ force: true });
-});
-
-// CLEANUP : Vider les tables entre chaque test (isolation)
-beforeEach(async () => {
-  await UserSkill.destroy({ where: {}, truncate: true });
-  await User.destroy({ where: {}, truncate: true });
-  await Skill.destroy({ where: {}, truncate: true });
-  await Category.destroy({ where: {}, truncate: true });
 });
 
 // TEARDOWN : Fermer la connexion à la fin
@@ -37,8 +25,8 @@ describe('searchService.searchUsers', () => {
   // TEST 1 : Recherche par skillId (cas nominal)
   it('devrait trouver un user par skillId', async () => {
     // Arrange : Créer les données de test
-    const category = await Category.create({ title: 'Dev' });
-    const skill = await Skill.create({ title: 'JavaScript', category_id: category.category_id });
+    const category = await Category.create({ title: 'Dev', content: 'Développement web' });
+    const skill = await Skill.create({ title: 'JavaScript', content: 'Langage de programmation web', category_id: category.category_id });
     const user = await User.create({
       first_name: 'Grace',
       last_name: 'Hopper',
@@ -67,8 +55,8 @@ describe('searchService.searchUsers', () => {
   // TEST 3 : Pagination (cas complexe)
   it('devrait paginer correctement les résultats', async () => {
     // Arrange : Créer 15 users avec la même compétence
-    const category = await Category.create({ title: 'Dev' });
-    const skill = await Skill.create({ title: 'JavaScript', category_id: category.category_id });
+    const category = await Category.create({ title: 'Dev', content: 'Développement web' });
+    const skill = await Skill.create({ title: 'JavaScript', content: 'Langage de programmation web', category_id: category.category_id });
     
     for (let i = 1; i <= 15; i++) {
       const user = await User.create({
