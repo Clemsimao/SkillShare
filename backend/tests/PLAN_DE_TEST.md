@@ -140,20 +140,28 @@
 - Host : `postgres` (container Docker)
 - Port : 5432
 
+**Isolation de la base de test :**
+- La variable `DATABASE_URL` est forcée à pointer vers `skillshare_test` AVANT l'import des modèles
+- Cela garantit que tous les modèles Sequelize utilisent la base de test et non la base de production
+- Les tests sont donc véritablement isolés de la base de données de développement
+
 **Commandes :**
 ```bash
-# Créer la base de test
+# Créer la base de test (une seule fois)
 docker exec -it skillshare_db psql -U skillshare -c "CREATE DATABASE skillshare_test;"
 
 # Lancer les tests
 docker exec -it skillshare_back npm test
 ```
 
+**Configuration :**
+- `package.json` : Le script `test` définit `DATABASE_URL` avant d'exécuter Jest
+- `searchService.test.js` : Force `process.env.DATABASE_URL` avant les imports de modèles
+
 **Dépendances :**
 - jest: 30.2.0
 - sequelize: 6.37.7
 - pg: 8.16.3
-
 ---
 
 ## 7. Résultats des tests
