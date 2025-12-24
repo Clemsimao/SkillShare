@@ -5,10 +5,23 @@ import Link from 'next/link';
 import { useEffect, useState } from "react";
 import { getExampleProfiles } from "@/integration/services/public";
 import type { User } from "@/integration/types/api";
+import { useAuth } from "@/context/AuthProvider";
+import LatestTutorials from "@/components/home/LatestTutorials";
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
   const [profiles, setProfiles] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleProtectedClick = (e: React.MouseEvent) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      const modal = document.getElementById('login_modal') as HTMLDialogElement;
+      if (modal) {
+        modal.showModal();
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -57,15 +70,25 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Link href="/signup" className="btn btn-primary btn-lg shadow-lg hover:scale-105 transition-transform duration-200 group">
-              Rejoindre la communauté
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>
-            </Link>
-            <Link href="/search" className="btn btn-outline btn-lg backdrop-blur-sm hover:bg-base-content hover:text-base-100">
-              Explorer les talents
-            </Link>
+            {!isAuthenticated && (
+              <Link href="/signup" className="btn btn-primary btn-lg shadow-lg hover:scale-105 transition-transform duration-200 group">
+                Rejoindre la communauté
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </Link>
+            )}
+
+            {isAuthenticated && (
+              <>
+                <Link href="/search" className="btn btn-outline btn-lg backdrop-blur-sm hover:bg-base-content hover:text-base-100">
+                  Découvrir les talents
+                </Link>
+                <Link href="/search?tab=tutorials" className="btn btn-outline btn-lg backdrop-blur-sm hover:bg-base-content hover:text-base-100">
+                  Consulter les tutoriels
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Stats rapides */}
@@ -87,6 +110,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* --- LATEST TUTORIALS SECTION --- */}
+      <LatestTutorials />
 
       {/* --- FEATURED PROFILES SECTION --- */}
       <section className="py-20 px-8 bg-base-200/50">
@@ -134,8 +160,12 @@ export default function Home() {
                     </div>
 
                     <div className="card-actions mt-4 w-full">
-                      <Link href={`/profile/${profile.id}`} className="btn btn-primary btn-sm btn-block">
-                        Voir le profil
+                      <Link
+                        href={`/profile/${profile.id}`}
+                        className="btn btn-primary btn-sm btn-block"
+                        onClick={handleProtectedClick}
+                      >
+                        {isAuthenticated ? "Voir le profil" : "Se connecter pour voir le profil"}
                       </Link>
                     </div>
                   </div>

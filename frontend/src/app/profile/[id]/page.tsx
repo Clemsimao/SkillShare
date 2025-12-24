@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthProvider";
 import { getUserProfile } from "@/integration/services/user";
 import type { User } from "@/integration/types/api";
+import EditProfileModal from "@/components/profile/EditProfileModal";
 
 export default function ProfilePage() {
     const params = useParams(); // Récupère l'ID depuis l'URL
@@ -14,38 +15,38 @@ export default function ProfilePage() {
     const [profileUser, setProfileUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    useEffect(() => {
+    const fetchProfile = useCallback(async () => {
         // Si pas d'ID, on arrête
         if (!params?.id) return;
 
-        const fetchProfile = async () => {
-            try {
-                setIsLoading(true);
-                // Conversion de l'ID string en number
-                const userId = parseInt(Array.isArray(params.id) ? params.id[0] : params.id);
+        try {
+            // Conversion de l'ID string en number
+            const userId = parseInt(Array.isArray(params.id) ? params.id[0] : params.id);
 
-                if (isNaN(userId)) {
-                    setError("Identifiant utilisateur invalide");
-                    return;
-                }
-
-                const response = await getUserProfile(userId);
-                if (response.success) {
-                    setProfileUser(response.user);
-                } else {
-                    setError(response.message || "Impossible de récupérer le profil");
-                }
-            } catch (err) {
-                console.error("Erreur chargement profil:", err);
-                setError("Une erreur est survenue lors du chargement du profil");
-            } finally {
-                setIsLoading(false);
+            if (isNaN(userId)) {
+                setError("Identifiant utilisateur invalide");
+                return;
             }
-        };
 
-        fetchProfile();
+            const response = await getUserProfile(userId);
+            if (response.success) {
+                setProfileUser(response.user);
+            } else {
+                setError(response.message || "Impossible de récupérer le profil");
+            }
+        } catch (err) {
+            console.error("Erreur chargement profil:", err);
+            setError("Une erreur est survenue lors du chargement du profil");
+        } finally {
+            setIsLoading(false);
+        }
     }, [params?.id]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [fetchProfile]);
 
     if (isLoading) {
         return (
@@ -124,7 +125,10 @@ export default function ProfilePage() {
                                 {/* Actions */}
                                 <div className="flex flex-col gap-2">
                                     {isOwner ? (
-                                        <button className="btn btn-outline btn-sm">
+                                        <button
+                                            className="btn btn-outline btn-sm"
+                                            onClick={() => setIsEditModalOpen(true)}
+                                        >
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
@@ -194,6 +198,13 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
+
+            <EditProfileModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                user={profileUser}
+                onUpdate={fetchProfile}
+            />
         </div>
     );
 }

@@ -10,13 +10,15 @@ const router = express.Router();
  * L'ID vient du clic frontend sur une skill de /api/skills
  * Route protégée - Visiteurs voient "connectez-vous", membres voient les profils
  */
+/**
+ * GET /api/search/users
+ * Route protégée - Nécessite une authentification
+ */
 router.get('/users', authMiddleware, searchUsers);
 
 /**
- * GET /api/search/tutorials?skillId={ID_DYNAMIQUE}&page=1  
- * Recherche tutoriels écrits par des experts de cette compétence
- * L'ID vient du clic frontend sur une skill de /api/skills
- * Route protégée - Trouve contenus pédagogiques d'auteurs qualifiés
+ * GET /api/search/tutorials
+ * Route protégée - Nécessite une authentification
  */
 router.get('/tutorials', authMiddleware, searchTutorials);
 

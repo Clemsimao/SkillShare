@@ -34,7 +34,7 @@ import type {
  * ```
  */
 export const getSkills = async (): Promise<SkillsResponse> => {
-  const {data} = await api.get<SkillsResponse>(ENDPOINTS.PUBLIC.SKILLS);
+  const { data } = await api.get<SkillsResponse>(ENDPOINTS.PUBLIC.SKILLS);
   return data;
 };
 
@@ -49,7 +49,7 @@ export const getSkills = async (): Promise<SkillsResponse> => {
  * ```
  */
 export const getCategories = async (): Promise<CategoriesResponse> => {
-  const {data} = await api.get<CategoriesResponse>(ENDPOINTS.PUBLIC.SKILLS_CATEGORIES);
+  const { data } = await api.get<CategoriesResponse>(ENDPOINTS.PUBLIC.SKILLS_CATEGORIES);
   return data;
 };
 
@@ -64,7 +64,18 @@ export const getCategories = async (): Promise<CategoriesResponse> => {
  * ```
  */
 export const getLandingTutorial = async (): Promise<TutorialResponse> => {
-  const {data} = await api.get<TutorialResponse>(ENDPOINTS.PUBLIC.TUTORIALS_LANDING);
+  const { data } = await api.get<TutorialResponse>(ENDPOINTS.PUBLIC.TUTORIALS_LANDING);
+  return data;
+};
+
+/**
+ * DERNIERS TUTORIELS - Récupérer les 3 derniers tutoriels (Landing Page)
+ * @returns {Promise<{success: boolean, tutorials: Tutorial[]}>}
+ */
+export const getLatestTutorials = async (): Promise<{ success: boolean, tutorials: any[] }> => {
+  // Note: 'any' pour Tutorial si non importé, ou on ajoute Tutorial dans les imports si manquant.
+  // Mais Tutorial est déjà importé mais peut être pas le type tableau dans TutorialResponse
+  const { data } = await api.get<{ success: boolean; tutorials: any[] }>(ENDPOINTS.PUBLIC.TUTORIALS_LATEST);
   return data;
 };
 
@@ -82,7 +93,7 @@ export const getLandingTutorial = async (): Promise<TutorialResponse> => {
 export const getExampleProfiles = async (
   limit: number = 6
 ): Promise<{ success: boolean; users: User[]; count: number }> => {
-  const {data} = await api.get<{ success: boolean; users: User[]; count: number }>(
+  const { data } = await api.get<{ success: boolean; users: User[]; count: number }>(
     `${ENDPOINTS.PUBLIC.USERS_EXAMPLES}?limit=${limit}`
   );
   return data;
@@ -100,7 +111,7 @@ export const getExampleProfiles = async (
  * ```
  */
 export const getApiHealth = async (): Promise<ApiResponse & { timestamp: string }> => {
-  const {data} = await api.get<ApiResponse & { timestamp: string }>(ENDPOINTS.PUBLIC.HEALTH);
+  const { data } = await api.get<ApiResponse & { timestamp: string }>(ENDPOINTS.PUBLIC.HEALTH);
   return data;
 };
 

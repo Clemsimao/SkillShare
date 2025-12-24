@@ -1,65 +1,64 @@
-import { User, Tutorial, Skill, Category } from '../models/index.js';
+import { User, Tutorial, Skill, Category, sequelize } from '../models/index.js';
+import { Op } from 'sequelize';
 
 export const searchService = {
   /**
-   * Recherche d'utilisateurs par compétence ou catégorie
+   * Recherche d'utilisateurs par compétence, catégorie ou texte
    */
-  async searchUsers({ skillId, categoryId, page = 1, limit = 10 }) {
+  async searchUsers({ skillId, categoryId, q, page = 1, limit = 10 }) {
     try {
-      if (!skillId && !categoryId) {
-        throw new Error('skillId ou categoryId requis');
+      // PAGINATION
+      const offset = (page - 1) * limit;
+
+      // 1. FILTRE UTILISATEUR (Recherche textuelle)
+      let userWhere = {};
+      if (q) {
+        const searchTerm = `%${q}%`;
+        userWhere = {
+          [Op.or]: [
+            { username: { [Op.iLike]: searchTerm } },
+            { first_name: { [Op.iLike]: searchTerm } },
+            { last_name: { [Op.iLike]: searchTerm } },
+            // Recherche concaténée nom complet (postgres specific)
+            sequelize.where(
+              sequelize.fn('concat', sequelize.col('first_name'), ' ', sequelize.col('last_name')),
+              { [Op.iLike]: searchTerm }
+            )
+          ]
+        };
       }
 
-      // PAGINATION : Calculer le décalage pour la page demandée
-      // Ex: page 2, limit 10 → offset = (2-1)*10 = 10 (ignore les 10 premiers)
-      const offset = (page - 1) * limit;
-      
-      // CONDITION DE RECHERCHE : Soit par compétence précise, soit par catégorie
-      // skillId fourni → cherche cette compétence exacte
-      // categoryId fourni → cherche toutes les compétences de cette catégorie
-      const skillWhere = skillId ? { skill_id: skillId } : { category_id: categoryId };
+      // 2. FILTRE COMPETENCE (Si skillId ou categoryId fourni)
+      let includeSkillObj = {
+        model: Skill,
+        as: 'skills',
+        through: { attributes: [] },
+        include: [{ model: Category, as: 'category' }]
+      };
+
+      if (skillId || categoryId) {
+        includeSkillObj.where = skillId ? { skill_id: skillId } : { category_id: categoryId };
+        includeSkillObj.required = true; // INNER JOIN si on filtre par skill
+      } else {
+        includeSkillObj.required = false; // LEFT JOIN si on cherche juste par texte
+      }
 
       const users = await User.findAll({
-        // SÉCURITÉ : Exclure le mot de passe des résultats
+        where: userWhere,
         attributes: { exclude: ['password'] },
-        
-        // JOINTURE : Récupérer les compétences de l'utilisateur
-        include: [{
-          model: Skill,
-          as: 'skills', // Nom de l'association définie dans models/index.js
-          through: { attributes: [] }, // Masquer la table de liaison user_skills
-          where: skillWhere, // Appliquer le filtre de recherche
-          required: true, // INNER JOIN - seulement users qui ONT des compétences matchantes
-          
-          // SOUS-JOINTURE : Récupérer la catégorie de chaque compétence
-          include: [{ model: Category, as: 'category' }]
-        }],
-        
-        // PAGINATION : Limiter le nombre de résultats
-        limit,  // Nombre max de résultats (ex: 10)
-        offset, // Nombre de résultats à ignorer (ex: 20 pour page 3)
-        
-        // TRI : Les utilisateurs les plus récents en premier
+        include: [includeSkillObj],
+        limit,
+        offset,
         order: [['created_at', 'DESC']],
-        
-        // DÉDUPLICATION : Éviter les doublons dus aux relations many-to-many
         distinct: true
       });
 
-      // COMPTAGE TOTAL : Pour la pagination (même requête sans limit/offset)
       const totalCount = await User.count({
-        include: [{
-          model: Skill,
-          as: 'skills',
-          through: { attributes: [] },
-          where: skillWhere,
-          required: true,
-          include: [{ model: Category, as: 'category' }]
-        }],
+        where: userWhere,
+        include: [includeSkillObj],
         distinct: true
       });
 
-      // FORMATAGE RÉPONSE : Structure standardisée
       return {
         data: users.map(user => ({
           id: user.user_id,
@@ -67,11 +66,11 @@ export const searchService = {
           lastName: user.last_name,
           username: user.username,
           profilePicture: user.profile_picture,
-          skills: user.skills.map(skill => ({
+          skills: user.skills ? user.skills.map(skill => ({
             id: skill.skill_id,
             title: skill.title,
-            category: skill.category.title
-          }))
+            category: skill.category ? skill.category.title : null
+          })) : []
         })),
         pagination: {
           page,
@@ -88,60 +87,67 @@ export const searchService = {
   },
 
   /**
-   * Recherche de tutoriels par compétence ou catégorie (via auteur)
+   * Recherche de tutoriels par compétence, catégorie ou texte (titre)
    */
-  async searchTutorials({ skillId, categoryId, page = 1, limit = 10 }) {
+  async searchTutorials({ skillId, categoryId, q, page = 1, limit = 10 }) {
     try {
-      if (!skillId && !categoryId) {
-        throw new Error('skillId ou categoryId requis');
+      const offset = (page - 1) * limit;
+
+      // 1. FILTRE TUTORIEL (Recherche textuelle)
+      let tutorialWhere = {};
+      if (q) {
+        tutorialWhere = {
+          title: { [Op.iLike]: `%${q}%` }
+        };
       }
 
-      // PAGINATION : Calculer décalage
-      const offset = (page - 1) * limit;
-      
-      // CONDITION RECHERCHE : Filtrer par compétences de l'auteur
-      const authorSkillWhere = skillId ? { skill_id: skillId } : { category_id: categoryId };
+      // 2. FILTRE COMPETENCE (via Auteur -> Skills)
+      // Note: La logique initiale filtrait les tutoriels écrits par des AUTEURS ayant la compétence.
+      // Si on cherche par texte, on veut peut-être juste les tutos qui match le titre, peu importe l'auteur.
+      // Si skillId est là, on garde la restriction.
+
+      let includeAuthorObj = {
+        model: User,
+        as: 'author',
+        attributes: ['user_id', 'first_name', 'last_name', 'username', 'profile_picture'],
+        include: []
+      };
+
+      if (skillId || categoryId) {
+        const authorSkillWhere = skillId ? { skill_id: skillId } : { category_id: categoryId };
+        includeAuthorObj.include.push({
+          model: Skill,
+          as: 'skills',
+          through: { attributes: [] },
+          where: authorSkillWhere,
+          required: true,
+          include: [{ model: Category, as: 'category' }]
+        });
+      } else {
+        // Si pas de filtre skill, on charge quand même les skills de l'auteur pour l'affichage (optionnel)
+        includeAuthorObj.include.push({
+          model: Skill,
+          as: 'skills',
+          through: { attributes: [] },
+          include: [{ model: Category, as: 'category' }]
+        });
+      }
 
       const tutorials = await Tutorial.findAll({
-        // JOINTURE AUTEUR : Récupérer l'auteur et ses compétences
-        include: [{
-          model: User,
-          as: 'author',
-          attributes: ['user_id', 'first_name', 'last_name', 'username', 'profile_picture'],
-          
-          // JOINTURE COMPÉTENCES AUTEUR : Filtrer par compétences
-          include: [{
-            model: Skill,
-            as: 'skills',
-            through: { attributes: [] },
-            where: authorSkillWhere,
-            required: true, // INNER JOIN - seulement auteurs avec compétences matchantes
-            include: [{ model: Category, as: 'category' }]
-          }]
-        }],
+        where: tutorialWhere,
+        include: [includeAuthorObj],
         limit,
         offset,
-        // TRI : Tutoriels les plus récents en premier
-        order: [['published_at', 'DESC']]
+        order: [['published_at', 'DESC']],
+        distinct: true
       });
 
-      // COMPTAGE TOTAL : Pour pagination
       const totalCount = await Tutorial.count({
-        include: [{
-          model: User,
-          as: 'author',
-          include: [{
-            model: Skill,
-            as: 'skills',
-            through: { attributes: [] },
-            where: authorSkillWhere,
-            required: true,
-            include: [{ model: Category, as: 'category' }]
-          }]
-        }]
+        where: tutorialWhere,
+        include: [includeAuthorObj],
+        distinct: true
       });
 
-      // FORMATAGE RÉPONSE
       return {
         data: tutorials.map(tutorial => ({
           id: tutorial.tutorial_id,
@@ -153,7 +159,7 @@ export const searchService = {
             id: tutorial.author.user_id,
             username: tutorial.author.username,
             profilePicture: tutorial.author.profile_picture,
-            skills: tutorial.author.skills.map(skill => skill.title)
+            skills: tutorial.author.skills ? tutorial.author.skills.map(skill => skill.title) : []
           }
         })),
         pagination: {

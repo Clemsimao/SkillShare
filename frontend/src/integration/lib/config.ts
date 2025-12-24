@@ -25,6 +25,7 @@ export const ENDPOINTS = {
     SKILLS: "/api/skills",
     SKILLS_CATEGORIES: "/api/skills/categories",
     TUTORIALS_LANDING: "/api/tutorials/landing",
+    TUTORIALS_LATEST: "/api/tutorials/latest",
     USERS_EXAMPLES: "/api/users/examples",
   },
 

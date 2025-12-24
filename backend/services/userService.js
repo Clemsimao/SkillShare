@@ -11,7 +11,7 @@ export const userService = {
     try {
       const user = await User.findOne({
         where: { user_id: id },
-        attributes: { 
+        attributes: {
           exclude: ['password'] // Exclure le mot de passe
         },
         include: [
@@ -79,24 +79,25 @@ export const userService = {
     try {
       // Mapping des champs autorisés (cohérent avec le modèle)
       const allowedFields = {};
-      
+
       if (updateData.firstName) allowedFields.first_name = updateData.firstName;
       if (updateData.lastName) allowedFields.last_name = updateData.lastName;
       if (updateData.username) allowedFields.username = updateData.username;
       if (updateData.email) allowedFields.email = updateData.email;
       if (updateData.content) allowedFields.content = updateData.content;
       if (updateData.gender !== undefined) allowedFields.gender = updateData.gender;
-      
+      if (updateData.profile_picture) allowedFields.profile_picture = updateData.profile_picture;
+
       // Mise à jour automatique du timestamp
       allowedFields.updated_at = new Date();
 
       // Validation unicité email (comme dans authController)
       if (updateData.email) {
-        const existingEmail = await User.findOne({ 
-          where: { 
+        const existingEmail = await User.findOne({
+          where: {
             email: updateData.email,
             user_id: { [Op.ne]: userId } // Exclure l'utilisateur actuel
-          } 
+          }
         });
         if (existingEmail) {
           throw new Error('Cet email est déjà utilisé');
@@ -105,11 +106,11 @@ export const userService = {
 
       // Validation unicité username (comme dans authController)
       if (updateData.username) {
-        const existingUsername = await User.findOne({ 
-          where: { 
+        const existingUsername = await User.findOne({
+          where: {
             username: updateData.username,
             user_id: { [Op.ne]: userId }
-          } 
+          }
         });
         if (existingUsername) {
           throw new Error('Ce nom d\'utilisateur est déjà pris');
@@ -171,12 +172,12 @@ export const userService = {
 
     } catch (error) {
       console.error('❌ Erreur deleteUserAccount:', error);
-      
+
       // Gestion erreur contrainte FK
       if (error.name === 'SequelizeForeignKeyConstraintError') {
         throw new Error('Impossible de supprimer : des données liées existent encore');
       }
-      
+
       throw error;
     }
   },
@@ -190,7 +191,7 @@ export const userService = {
     try {
       const users = await User.findAll({
         limit,
-        attributes: { 
+        attributes: {
           exclude: ['password', 'email'] // Exclure données sensibles
         },
         include: [

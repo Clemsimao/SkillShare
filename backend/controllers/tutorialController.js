@@ -27,6 +27,26 @@ export const getLandingTutorial = async (req, res) => {
   }
 };
 
+export const getLatestTutorials = async (req, res) => {
+  try {
+    const tutorials = await tutorialService.getAllTutorials();
+    // On suppose que getAllTutorials renvoie du plus récent au plus ancien (à vérifier dans le service)
+    const latestTutorials = tutorials.slice(0, 3);
+
+    return res.status(200).json({
+      success: true,
+      message: "Derniers tutoriels récupérés",
+      tutorials: latestTutorials,
+    });
+  } catch (error) {
+    console.error("❌ Erreur getLatestTutorials controller:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Impossible de récupérer les derniers tutoriels",
+    });
+  }
+};
+
 // -------------------------------
 // Partie privée : Avec JWT
 // -------------------------------

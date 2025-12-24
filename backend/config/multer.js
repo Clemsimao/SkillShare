@@ -25,16 +25,8 @@ const uploadImageTutorial = multer({
 });
 
 // ---------- Réglage image de profil user ----------
-const avatarStorage = new CloudinaryStorage({
-  cloudinary,
-  params: (req, file) => ({
-    folder: 'skillshare/avatars',
-    resource_type: 'image',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [{ width: 512, height: 512, crop: 'fill', gravity: 'face' }],
-    format: 'webp', // sortie plus légère
-  }),
-});
+// Configurer le stockage en mémoire pour lister le buffer manuellement vers Cloudinary
+const avatarStorage = multer.memoryStorage();
 
 const uploadAvatar = multer({
   storage: avatarStorage,

@@ -2,22 +2,13 @@
 // Services de recherche d'utilisateurs et de tutoriels
 
 import { api } from "../lib/http-client";
-import { buildUrl } from "../lib/config";
+import { ENDPOINTS } from "../lib/config";
 import type {
   SearchUsersResponse,
   SearchTutorialsResponse,
 } from "../types/api";
 
-/**
- * ================================
- * SEARCH SERVICES
- * ================================
- * Services de recherche avancée :
- * - Recherche d'utilisateurs par compétence
- * - Recherche de tutoriels par compétence
- * - Support pagination
- * - Filtrage par catégorie ou compétence spécifique
- */
+// ... existing code ...
 
 /**
  * Interface pour les paramètres de recherche
@@ -25,39 +16,27 @@ import type {
 export interface SearchParams {
   skillId?: number;
   categoryId?: number;
+  q?: string;
   page?: number;
   limit?: number;
 }
 
-/**
- * RECHERCHE UTILISATEURS - Trouver des utilisateurs par compétence ou catégorie
- * @param params - Paramètres de recherche
- * @returns Résultats paginés avec utilisateurs et leurs compétences
- */
 export const searchUsers = async (
   params: SearchParams
 ): Promise<SearchUsersResponse> => {
-  // Validation : au moins skillId ou categoryId requis
-  if (!params.skillId && !params.categoryId) {
-    throw new Error("skillId ou categoryId requis pour la recherche");
-  }
+  // Validation : au moins un critère requis -> RELAXED
+  // if (!params.skillId && !params.categoryId && !params.q) throw ...
 
-  // Construction de l'URL avec paramètres
-  let url = buildUrl.searchUsers(params.skillId || 0, params.page || 1);
+  const queryParams = new URLSearchParams();
+  if (params.skillId) queryParams.append("skillId", params.skillId.toString());
+  if (params.categoryId) queryParams.append("categoryId", params.categoryId.toString());
+  if (params.q) queryParams.append("q", params.q);
+  if (params.page) queryParams.append("page", params.page.toString());
+  if (params.limit) queryParams.append("limit", params.limit.toString());
 
-  // Si c'est une recherche par catégorie, ajuster l'URL
-  if (params.categoryId && !params.skillId) {
-    url = `${url.split("?")[0]}?categoryId=${params.categoryId}&page=${params.page || 1}`;
-  }
+  const url = `${ENDPOINTS.SEARCH.USERS}?${queryParams.toString()}`;
 
-  // Ajouter limit si spécifié
-  if (params.limit) {
-    url += `&limit=${params.limit}`;
-  }
-
-  //return api.get<SearchUsersResponse>(url); a modifier 
-  // la modification : 
-  const {data} = await api.get<SearchUsersResponse>(url);
+  const { data } = await api.get<SearchUsersResponse>(url);
   return data;
 };
 
@@ -69,27 +48,19 @@ export const searchUsers = async (
 export const searchTutorials = async (
   params: SearchParams
 ): Promise<SearchTutorialsResponse> => {
-  // Validation : au moins skillId ou categoryId requis
-  if (!params.skillId && !params.categoryId) {
-    throw new Error("skillId ou categoryId requis pour la recherche");
-  }
+  // Validation : RELAXED
+  // if (!params.skillId && !params.categoryId && !params.q) throw ...
 
-  // Construction de l'URL avec paramètres
-  let url = buildUrl.searchTutorials(params.skillId || 0, params.page || 1);
+  const queryParams = new URLSearchParams();
+  if (params.skillId) queryParams.append("skillId", params.skillId.toString());
+  if (params.categoryId) queryParams.append("categoryId", params.categoryId.toString());
+  if (params.q) queryParams.append("q", params.q);
+  if (params.page) queryParams.append("page", params.page.toString());
+  if (params.limit) queryParams.append("limit", params.limit.toString());
 
-  // Si c'est une recherche par catégorie, ajuster l'URL
-  if (params.categoryId && !params.skillId) {
-    url = `${url.split("?")[0]}?categoryId=${params.categoryId}&page=${params.page || 1}`;
-  }
+  const url = `${ENDPOINTS.SEARCH.TUTORIALS}?${queryParams.toString()}`;
 
-  // Ajouter limit si spécifié
-  if (params.limit) {
-    url += `&limit=${params.limit}`;
-  }
-
-  //return api.get<SearchTutorialsResponse>(url); a modifier 
-  // la modification :
-  const {data} = await api.get<SearchTutorialsResponse>(url);
+  const { data } = await api.get<SearchTutorialsResponse>(url);
   return data;
 };
 

@@ -8,7 +8,7 @@ import { skillService } from '../services/skillService.js';
 export const getPublicProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Validation ID
     if (!id || isNaN(parseInt(id))) {
       return res.status(400).json({
@@ -18,7 +18,7 @@ export const getPublicProfile = async (req, res) => {
     }
 
     const user = await userService.getUserById(parseInt(id));
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -67,7 +67,7 @@ export const updateProfile = async (req, res) => {
           message: 'La description doit être du texte'
         });
       }
-      
+
       if (updateData.content.length > 255) {
         return res.status(400).json({
           success: false,
@@ -92,7 +92,7 @@ export const updateProfile = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur updateProfile:', error);
-    
+
     // Gestion erreurs spécifiques du service
     if (error.message === 'Cet email est déjà utilisé') {
       return res.status(409).json({
@@ -100,14 +100,14 @@ export const updateProfile = async (req, res) => {
         message: error.message
       });
     }
-    
+
     if (error.message === 'Ce nom d\'utilisateur est déjà pris') {
       return res.status(409).json({
         success: false,
         message: error.message
       });
     }
-    
+
     if (error.message === 'Utilisateur non trouvé') {
       return res.status(404).json({
         success: false,
@@ -128,26 +128,56 @@ export const updateProfile = async (req, res) => {
  * Route protégée (authMiddleware requis)
  * Body: form-data -> field "avatar" (type File)
  */
+import cloudinary from '../config/cloudinary.js';
+// ...
+
+/**
+ * Upload / mettre à jour la photo de profil
+ * POST /api/users/profile/picture
+ * Route protégée (authMiddleware requis)
+ * Body: form-data -> field "avatar" (type File)
+ */
 export const uploadProfilePicture = async (req, res) => {
   try {
     const userId = req.user.id;
-    const imageUrl = req.file.path;
 
-    if (!req.file?.path) {
+    // Avec memoryStorage, le fichier est dans req.file.buffer
+    if (!req.file || !req.file.buffer) {
       return res.status(400).json({
         success: false,
         message: 'Aucun fichier reçu'
       });
     }
 
+    // Fonction interne pour transformer le buffer en Promise d'upload
+    const uploadToCloudinary = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'skillshare/avatars',
+            resource_type: 'image',
+            format: 'webp',
+            transformation: [{ width: 512, height: 512, crop: 'fill', gravity: 'face' }]
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+    };
+
+    const result = await uploadToCloudinary(req.file.buffer);
+
     const updatedUser = await userService.updateUserProfile(userId, {
-      profile_picture: req.file.path
+      profile_picture: result.secure_url
     });
 
     return res.status(200).json({
       success: true,
       message: 'Photo de profil mise à jour',
-      url: imageUrl
+      url: result.secure_url
     });
 
   } catch (error) {
@@ -182,7 +212,7 @@ export const deleteProfile = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur deleteProfile:', error);
-    
+
     // Gestion erreur contrainte FK (relations existantes)
     if (error.message === 'Impossible de supprimer : des données liées existent encore') {
       return res.status(409).json({
@@ -190,7 +220,7 @@ export const deleteProfile = async (req, res) => {
         message: 'Impossible de supprimer le compte : des tutoriels ou commentaires sont encore associés. Contactez le support.'
       });
     }
-    
+
     if (error.message === 'Utilisateur non trouvé') {
       return res.status(404).json({
         success: false,
@@ -213,7 +243,7 @@ export const deleteProfile = async (req, res) => {
 export const getExampleProfiles = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
-    
+
     // Validation limit
     if (limit > 20) {
       return res.status(400).json({
@@ -271,7 +301,7 @@ export const addUserSkill = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur addUserSkill:', error);
-    
+
     // Gestion erreurs spécifiques du service
     if (error.message === 'Compétence non trouvée') {
       return res.status(404).json({
@@ -279,7 +309,7 @@ export const addUserSkill = async (req, res) => {
         message: error.message
       });
     }
-    
+
     if (error.message === 'Cette compétence est déjà associée à votre profil') {
       return res.status(409).json({
         success: false,
@@ -321,7 +351,7 @@ export const removeUserSkill = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur removeUserSkill:', error);
-    
+
     if (error.message === 'Compétence non trouvée dans votre profil') {
       return res.status(404).json({
         success: false,
@@ -367,7 +397,7 @@ export const addUserInterest = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur addUserInterest:', error);
-    
+
     // Gestion erreurs spécifiques du service
     if (error.message === 'Compétence non trouvée') {
       return res.status(404).json({
@@ -375,7 +405,7 @@ export const addUserInterest = async (req, res) => {
         message: error.message
       });
     }
-    
+
     if (error.message === 'Cet intérêt est déjà associé à votre profil') {
       return res.status(409).json({
         success: false,
@@ -417,7 +447,7 @@ export const removeUserInterest = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur removeUserInterest:', error);
-    
+
     if (error.message === 'Intérêt non trouvé dans votre profil') {
       return res.status(404).json({
         success: false,

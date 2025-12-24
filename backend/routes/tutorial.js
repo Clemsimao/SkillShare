@@ -5,6 +5,7 @@ import { Tutorial } from "../models/index.js";
 import { authMiddleware } from "../middlewares/auth.js";
 import {
   getLandingTutorial,
+  getLatestTutorials,
   getAllTutorials,
   getTutorialById,
   createTutorial,
@@ -22,6 +23,9 @@ const router = express.Router();
 
 //Récupère le dernier tutoriel pour la landing page
 router.get("/landing", getLandingTutorial);
+
+//Récupère les 3 derniers tutoriels
+router.get("/latest", getLatestTutorials);
 
 // =====================================================
 // ROUTES PROTÉGÉES - Authentification requise
@@ -44,7 +48,7 @@ router.delete("/:id", authMiddleware, deleteTutorial);
 
 // Route POST /tutorials/:id/image
 router.post('/:id/image', uploadImageTutorial.single('image'), async (req, res) => {
-    console.log('Route image appelée', req.params.id, req.file);
+  console.log('Route image appelée', req.params.id, req.file);
 
   try {
     const tutorialId = req.params.id;

@@ -2,7 +2,7 @@
 // Client HTTP centralisé avec intercepteurs JWT automatiques
 
 import axios from "axios";
-import { API_CONFIG, DEFAULT_HEADERS } from "./config";
+import { API_CONFIG, DEFAULT_HEADERS, TIMEOUTS } from "./config";
 import { getToken, removeToken } from "./token";
 
 // Vérifie si le token JWT est expiré
@@ -58,6 +58,7 @@ const uploadFile = async <T>(
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    timeout: TIMEOUTS.SLOW,
   });
   return response.data;
 };

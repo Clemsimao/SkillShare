@@ -30,16 +30,12 @@ import { searchService } from '../services/searchService.js';
 export const searchUsers = async (req, res) => {
   try {
     // EXTRACTION DES PARAMÈTRES : Récupérer les query params de l'URL
-    // Ex: /api/search/users?skillId=5&page=2&limit=5
-    const { skillId, categoryId, page, limit } = req.query;
+    const { skillId, categoryId, q, page, limit } = req.query;
+    console.log('🔍 SEARCH USERS REQUEST:', { skillId, categoryId, q, page, limit });
 
     // VALIDATION PARAMÈTRES : Au moins un critère de recherche requis
-    if (!skillId && !categoryId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Paramètre skillId ou categoryId requis'
-      });
-    }
+    // if (!skillId && !categoryId && !q) { ... } -> RELAXED for "Show All"
+
 
     // VALIDATION TYPES : Vérifier que les IDs sont des nombres
     if (skillId && isNaN(parseInt(skillId))) {
@@ -56,15 +52,16 @@ export const searchUsers = async (req, res) => {
       });
     }
 
-    // CONVERSION EN ENTIERS : Les query params sont toujours des strings
+    // CONVERSION EN ENTIERS
     const searchParams = {
       skillId: skillId ? parseInt(skillId) : null,
       categoryId: categoryId ? parseInt(categoryId) : null,
-      page: page ? parseInt(page) : 1,        // Défaut page 1
-      limit: limit ? parseInt(limit) : 10     // Défaut 10 résultats
+      q: q || null,
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 10
     };
 
-    // VALIDATION PAGINATION : Valeurs cohérentes
+    // VALIDATION PAGINATION
     if (searchParams.page < 1) {
       return res.status(400).json({
         success: false,
@@ -79,29 +76,27 @@ export const searchUsers = async (req, res) => {
       });
     }
 
-    // APPEL DU SERVICE : Déléguer la logique métier au service
+    // APPEL DU SERVICE
     const results = await searchService.searchUsers(searchParams);
 
-    // RÉPONSE SUCCÈS : Format JSON standardisé
+    // RÉPONSE SUCCÈS
     res.status(200).json({
       success: true,
       message: `${results.data.length} utilisateur(s) trouvé(s)`,
-      users: results.data,           // Liste des utilisateurs
-      pagination: results.pagination  // Infos pagination
+      users: results.data,
+      pagination: results.pagination
     });
 
   } catch (error) {
     console.error('❌ Erreur searchUsers controller:', error);
-    
-    // GESTION ERREURS SPÉCIFIQUES : Erreurs de validation du service
-    if (error.message === 'skillId ou categoryId requis') {
+
+    if (error.message.includes('requis')) { // Catch generic required error
       return res.status(400).json({
         success: false,
         message: error.message
       });
     }
 
-    // ERREUR GÉNÉRIQUE : Problème serveur/base de données
     res.status(500).json({
       success: false,
       message: 'Erreur lors de la recherche d\'utilisateurs'
@@ -117,18 +112,14 @@ export const searchUsers = async (req, res) => {
  */
 export const searchTutorials = async (req, res) => {
   try {
-    // EXTRACTION DES PARAMÈTRES : Identique à searchUsers
-    const { skillId, categoryId, page, limit } = req.query;
+    // EXTRACTION DES PARAMÈTRES
+    const { skillId, categoryId, q, page, limit } = req.query;
 
-    // VALIDATION PARAMÈTRES : Au moins un critère requis
-    if (!skillId && !categoryId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Paramètre skillId ou categoryId requis'
-      });
-    }
+    // VALIDATION PARAMÈTRES
+    // if (!skillId && !categoryId && !q) { ... } -> RELAXED
 
-    // VALIDATION TYPES : Vérifier que les IDs sont des nombres
+
+    // VALIDATION TYPES
     if (skillId && isNaN(parseInt(skillId))) {
       return res.status(400).json({
         success: false,
@@ -143,10 +134,11 @@ export const searchTutorials = async (req, res) => {
       });
     }
 
-    // CONVERSION EN ENTIERS : Même logique que searchUsers
+    // CONVERSION EN ENTIERS
     const searchParams = {
       skillId: skillId ? parseInt(skillId) : null,
       categoryId: categoryId ? parseInt(categoryId) : null,
+      q: q || null,
       page: page ? parseInt(page) : 1,
       limit: limit ? parseInt(limit) : 10
     };
@@ -179,7 +171,7 @@ export const searchTutorials = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Erreur searchTutorials controller:', error);
-    
+
 
     if (error.message === 'skillId ou categoryId requis') {
       return res.status(400).json({
