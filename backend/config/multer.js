@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import CloudinaryStorage from 'multer-storage-cloudinary';
 import cloudinary from './cloudinary.js';
 
 // ---------- Réglage tutoriel image ----------
@@ -10,7 +10,7 @@ const tutorialStorage = new CloudinaryStorage({
     resource_type: 'image',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
     // Conserve le format original et limite simplement la taille (pas de crop agressif)
-    transformation: [ { width: 1600, height: 1600, crop: 'limit' } ],
+    transformation: [{ width: 1600, height: 1600, crop: 'limit' }],
   }),
 });
 
@@ -31,7 +31,7 @@ const avatarStorage = new CloudinaryStorage({
     folder: 'skillshare/avatars',
     resource_type: 'image',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [ { width: 512, height: 512, crop: 'fill', gravity: 'face' } ],
+    transformation: [{ width: 512, height: 512, crop: 'fill', gravity: 'face' }],
     format: 'webp', // sortie plus légère
   }),
 });

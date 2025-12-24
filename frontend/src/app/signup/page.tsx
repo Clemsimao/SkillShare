@@ -1,21 +1,34 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-// import { useSession } from "next-auth/react";
+import { useAuth } from '@/context/AuthProvider';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
-  // Récupérez l'état de connexion depuis notr système d'auth
-  // Exemples possibles de conditions - à check les back:
-  // const { user, isLoggedIn } = useAuth(); // Context
-  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn); // Redux
-  // const { data: session } = useSession(); // NextAuth
-  // const isLoggedIn = !!session;
+  const { register } = useAuth();
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    birthdate: '',
+    location: '', // Pas utilisé par le backend pour l'instant au register
+    bio: ''       // Pas utilisé par le backend pour l'instant au register
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Définition des champs du formulaire
   const formFields = [
     {
-      name: 'pseudo',
-      label: 'Pseudo',
+      name: 'username',
+      label: 'Pseudo (Username)',
       type: 'text',
       placeholder: 'RingBearer1337',
       required: true
@@ -28,30 +41,35 @@ export default function SignUpPage() {
       required: true
     },
     {
-      name: 'prenom',
+      name: 'password',
+      label: 'Mot de passe',
+      type: 'password',
+      placeholder: '••••••••',
+      required: true
+    },
+    {
+      name: 'firstName',
       label: 'Prénom',
       type: 'text',
       placeholder: 'Frodo',
-      required: false
+      required: true
     },
     {
-      name: 'nom',
+      name: 'lastName',
       label: 'Nom',
       type: 'text',
       placeholder: 'Baggins',
-      required: false
+      required: true
     },
     {
-      name: 'age',
-      label: 'Âge',
-      type: 'number',
-      placeholder: '106',
-      required: false,
-      min: 13,
-      max: 120
+      name: 'birthdate',
+      label: 'Date de naissance',
+      type: 'date',
+      placeholder: '',
+      required: true,
     },
     {
-      name: 'localisation',
+      name: 'location',
       label: 'Localisation',
       type: 'text',
       placeholder: 'La Comté, Terres du Milieu',
@@ -59,7 +77,6 @@ export default function SignUpPage() {
     }
   ];
 
-  // Définition du type pour les champs du formulaire
   type FormField = {
     name: string;
     label: string;
@@ -70,7 +87,45 @@ export default function SignUpPage() {
     max?: number;
   };
 
-  // Rendu d'un champ de formulaire
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    // Validation basique
+    if (!formData.username || !formData.email || !formData.password || !formData.firstName || !formData.lastName || !formData.birthdate) {
+      setError("Veuillez remplir tous les champs obligatoires (*)");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        birthdate: formData.birthdate
+      });
+      // Redirection après succès sur la home ou profile
+      router.push('/');
+    } catch (err: any) {
+      console.error("Erreur inscription:", err);
+      // L'erreur est gérée par le context mais on l'affiche ici localement si besoin
+      setError(err.response?.data?.message || "Erreur lors de l'inscription");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const renderFormField = (field: FormField) => (
     <div key={field.name} className="form-control">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
@@ -80,24 +135,26 @@ export default function SignUpPage() {
         </label>
         <input
           type={field.type}
+          name={field.name}
+          value={(formData as any)[field.name]}
+          onChange={handleInputChange}
           className="input italic opacity-50 input-bordered w-full md:w-78"
           placeholder={field.placeholder}
-          min={field.min}
-          max={field.max}
+          required={field.required}
         />
       </div>
     </div>
   );
 
-  // Section statistiques
+  // Section statistiques (Gardé pour l'esthétique mais statique pour l'instant)
   const renderStats = () => (
     <div className="stats stats-horizontal shadow mt-8">
       <div className="stat text-center flex-1">
-        <div className="stat-value text-primary">233</div>
+        <div className="stat-value text-primary">0</div>
         <div className="stat-desc px-4">Abonnés</div>
       </div>
       <div className="stat text-center flex-1">
-        <div className="stat-value text-primary">174</div>
+        <div className="stat-value text-primary">0</div>
         <div className="stat-desc px-1">Abonnements</div>
       </div>
     </div>
@@ -110,6 +167,12 @@ export default function SignUpPage() {
           <div className="card bg-base-200 shadow-xl">
             <div className="card-body">
 
+              {error && (
+                <div className="alert alert-error mb-4">
+                  <span>{error}</span>
+                </div>
+              )}
+
               {/* --- Section informations personnelles --- */}
               <div className="space-y-4">
                 {formFields.map(renderFormField)}
@@ -120,6 +183,9 @@ export default function SignUpPage() {
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
                   <label className="label-text md:pt-3">À propos de moi</label>
                   <textarea
+                    name="bio"
+                    value={formData.bio}
+                    onChange={handleInputChange}
                     className="textarea italic opacity-50 textarea-bordered h-24 w-full md:w-78"
                     placeholder="Parlez-nous de vous, vos passions, vos centres d'intérêts..."
                   />
@@ -134,20 +200,17 @@ export default function SignUpPage() {
                 * Champs obligatoires
               </div>
 
-              {/* --- Section d'assaut brr brr nan je deconne c'est une simu des 2 boutons --- */}
               <div className="card-actions justify-end mt-6">
-                <button className="btn btn-neutral flex-1">Créer le compte</button>
-                <button className="btn btn-outline btn-primary flex-1">Éditer le profil</button>
+                <button
+                  className="btn btn-neutral flex-1"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Création..." : "Créer le compte"}
+                </button>
+                {/* Bouton éditer profil désactivé ou caché en mode création */}
+                {/* <button className="btn btn-outline btn-primary flex-1" disabled>Éditer le profil</button> */}
               </div>
-
-              {/* Bouton conditionnel */}
-              {/* <div className="card-actions justify-end mt-6">
-                {!isLoggedIn ? (
-                  <button className="btn btn-neutral w-full">Créer le compte</button>
-                ) : (
-                  <button className="btn btn-outline btn-primary flex-1">Éditer le profil</button>
-                )}
-              </div> */}
 
             </div>
           </div>
