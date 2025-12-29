@@ -42,12 +42,12 @@ export default function LoginModal() {
 
       // Utilisation de votre service d'authentification
       const success = await authLogin(formData);
-      
+
       if (success) {
         // Fermer la modale en cas de succès
         const modal = document.getElementById('login_modal') as HTMLDialogElement;
         modal?.close();
-        
+
         // Optionnel : redirection ou autre action
         console.log("Connexion réussie !");
       }
@@ -67,11 +67,11 @@ export default function LoginModal() {
             ✕
           </button>
         </form>
-        
+
         <form onSubmit={handleSubmit} className="w-full max-w-sm">
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 w-full">
             <legend className="fieldset-legend text-xl">Connexion</legend>
-            
+
             <button type="button" className="btn bg-white text-black border-[#e5e5e5] w-full">
               <svg
                 aria-label="Google logo"
@@ -119,16 +119,16 @@ export default function LoginModal() {
             )}
 
             <label className="label">Email</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               name="email"
-              className="input italic w-full" 
+              className="input italic w-full"
               placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
               required
             />
-            
+
             <label className="label">Password</label>
             <input
               type="password"
@@ -139,7 +139,7 @@ export default function LoginModal() {
               onChange={handleInputChange}
               required
             />
-            
+
             <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-2 mt-4">
               <legend className="fieldset italic">Option de connexion</legend>
               <label className="label flex items-center justify-between w-full">
@@ -152,9 +152,9 @@ export default function LoginModal() {
                 />
               </label>
             </fieldset>
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               className="btn btn-neutral mt-4 w-full"
               disabled={isLoading}
             >
@@ -167,15 +167,10 @@ export default function LoginModal() {
           </fieldset>
         </form>
 
-        <div className="tooltip tooltip-open tooltip-bottom" data-tip="hello">
-          <div className="tooltip-content">
-            <div className="animate-bounce text-yellow-400 -rotate-2 text-sm font-black">
-              inscris-toi !
-            </div>
-          </div>
+        <div>
 
-          <Link 
-            href="/signup" 
+          <Link
+            href="/signup"
             className="btn btn-accent"
             onClick={() => {
               const modal = document.getElementById('login_modal') as HTMLDialogElement;
