@@ -4,7 +4,7 @@ import { User } from '../models/index.js';
 // Inscription - VERSION VRAIE DB
 export const register = async (req, res) => {
   try {
-    const { email, password, firstName, lastName, username, birthdate } = req.body;
+    const { email, password, firstName, lastName, username, birthdate, location, content } = req.body;
 
     // ADAPTATION : Ajouter username et birthdate qui sont obligatoires
     if (!email || !password || !firstName || !lastName || !username || !birthdate) {
@@ -41,7 +41,9 @@ export const register = async (req, res) => {
       first_name: firstName,    // ← Adapter au modèle
       last_name: lastName,      // ← Adapter au modèle
       username,
-      birthdate
+      birthdate,
+      location: location || null,
+      content: content || null
     });
 
 
@@ -59,7 +61,9 @@ export const register = async (req, res) => {
         firstName: newUser.first_name, // ← first_name
         lastName: newUser.last_name,   // ← last_name
         username: newUser.username,
-        profilePicture: newUser.profile_picture
+        profilePicture: newUser.profile_picture,
+        location: newUser.location,
+        content: newUser.content
       },
       token
     });

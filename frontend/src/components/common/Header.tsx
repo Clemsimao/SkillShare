@@ -5,6 +5,8 @@ import Image from 'next/image';
 import LoginModal from '../common/LoginModal';
 import { useAuth } from '@/context/AuthProvider';
 
+import { SquarePen } from 'lucide-react';
+
 export default function Header() {
   const [isDark, setIsDark] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
@@ -103,6 +105,13 @@ export default function Header() {
 
       {/* Groupe d'éléments alignés à droite */}
       <div className="flex items-center gap-2">
+        {isAuthenticated && (
+          <Link href="/tutorials/CreateTuto" className="btn btn-ghost btn-sm sm:btn-md gap-2 mr-1">
+            <SquarePen size={20} />
+            <span className="hidden sm:inline">Créer</span>
+          </Link>
+        )}
+
         {/* Toggle thème */}
         <label className="swap swap-rotate">
           <input type="checkbox" checked={isDark} onChange={toggleTheme} />

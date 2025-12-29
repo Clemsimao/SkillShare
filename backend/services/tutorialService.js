@@ -91,7 +91,22 @@ export const tutorialService = {
         user_id: data.user_id,
         published_at: new Date(), // pas de brouillon pour le MVP, donc publié directement
       });
-      return newTutorial;
+      return {
+        id: newTutorial.tutorial_id,
+        title: newTutorial.title,
+        content: newTutorial.content,
+        picture: newTutorial.picture,
+        videoLink: newTutorial.video_link,
+        author: {
+          id: data.user_id, // On a déjà l'ID via le token
+          // On n'a pas le username/photo ici sans refaire une requête, 
+          // mais pour la redirection l'ID suffit.
+          // Idéalement on ferait un reload avec include User.
+        },
+        createdAt: newTutorial.created_at,
+        updatedAt: newTutorial.updated_at,
+        publishedAt: newTutorial.published_at,
+      };
     } catch (error) {
       console.error("Erreur création tutoriel :", error.message);
       return null;

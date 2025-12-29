@@ -76,7 +76,7 @@ export const DEFAULT_HEADERS = {
 export const TIMEOUTS = {
   FAST: 5_000, // Auth, search
   NORMAL: 10_000, // CRUD operations
-  SLOW: 30_000, // File uploads
+  SLOW: 300_000, // File uploads (5 min)
 } as const;
 
 // Status codes à gérer spécifiquement

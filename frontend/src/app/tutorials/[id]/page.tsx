@@ -1,107 +1,100 @@
-// src/app/tutorials/[id]/page.tsx
+"use client";
 
-import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getTutorial } from "@/integration/services/tutorials";
+import { Tutorial } from "@/integration/types/api";
 
-// Type données pour tester sans backend
-type Tutorial = {
-  id: string;
-  title: string;
-  author?: string;
-  coverUrl?: string;
-  summary?: string;
-  content: string;
-};
+export default function TutorialDetailPage() {
+  const params = useParams();
+  const id = params?.id as string;
+  const [tutorial, setTutorial] = useState<Tutorial | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-type Comment = {
-  id: string;
-  tutorialId: string;
-  author: string;
-  content: string;
-  createdAt: string; // ISO string
-};
+  useEffect(() => {
+    if (!id) return;
 
-// Données fictives TUTOS pour tester l'affichage
-const MOCK_TUTORIALS: Tutorial[] = [
-  {
-    id: "1",
-    title: "Tuto 1",
-    author: "Mathieu Dupond",
-    summary: "Introduction au dessin",
-    content:
-      "Découvrir les bases: tenue du crayon, types de traits, échauffements. Travailler la régularité avec des exercices courts.",
-  },
-  {
-    id: "2",
-    title: "Tuto 2",
-    author: "Amina R.",
-    summary: "Les proportions",
-    content:
-      "Comprendre les repères, la construction en formes simples, la mesure comparative et le négatif.",
-  },
-];
+    const fetchTutorial = async () => {
+      try {
+        setLoading(true);
+        // L'ID dans l'URL est une string, il faut le convertir en number pour l'API
+        const tutorialId = Number(id);
+        if (isNaN(tutorialId)) {
+          setError("ID invalide.");
+          setLoading(false);
+          return;
+        }
 
-// Données fictives COMMENTAIRES pour tester l'affichage
-const MOCK_COMMENTS: Comment[] = [
-  {
-    id: "c1",
-    tutorialId: "1",
-    author: "Benjamin",
-    content: "Très clair, merci pour les exos d’échauffement !",
-    createdAt: "2025-08-25T08:05:00.000Z",
-  },
-  {
-    id: "c2",
-    tutorialId: "1",
-    author: "Samir",
-    content: "Ça m’a aidé à corriger ma tenue du crayon.",
-    createdAt: "2025-08-25T09:10:00.000Z",
-  },
-];
+        const response = await getTutorial(tutorialId);
+        if (response.success && response.tutorial) {
+          setTutorial(response.tutorial);
+        } else {
+          setError("Impossible de charger le tutoriel.");
+        }
+      } catch (err) {
+        console.error("Erreur chargement tuto:", err);
+        setError("Erreur lors du chargement.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-// Fonctions mock
-async function getTutorialById(id: string): Promise<Tutorial | null> {
-  return MOCK_TUTORIALS.find((t) => t.id === id) ?? null;
-}
-async function getCommentsByTutorial(id: string): Promise<Comment[]> {
-  return MOCK_COMMENTS.filter((c) => c.tutorialId === id);
-}
+    fetchTutorial();
+  }, [id]);
 
-// ----------------- Composant (Page) détail d’un tuto -----------------
-export default async function TutorialDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
 
-  const tuto = await getTutorialById(id);
-  if (!tuto) return notFound();
-
-  const comments = await getCommentsByTutorial(id);
+  if (error || !tutorial) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[50vh] space-y-4">
+        <h2 className="text-2xl font-bold text-error">Oups !</h2>
+        <p>{error || "Tutoriel introuvable."}</p>
+        <button onClick={() => window.location.reload()} className="btn btn-outline">
+          Réessayer
+        </button>
+      </div>
+    );
+  }
 
   return (
     <main className="max-w-3xl mx-auto w-full px-4 py-6 space-y-6">
       {/* ---------- 1) En-tête ---------- */}
       <header className="space-y-1 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-[#19362D]">
-          {tuto.title}
+          {tutorial.title}
         </h1>
-        {tuto.author && (
-          <p className="text-sm text-gray-500">Par {tuto.author}</p>
+        {tutorial.author && (
+          <p className="text-sm text-gray-500">Par {tutorial.author.username}</p>
         )}
-        {tuto.summary && (
-          <p className="text-base text-gray-600 italic">{tuto.summary}</p>
+        {tutorial.publishedAt && (
+          <p className="text-xs text-gray-400">
+            Publié le {new Date(tutorial.publishedAt).toLocaleDateString()}
+          </p>
         )}
       </header>
 
       {/* ---------- 2) Média ---------- */}
       <section>
-        <div className="w-full aspect-video rounded-xl bg-base-100 flex items-center justify-center shadow-lg">
-          {tuto.coverUrl ? (
+        <div className="w-full aspect-video rounded-xl bg-base-100 flex items-center justify-center shadow-lg overflow-hidden relative">
+          {tutorial.videoLink ? (
+            <iframe
+              src={tutorial.videoLink.replace("watch?v=", "embed/")}
+              className="w-full h-full object-cover"
+              allowFullScreen
+              title={tutorial.title}
+            ></iframe>
+          ) : tutorial.picture ? (
             <img
-              src={tuto.coverUrl}
-              alt=""
-              className="w-full h-full object-cover rounded-xl"
+              src={tutorial.picture}
+              alt={tutorial.title}
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="placeholder bg-base-300 text-base-content rounded-md w-20 h-20 flex items-center justify-center shadow-md">
@@ -112,45 +105,19 @@ export default async function TutorialDetailPage({
       </section>
 
       {/* ---------- 3) Contenu du tuto ---------- */}
-      <article className="bg-base-200 rounded-xl p-6 shadow-xl leading-relaxed border-l-4 border-[#19362D]">
-        {tuto.content}
+      <article className="bg-base-200 rounded-xl p-6 shadow-xl leading-relaxed border-l-4 border-[#19362D] whitespace-pre-wrap">
+        {tutorial.content}
       </article>
 
-      {/* ---------- 4) Commentaires ---------- */}
+      {/* ---------- 4) Commentaires (Placeholder pour le moment) ---------- */}
       <section aria-label="Commentaires" className="space-y-4">
         <h2 className="text-xl font-semibold text-[#19362D]">
-          Commentaires ({comments.length})
+          Commentaires
         </h2>
 
-        {comments.length === 0 ? (
-          <p className="opacity-70">Aucun commentaire pour le moment.</p>
-        ) : (
-          <ul className="space-y-3">
-            {comments.map((c) => (
-              <li
-                key={c.id}
-                className="bg-base-200 rounded-xl p-4 shadow-md border border-gray-200"
-              >
-                <div className="text-sm text-gray-500 mb-1">
-                  <span className="font-medium text-[#19362D]">
-                    {c.author}
-                  </span>{" "}
-                  •{" "}
-                  {new Date(c.createdAt).toLocaleString("fr-FR", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                </div>
-                <p className="text-sm">{c.content}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-        
-        {/* Placeholder formulaire (pour plus tard, côté backend) */}
         <div className="bg-base-200 rounded-xl p-4 border border-dashed border-[#19362D] shadow-inner">
           <p className="text-sm text-gray-500">
-            Formulaire d’ajout de commentaire à intégrer (V1 backend).
+            Fonctionnalité de commentaires à venir.
           </p>
         </div>
       </section>

@@ -3,6 +3,8 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { createTutorial, uploadTutorialImage } from "@/integration/services/tutorials";
 
 const ACCENT = "#19362D";
 // le type FormData définit les types de données attendus
@@ -29,6 +31,7 @@ const CATEGORIES = [
 
 // cette fonction définit l'état initial du formulaire
 export default function TutorialForm() {
+  const router = useRouter();
   const [data, setData] = useState<FormData>({
     title: "",
     category: "",
@@ -37,6 +40,7 @@ export default function TutorialForm() {
     photoFile: null,
     photoPreview: null,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // --- handlers :  gestionnaires d'événements
 
@@ -65,7 +69,7 @@ export default function TutorialForm() {
   function validate(): string[] {
     const errs: string[] = [];
     if (!data.title.trim()) errs.push("Nom du tutoriel requis.");
-    if (!data.category) errs.push("Catégorie requise.");
+    // if (!data.category) errs.push("Catégorie requise."); // Backend doesn't support category yet
     if (!data.description.trim()) errs.push("Description requise.");
     return errs;
   }
@@ -76,16 +80,43 @@ export default function TutorialForm() {
     const errs = validate();
     if (errs.length) return alert("Compléter: \n• " + errs.join("\n• "));
     console.log("[DRAFT]", data);
-    alert("Brouillon enregistré.");
+    alert("Brouillon enregistré (simulation).");
   }
 
   // fonction  bouton "Publier"
-  function onPublish(e: FormEvent) {
+  async function onPublish(e: FormEvent) {
     e.preventDefault();
     const errs = validate();
     if (errs.length) return alert("Compléter: \n• " + errs.join("\n• "));
-    console.log("[PUBLISH]", data);
-    alert("Tutoriel publié.");
+
+    setIsLoading(true);
+    try {
+      // 1. Création du tutoriel (texte)
+      const response = await createTutorial({
+        title: data.title,
+        content: data.description, // Mapping description -> content
+        videoLink: data.mediaUrl || undefined
+        // Note: category is not supported by backend yet
+      });
+
+      if (response.success && response.tutorial) {
+        // 2. Upload de l'image si présente
+        if (data.photoFile) {
+          await uploadTutorialImage(response.tutorial.id, data.photoFile);
+        }
+
+        // 3. Redirection
+        // alert("Tutoriel publié avec succès !");
+        router.push(`/tutorials/${response.tutorial.id}`);
+      } else {
+        alert("Erreur lors de la création : " + response.message);
+      }
+    } catch (error) {
+      console.error("Erreur detailed:", error);
+      alert("Une erreur est survenue lors de la publication.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   // --- UI: rendu principal du formulaire
@@ -102,6 +133,7 @@ export default function TutorialForm() {
         type="text"
         placeholder="Titre du tutoriel"
         className="input input-bordered w-full border border-[#334155] rounded-lg"
+        disabled={isLoading}
       />
 
       <select
@@ -109,6 +141,7 @@ export default function TutorialForm() {
         value={data.category}
         onChange={onChange}
         className="select select-bordered w-full border border-[#334155] rounded-lg"
+        disabled={isLoading}
       >
         {CATEGORIES.map((c) => (
           <option key={c.value} value={c.value} disabled={c.value === ""}>
@@ -121,8 +154,9 @@ export default function TutorialForm() {
         name="description"
         value={data.description}
         onChange={onChange}
-        placeholder="Descriptif"
-        className="textarea textarea-bordered w-full border border-[#334155] rounded-lg"
+        placeholder="Descriptif / Contenu du tutoriel"
+        className="textarea textarea-bordered w-full border border-[#334155] rounded-lg min-h-[150px]"
+        disabled={isLoading}
       />
 
       <div className="bg-base-200 p-3 border border-[#334155] rounded-lg">
@@ -137,7 +171,7 @@ export default function TutorialForm() {
             Image
           </div>
         )}
-        <input type="file" accept="image/*" onChange={onPickPhoto} />
+        <input type="file" accept="image/*" onChange={onPickPhoto} disabled={isLoading} />
       </div>
 
       <input
@@ -145,14 +179,16 @@ export default function TutorialForm() {
         value={data.mediaUrl}
         onChange={onChange}
         type="url"
-        placeholder="Lien de votre vidéo"
+        placeholder="Lien de votre vidéo (optionnel)"
         className="input input-bordered w-full italic border border-[#334155] rounded-lg"
+        disabled={isLoading}
       />
 
       <button
         onClick={onSaveDraft}
         className="btn w-full btn-dash btn-secondary"
         type="button"
+        disabled={isLoading}
       >
         Enregistrer les modifications
       </button>
@@ -161,8 +197,13 @@ export default function TutorialForm() {
         className="btn btn-outline btn-primary flex-1 w-full"
         style={{ backgroundColor: ACCENT }}
         type="button"
+        disabled={isLoading}
       >
-        Publier
+        {isLoading ? (
+          <span className="loading loading-spinner"></span>
+        ) : (
+          "Publier"
+        )}
       </button>
     </form>
   );

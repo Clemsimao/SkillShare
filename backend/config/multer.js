@@ -3,16 +3,19 @@ import CloudinaryStorage from 'multer-storage-cloudinary';
 import cloudinary from './cloudinary.js';
 
 // ---------- Réglage tutoriel image ----------
-const tutorialStorage = new CloudinaryStorage({
-  cloudinary,
-  params: (req, file) => ({
-    folder: 'skillshare/tutorials', // anciennement 'skillswap'
-    resource_type: 'image',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    // Conserve le format original et limite simplement la taille (pas de crop agressif)
-    transformation: [{ width: 1600, height: 1600, crop: 'limit' }],
-  }),
-});
+// ---------- Réglage tutoriel image ----------
+// UPDATE : Passage en memoryStorage pour upload manuel (plus fiable)
+const tutorialStorage = multer.memoryStorage();
+// const tutorialStorage = new CloudinaryStorage({
+//   cloudinary,
+//   params: (req, file) => ({
+//     folder: 'skillshare/tutorials', // anciennement 'skillswap'
+//     resource_type: 'image',
+//     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+//     // Conserve le format original et limite simplement la taille (pas de crop agressif)
+//     transformation: [{ width: 1600, height: 1600, crop: 'limit' }],
+//   }),
+// });
 
 const uploadImageTutorial = multer({
   storage: tutorialStorage,

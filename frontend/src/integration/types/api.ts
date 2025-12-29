@@ -133,6 +133,8 @@ export interface RegisterRequest {
   readonly lastName: string;
   readonly username: string;
   readonly birthdate: string;
+  readonly location?: string;
+  readonly content?: string;
 }
 
 export interface CreateTutorialRequest {

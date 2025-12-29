@@ -113,7 +113,9 @@ export default function SignUpPage() {
         password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        birthdate: formData.birthdate
+        birthdate: formData.birthdate,
+        location: formData.location,
+        content: formData.bio
       });
       // Redirection après succès sur la home ou profile
       router.push('/');

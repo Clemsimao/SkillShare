@@ -47,12 +47,46 @@ router.put("/:id", authMiddleware, updateTutorial);
 router.delete("/:id", authMiddleware, deleteTutorial);
 
 // Route POST /tutorials/:id/image
+import cloudinary from '../config/cloudinary.js';
+import { Readable } from 'stream';
+
+// Route POST /tutorials/:id/image
 router.post('/:id/image', uploadImageTutorial.single('image'), async (req, res) => {
-  console.log('Route image appelée', req.params.id, req.file);
+  console.log('Route image appelée (Manual Upload)', req.params.id);
 
   try {
     const tutorialId = req.params.id;
-    const imageUrl = req.file.path; // URL Cloudinary
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "Aucun fichier fourni" });
+    }
+
+    // Fonction de promesse pour l'upload stream
+    const streamUpload = (fileBuffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'skillshare/tutorials',
+            resource_type: 'image',
+            transformation: [{ width: 1600, height: 1600, crop: 'limit' }]
+          },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        Readable.from(fileBuffer).pipe(stream);
+      });
+    };
+
+    // Exécution de l'upload
+    const result = await streamUpload(req.file.buffer);
+    const imageUrl = result.secure_url;
+
+    console.log("Upload succes:", imageUrl);
 
     // Met à jour le tutoriel avec l’URL de l’image
     await Tutorial.update(
@@ -62,7 +96,8 @@ router.post('/:id/image', uploadImageTutorial.single('image'), async (req, res) 
 
     res.json({ success: true, imageUrl });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Erreur upload image" });
+    console.error("Erreur echec upload manual:", error);
+    res.status(500).json({ success: false, message: "Erreur upload image: " + error.message });
   }
 });
 
