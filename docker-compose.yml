@@ -30,8 +30,17 @@ services:
       - ./backend/.env
     volumes:
       - ./backend:/app
-      - /app/node_modules  # Empêche l'écrasement des node_modules du conteneur
+      - /app/node_modules
     restart: unless-stopped
+
+  adminer:
+    image: adminer
+    container_name: skillshare_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
 
 volumes:
   db_data:
