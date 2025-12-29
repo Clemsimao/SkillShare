@@ -5,7 +5,7 @@ import Link from "next/link";
 
 // Import de vos services d'intégration
 import { login } from "@/integration/services/auth";
-import { useAuth } from "@/integration/hooks/use-auth";
+import { useAuth } from "@/context/AuthProvider";
 import type { LoginRequest } from "@/integration/types/api";
 
 export default function LoginModal() {
@@ -18,7 +18,7 @@ export default function LoginModal() {
   const [error, setError] = useState<string | null>(null);
 
   // Utilisation de votre hook d'authentification
-  const { login: authLogin, isLoggedIn, error: authError } = useAuth();
+  const { login: authLogin, isAuthenticated, error: authError } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,16 +41,14 @@ export default function LoginModal() {
       }
 
       // Utilisation de votre service d'authentification
-      const success = await authLogin(formData);
+      await authLogin(formData);
 
-      if (success) {
-        // Fermer la modale en cas de succès
-        const modal = document.getElementById('login_modal') as HTMLDialogElement;
-        modal?.close();
+      // Si pas d'erreur, on considère que c'est succès
+      const modal = document.getElementById('login_modal') as HTMLDialogElement;
+      modal?.close();
 
-        // Optionnel : redirection ou autre action
-        console.log("Connexion réussie !");
-      }
+      // Optionnel : redirection ou autre action
+      console.log("Connexion réussie !");
     } catch (err) {
       console.error("Erreur de connexion:", err);
       setError("Erreur lors de la connexion");

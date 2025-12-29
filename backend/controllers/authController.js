@@ -90,8 +90,10 @@ export const login = async (req, res) => {
     }
 
     // VRAIE RECHERCHE EN BASE
+    console.log(` Tentative de connexion pour: ${email}`);
     const user = await User.findOne({ where: { email } });
     if (!user) {
+      console.log('Utilisateur non trouvé');
       return res.status(401).json({
         success: false,
         message: 'Email ou mot de passe incorrect'
@@ -99,6 +101,7 @@ export const login = async (req, res) => {
     }
 
     const isPasswordValid = await authService.verifyPassword(password, user.password);
+    console.log(`Mot de passe valide ? ${isPasswordValid}`);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,

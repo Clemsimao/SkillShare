@@ -1,21 +1,29 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
-import Image from "next/image";
+import { useParams, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import { getUserProfile } from "@/integration/services/user";
-import type { User } from "@/integration/types/api";
+import { getAllTutorials } from "@/integration/services/tutorials";
+import type { User, Tutorial } from "@/integration/types/api";
 import EditProfileModal from "@/components/profile/EditProfileModal";
+import { BookOpen } from "lucide-react";
 
 export default function ProfilePage() {
     const params = useParams(); // Récupère l'ID depuis l'URL
+    const searchParams = useSearchParams();
     const { user: currentUser } = useAuth(); // Utilisateur connecté
 
     const [profileUser, setProfileUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    // Tutorials Tab
+    const [userTutorials, setUserTutorials] = useState<Tutorial[]>([]);
+    const [loadingTutorials, setLoadingTutorials] = useState(false);
+    const [activeTab, setActiveTab] = useState("infos");
 
     const fetchProfile = useCallback(async () => {
         // Si pas d'ID, on arrête
@@ -47,6 +55,38 @@ export default function ProfilePage() {
     useEffect(() => {
         fetchProfile();
     }, [fetchProfile]);
+
+    // Gestion du tab via URL ou défaut
+    useEffect(() => {
+        const tab = searchParams?.get("tab");
+        if (tab === "tutorials") {
+            setActiveTab("tutorials");
+        } else {
+            setActiveTab("infos");
+        }
+    }, [searchParams]);
+
+    // Chargement des tutoriels si onglet actif
+    useEffect(() => {
+        if (activeTab === "tutorials" && profileUser?.id) {
+            const fetchUserTutorials = async () => {
+                setLoadingTutorials(true);
+                try {
+                    const response = await getAllTutorials();
+                    if (response.success && response.tutorials) {
+                        // Filtrage côté client (TODO: faire une route backend dédiée)
+                        const filtered = response.tutorials.filter(t => t.author?.id === profileUser.id);
+                        setUserTutorials(filtered);
+                    }
+                } catch (err) {
+                    console.error("Erreur chargement tutoriels utilisateur:", err);
+                } finally {
+                    setLoadingTutorials(false);
+                }
+            };
+            fetchUserTutorials();
+        }
+    }, [activeTab, profileUser?.id]);
 
     if (isLoading) {
         return (
@@ -147,57 +187,126 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* --- Compétences (Skills) --- */}
-                <div className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <h2 className="card-title flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.001 6.001 0 0 0-5.303-3M6.75 5.25a2.25 2.25 0 0 1 2.25-2.25h3a2.25 2.25 0 0 1 2.25 2.25v.008a2.25 2.25 0 0 1-2.25 2.25h-3a2.25 2.25 0 0 1-2.25-2.25v-.008Z" />
-                            </svg>
-                            Compétences
-                        </h2>
-                        <div className="divider my-0"></div>
-
-                        {profileUser.skills && profileUser.skills.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 mt-4">
-                                {profileUser.skills.map(skill => (
-                                    <div key={skill.id} className="badge badge-primary badge-lg gap-2 p-4">
-                                        {skill.title}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-sm italic opacity-60 mt-4">Aucune compétence renseignée.</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* --- Intérêts (Interests) --- */}
-                <div className="card bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <h2 className="card-title flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-secondary">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                            </svg>
-                            Centres d&apos;intérêt
-                        </h2>
-                        <div className="divider my-0"></div>
-
-                        {profileUser.interests && profileUser.interests.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 mt-4">
-                                {profileUser.interests.map(interest => (
-                                    <div key={interest.id} className="badge badge-secondary badge-outline badge-lg gap-2 p-4">
-                                        {interest.title}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-sm italic opacity-60 mt-4">Aucun centre d&apos;intérêt renseigné.</p>
-                        )}
-                    </div>
-                </div>
+            {/* --- Tabs --- */}
+            <div role="tablist" className="tabs tabs-bordered tabs-lg mb-8">
+                <a
+                    role="tab"
+                    className={`tab ${activeTab === 'infos' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('infos')}
+                >
+                    Infos
+                </a>
+                <a
+                    role="tab"
+                    className={`tab ${activeTab === 'tutorials' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('tutorials')}
+                >
+                    Tutoriels ({userTutorials.length > 0 ? userTutorials.length : '?'})
+                </a>
             </div>
+
+            {/* --- Content: Infos --- */}
+            {activeTab === 'infos' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* ... (keep existing Skills and Interests cards here) ... */}
+                    <div className="card bg-base-100 shadow-xl">
+                        <div className="card-body">
+                            <h2 className="card-title flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-primary">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.001 6.001 0 0 0-5.303-3M6.75 5.25a2.25 2.25 0 0 1 2.25-2.25h3a2.25 2.25 0 0 1 2.25 2.25v.008a2.25 2.25 0 0 1-2.25 2.25h-3a2.25 2.25 0 0 1-2.25-2.25v-.008Z" />
+                                </svg>
+                                Compétences
+                            </h2>
+                            <div className="divider my-0"></div>
+
+                            {profileUser.skills && profileUser.skills.length > 0 ? (
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    {profileUser.skills.map(skill => (
+                                        <div key={skill.id} className="badge badge-primary badge-lg gap-2 p-4">
+                                            {skill.title}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm italic opacity-60 mt-4">Aucune compétence renseignée.</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="card bg-base-100 shadow-xl">
+                        <div className="card-body">
+                            <h2 className="card-title flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-secondary">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                                Centres d&apos;intérêt
+                            </h2>
+                            <div className="divider my-0"></div>
+
+                            {profileUser.interests && profileUser.interests.length > 0 ? (
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    {profileUser.interests.map(interest => (
+                                        <div key={interest.id} className="badge badge-secondary badge-outline badge-lg gap-2 p-4">
+                                            {interest.title}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm italic opacity-60 mt-4">Aucun centre d&apos;intérêt renseigné.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* --- Content: Tutorials --- */}
+            {activeTab === 'tutorials' && (
+                <div className="space-y-6">
+                    {loadingTutorials ? (
+                        <div className="flex justify-center p-12">
+                            <span className="loading loading-spinner loading-lg"></span>
+                        </div>
+                    ) : userTutorials.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {userTutorials.map(tutorial => (
+                                <Link
+                                    key={tutorial.id}
+                                    href={`/tutorials/${tutorial.id}`}
+                                    className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full"
+                                >
+                                    <figure className="h-48 relative bg-base-300">
+                                        {tutorial.picture ? (
+                                            <img
+                                                src={tutorial.picture}
+                                                alt={tutorial.title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center h-full w-full bg-neutral text-neutral-content/30">
+                                                <BookOpen className="w-12 h-12 mb-2" />
+                                                <span className="text-sm">Pas d'image</span>
+                                            </div>
+                                        )}
+                                    </figure>
+                                    <div className="card-body p-4">
+                                        <h3 className="card-title text-base font-bold line-clamp-1">{tutorial.title}</h3>
+                                        <p className="text-xs text-gray-500 line-clamp-2">{tutorial.content}</p>
+                                        <div className="text-xs text-gray-400 mt-2">
+                                            Publié le {new Date(tutorial.publishedAt || tutorial.createdAt || Date.now()).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-12 bg-base-100 rounded-xl shadow border border-dashed border-base-300">
+                            <BookOpen className="w-16 h-16 mx-auto text-base-300 mb-4" />
+                            <h3 className="text-lg font-bold">Aucun tutoriel</h3>
+                            <p className="text-gray-500">Cet utilisateur n'a pas encore publié de tutoriel.</p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <EditProfileModal
                 isOpen={isEditModalOpen}

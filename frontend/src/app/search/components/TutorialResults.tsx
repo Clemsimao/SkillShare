@@ -19,7 +19,7 @@ export default function TutorialResults({ tutorials }: TutorialResultsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tutorials.map((tutorial) => (
                 <Link
-                    href={`/browse/${tutorial.id}`}
+                    href={`/tutorials/${tutorial.id}`}
                     key={tutorial.id}
                     className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer h-full"
                 >

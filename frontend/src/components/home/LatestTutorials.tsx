@@ -64,7 +64,7 @@ export default function LatestTutorials() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {tutorials.map((tutorial) => (
                         <Link
-                            href={`/browse/${tutorial.id}`} // Lien vers détail à implémenter plus tard (ou existant?)
+                            href={`/tutorials/${tutorial.id}`} // Lien vers détail à implémenter plus tard (ou existant?)
                             key={tutorial.id}
                             className="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                             onClick={handleProtectedClick}

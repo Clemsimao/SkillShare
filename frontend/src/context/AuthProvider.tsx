@@ -1,10 +1,10 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { 
-  login as loginService, 
-  register as registerService, 
-  logout as logoutService, 
+import {
+  login as loginService,
+  register as registerService,
+  logout as logoutService,
   getProfile,
   getCurrentUser
 } from "@/integration/services/auth";
@@ -35,11 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initAuth = async () => {
       try {
         const storedToken = typeof window !== 'undefined' ? localStorage.getItem('skillswap_token') : null;
-        
+
         if (storedToken) {
-            setTokenState(storedToken);
-            const { user } = await getProfile();
-            setUser(user);
+          setTokenState(storedToken);
+          const { user } = await getProfile();
+          setUser(user);
         }
       } catch (err) {
         console.error("Erreur initialisation auth:", err);
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error("Erreur logout:", err);
     } finally {
-        // Toujours nettoyer l'état local même si l'appel API échoue
+      // Toujours nettoyer l'état local même si l'appel API échoue
       removeToken();
       setUser(null);
       setTokenState(null);
@@ -99,14 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
+    <AuthContext.Provider
+      value={{
+        user,
         token,
-        isLoading, 
-        error, 
-        login, 
-        register, 
+        isLoading,
+        error,
+        login,
+        register,
         logout,
         isAuthenticated: !!user
       }}
