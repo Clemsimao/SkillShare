@@ -2,13 +2,13 @@ import { DataTypes, Model, literal } from "sequelize";
 import sequelize from '../config/database.js';
 
 
-export class User extends Model {}
+export class User extends Model { }
 
 User.init({
     user_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
     last_name: {
         type: DataTypes.STRING(50),
@@ -38,9 +38,9 @@ User.init({
     },
     gender: {
         type: DataTypes.STRING(1),
-        allowNull: true, 
+        allowNull: true,
         validate: {
-            isIn: [['M', 'F', 'A']] 
+            isIn: [['M', 'F', 'A']]
         }
     },
     profile_picture: {
@@ -51,6 +51,10 @@ User.init({
         type: DataTypes.STRING(255),
         allowNull: true
     },
+    location: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -59,15 +63,15 @@ User.init({
     updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: literal('NOW()') 
+        defaultValue: literal('NOW()')
     }
 },
 
-{
-        sequelize: sequelize, 
+    {
+        sequelize: sequelize,
         tableName: 'user',
         timestamps: false //on gere manuellement created_at/updated_at avec NOW()
-}
+    }
 
 );
 

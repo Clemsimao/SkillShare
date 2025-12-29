@@ -82,6 +82,27 @@ export const updateProfile = async (req, res) => {
       }
     }
 
+    // VALIDATION LOCATION
+    if (updateData.location !== undefined) {
+      if (typeof updateData.location !== 'string') {
+        return res.status(400).json({
+          success: false,
+          message: 'La localisation doit être du texte'
+        });
+      }
+
+      if (updateData.location.length > 100) {
+        return res.status(400).json({
+          success: false,
+          message: 'La localisation ne peut pas dépasser 100 caractères'
+        });
+      }
+
+      if (updateData.location.trim().length === 0) {
+        updateData.location = null;
+      }
+    }
+
     const updatedUser = await userService.updateUserProfile(userId, updateData);
 
     res.status(200).json({

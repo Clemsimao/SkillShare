@@ -58,6 +58,7 @@ export interface User {
   readonly username: string;
   readonly birthdate: string; // Obligatoire - allowNull: false dans le modèle
   readonly content?: string | null;
+  readonly location?: string | null;
   readonly gender?: "M" | "F" | "A" | null;
   readonly profilePicture?: string | null;
   readonly createdAt: string; // Obligatoire - allowNull: false dans le modèle
@@ -167,7 +168,7 @@ export interface AddSkillRequest {
 
 // Type pour mettre à jour un profil (champs modifiables uniquement)
 export type UpdateUserData = Partial<
-  Pick<User, "firstName" | "lastName" | "content" | "gender">
+  Pick<User, "firstName" | "lastName" | "content" | "gender" | "location">
 >;
 
 // Type pour créer un tutoriel (sans id, dates auto-générées)

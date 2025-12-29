@@ -46,6 +46,7 @@ export const userService = {
         lastName: user.last_name,
         username: user.username,
         content: user.content,
+        location: user.location,
         birthdate: user.birthdate,
         gender: user.gender,
         profilePicture: user.profile_picture,
@@ -85,6 +86,7 @@ export const userService = {
       if (updateData.username) allowedFields.username = updateData.username;
       if (updateData.email) allowedFields.email = updateData.email;
       if (updateData.content) allowedFields.content = updateData.content;
+      if (updateData.location) allowedFields.location = updateData.location;
       if (updateData.gender !== undefined) allowedFields.gender = updateData.gender;
       if (updateData.profile_picture) allowedFields.profile_picture = updateData.profile_picture;
 
@@ -140,6 +142,7 @@ export const userService = {
         lastName: updatedUser.last_name,
         username: updatedUser.username,
         content: updatedUser.content,
+        location: updatedUser.location,
         birthdate: updatedUser.birthdate,
         gender: updatedUser.gender,
         profilePicture: updatedUser.profile_picture,

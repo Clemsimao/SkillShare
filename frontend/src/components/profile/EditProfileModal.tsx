@@ -37,6 +37,7 @@ export default function EditProfileModal({
         firstName: user.firstName,
         lastName: user.lastName,
         content: user.content || "",
+        location: user.location || "",
         gender: user.gender,
     });
 
@@ -58,6 +59,7 @@ export default function EditProfileModal({
                 firstName: user.firstName,
                 lastName: user.lastName,
                 content: user.content || "",
+                location: user.location || "",
                 gender: user.gender,
             });
             setAvatarPreview(user.profilePicture || null);
@@ -284,6 +286,21 @@ export default function EditProfileModal({
                                     }
                                     placeholder="Décrivez-vous en quelques mots..."
                                 ></textarea>
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Ville / Pays</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    className="input input-bordered w-full"
+                                    value={formData.location || ""}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, location: e.target.value })
+                                    }
+                                    placeholder="Ex: Paris, France"
+                                />
                             </div>
 
                             <div className="form-control w-full max-w-xs">

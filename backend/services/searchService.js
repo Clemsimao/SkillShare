@@ -66,6 +66,7 @@ export const searchService = {
           lastName: user.last_name,
           username: user.username,
           profilePicture: user.profile_picture,
+          content: user.content,
           skills: user.skills ? user.skills.map(skill => ({
             id: skill.skill_id,
             title: skill.title,
