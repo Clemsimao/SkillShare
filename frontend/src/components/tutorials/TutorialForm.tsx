@@ -122,7 +122,7 @@ export default function TutorialForm() {
   // --- UI: rendu principal du formulaire
   return (
     <form className="w-full max-w-xl mx-auto space-y-4">
-      <h1 className="font-schoolbell text-xl font-bold text-cyan-500 md:text-xl">
+      <h1 className="font-sans text-xl font-bold text-cyan-500 md:text-xl">
         Créer un tutoriel
       </h1>
 

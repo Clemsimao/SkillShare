@@ -187,22 +187,22 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* --- Tabs --- */}
-            <div role="tablist" className="tabs tabs-bordered tabs-lg mb-8">
-                <a
+            {/* --- Tabs (Buttons style) --- */}
+            <div role="tablist" className="flex gap-4 mb-8">
+                <button
                     role="tab"
-                    className={`tab ${activeTab === 'infos' ? 'tab-active' : ''}`}
+                    className={`btn rounded-full px-8 ${activeTab === 'infos' ? 'btn-primary' : 'btn-outline'}`}
                     onClick={() => setActiveTab('infos')}
                 >
                     Infos
-                </a>
-                <a
+                </button>
+                <button
                     role="tab"
-                    className={`tab ${activeTab === 'tutorials' ? 'tab-active' : ''}`}
+                    className={`btn rounded-full px-8 ${activeTab === 'tutorials' ? 'btn-primary' : 'btn-outline'}`}
                     onClick={() => setActiveTab('tutorials')}
                 >
                     Tutoriels ({userTutorials.length > 0 ? userTutorials.length : '?'})
-                </a>
+                </button>
             </div>
 
             {/* --- Content: Infos --- */}
