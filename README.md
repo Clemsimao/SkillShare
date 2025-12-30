@@ -2,17 +2,17 @@
 
 ![SkillShare Banner](https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop)
 
-## 📌 À Propos
+##  À Propos
 
 **SkillShare** est une plateforme communautaire permettant l'échange gratuit de savoirs et de compétences. Le principe est simple : chacun a quelque chose à enseigner et quelque chose à apprendre. La plateforme facilite la mise en relation entre passionnés pour encourager l'apprentissage mutuel et collaboratif.
 
-### 🎓 Contexte du Projet
+###  Contexte du Projet
 
 Ce projet a été réalisé dans le cadre du **projet de fin de formation** pour l'obtention du Titre Professionnel **Concepteur Développeur d'Applications (CDA)** au sein de l'école **O'Clock**.
 
 Il a été conçu pour mettre en pratique l'ensemble des compétences acquises durant la formation : architecture complexe, conteneurisation, sécurité, respect des bonnes pratiques et gestion de projet agile.
 
-## 🚀 Fonctionnalités Principales
+##  Fonctionnalités Principales
 
 - **Authentification & Profils** : Inscription sécurisée, gestion de profil détaillé (avatar, bio, localisation).
 - **Compétences** : Ajout de compétences (ce que je sais faire) et d'intérêts (ce que je veux apprendre).
@@ -21,7 +21,7 @@ Il a été conçu pour mettre en pratique l'ensemble des compétences acquises d
 - **Interactions** : Système de commentaires sur les tutoriels pour échanger avec les auteurs.
 - **Social** : Possibilité de suivre d'autres utilisateurs.
 
-## 🛠️ Stack Technique
+##  Stack Technique
 
 **Frontend :**
 - [Next.js](https://nextjs.org/) (App Router)
@@ -40,7 +40,7 @@ Il a été conçu pour mettre en pratique l'ensemble des compétences acquises d
 - [Docker](https://www.docker.com/) & Docker Compose
 - Adminer (Gestion BDD)
 
-## 🐳 Installation et Lancement avec Docker
+##  Installation et Lancement avec Docker
 
 Le projet est entièrement conteneurisé pour faciliter son déploiement et son exécution locale.
 
