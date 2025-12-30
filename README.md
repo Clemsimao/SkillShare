@@ -64,20 +64,8 @@ Le projet est entièrement conteneurisé pour faciliter son déploiement et son 
    ```
    > *Note : Cette commande initialise également la base de données avec des données de test (catégories, compétences, utilisateurs exemples).*
 
-3. **Accéder à l'application**
 
-   Une fois les conteneurs lancés (attendre quelques secondes), vous pouvez accéder aux différents services :
-
-   - **Frontend (Application Web)** : [http://localhost:3000](http://localhost:3000)
-   - **Backend (API)** : [http://localhost:8000](http://localhost:8000)
-   - **Adminer (Interface BDD)** : [http://localhost:8080](http://localhost:8080)
-     - *Système :* PostgreSQL
-     - *Serveur :* `postgres`
-     - *Utilisateur :* `skillshare`
-     - *Mot de passe :* `skillshare`
-     - *Base de données :* `skillshare`
-
-4. **Arrêter l'application**
+3. **Arrêter l'application**
    Pour arrêter les conteneurs, faites `Ctrl+C` dans le terminal ou lancez :
    ```bash
    docker compose down
