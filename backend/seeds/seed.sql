@@ -6,15 +6,50 @@ INSERT INTO category (title, content) VALUES
 ('Design', 'Graphisme et UX/UI'),
 ('Langues', 'Apprentissage des langues étrangères'),
 ('Musique', 'Instruments et théorie musicale'),
-('Cuisine', 'Recettes et techniques culinaires');
+('Cuisine', 'Recettes et techniques culinaires'),
+('Sciences', 'Mathématiques, Physique, Biologie...'),
+('Business', 'Finance, Management, Marketing...'),
+('Sport', 'Fitness, Yoga, Sports d''équipe...'),
+('Bricolage', 'Travaux manuels, rénovation, jardinage'),
+('Bien-être', 'Santé mentale, nutrition, développement personnel');
 
 -- 2. Compétence
 INSERT INTO skill (title, content, category_id) VALUES 
+-- Programmation (1)
 ('JavaScript', 'Langage de programmation web', 1),
+('Python', 'Langage polyvalent et data science', 1),
+('React', 'Bibliothèque JS pour interfaces utilisateur', 1),
+('SQL', 'Langage de requête pour bases de données', 1),
+-- Design (2)
 ('Photoshop', 'Retouche photo et création graphique', 2),
+('UX Design', 'Expérience utilisateur', 2),
+('Illustrator', 'Création vectorielle', 2),
+-- Langues (3)
 ('Anglais', 'Langue internationale', 3),
+('Espagnol', 'Langue latine', 3),
+('Japonais', 'Langue asiatique', 3),
+-- Musique (4)
 ('Guitare', 'Instrument à cordes', 4),
-('Pâtisserie', 'Art de la pâtisserie', 5);
+('Piano', 'Instrument à touches', 4),
+('Solfège', 'Théorie musicale', 4),
+-- Cuisine (5)
+('Pâtisserie', 'Art de la pâtisserie', 5),
+('Cuisine Italienne', 'Pâtes, pizzas et plus', 5),
+-- Sciences (6)
+('Mathématiques', 'Analyse, algèbre et géométrie', 6),
+('Physique', 'Mécanique et thermodynamique', 6),
+-- Business (7)
+('Marketing Digital', 'Stratégies de vente en ligne', 7),
+('Management', 'Gestion d''équipe et de projet', 7),
+-- Sport (8)
+('Yoga', 'Pratique physique et spirituelle', 8),
+('Musculation', 'Renforcement musculaire', 8),
+-- Bricolage (9)
+('Menuiserie', 'Travail du bois', 9),
+('Plomberie', 'Réparations sanitaires', 9),
+-- Bien-être (10)
+('Méditation', 'Pratique mentale et relaxation', 10),
+('Nutrition', 'Alimentation équilibrée', 10);
 
 -- 3. Utilisateur
 INSERT INTO "user" (last_name, first_name, username, email, password, birthdate, gender, profile_picture) VALUES 

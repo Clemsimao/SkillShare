@@ -14,6 +14,7 @@ export default function SignUpPage() {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
     firstName: '',
     lastName: '',
     birthdate: '',
@@ -43,6 +44,13 @@ export default function SignUpPage() {
     {
       name: 'password',
       label: 'Mot de passe',
+      type: 'password',
+      placeholder: '••••••••',
+      required: true
+    },
+    {
+      name: 'confirmPassword',
+      label: 'Confirmer le mot de passe',
       type: 'password',
       placeholder: '••••••••',
       required: true
@@ -100,8 +108,14 @@ export default function SignUpPage() {
     setError(null);
 
     // Validation basique
-    if (!formData.username || !formData.email || !formData.password || !formData.firstName || !formData.lastName || !formData.birthdate) {
+    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !formData.firstName || !formData.lastName || !formData.birthdate) {
       setError("Veuillez remplir tous les champs obligatoires (*)");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
       setIsLoading(false);
       return;
     }
@@ -148,19 +162,7 @@ export default function SignUpPage() {
     </div>
   );
 
-  // Section statistiques (Gardé pour l'esthétique mais statique pour l'instant)
-  const renderStats = () => (
-    <div className="stats stats-horizontal shadow mt-8">
-      <div className="stat text-center flex-1">
-        <div className="stat-value text-primary">0</div>
-        <div className="stat-desc px-4">Abonnés</div>
-      </div>
-      <div className="stat text-center flex-1">
-        <div className="stat-value text-primary">0</div>
-        <div className="stat-desc px-1">Abonnements</div>
-      </div>
-    </div>
-  );
+
 
   return (
     <div className="min-h-screen bg-base-100 flex flex-col px-4 pt-4">
@@ -194,8 +196,7 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* --- Section stats abo avec largeur fixe --- */}
-              {renderStats()}
+
 
               {/* --- Indication champs obligatoires --- */}
               <div className="text-sm italic text-accent mt-6">
