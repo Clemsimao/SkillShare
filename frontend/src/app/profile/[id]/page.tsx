@@ -269,33 +269,46 @@ export default function ProfilePage() {
                     ) : userTutorials.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {userTutorials.map(tutorial => (
-                                <Link
-                                    key={tutorial.id}
-                                    href={`/tutorials/${tutorial.id}`}
-                                    className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full"
-                                >
-                                    <figure className="h-48 relative bg-base-300">
-                                        {tutorial.picture ? (
-                                            <img
-                                                src={tutorial.picture}
-                                                alt={tutorial.title}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex flex-col items-center justify-center h-full w-full bg-neutral text-neutral-content/30">
-                                                <BookOpen className="w-12 h-12 mb-2" />
-                                                <span className="text-sm">Pas d'image</span>
+                                <div key={tutorial.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col relative group">
+                                    <Link href={`/tutorials/${tutorial.id}`} className="flex-1">
+                                        <figure className="h-48 relative bg-base-300">
+                                            {tutorial.picture ? (
+                                                <img
+                                                    src={tutorial.picture}
+                                                    alt={tutorial.title}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full w-full bg-neutral text-neutral-content/30">
+                                                    <BookOpen className="w-12 h-12 mb-2" />
+                                                    <span className="text-sm">Pas d'image</span>
+                                                </div>
+                                            )}
+                                        </figure>
+                                        <div className="card-body p-4">
+                                            <h3 className="card-title text-base font-bold line-clamp-1">{tutorial.title}</h3>
+                                            <p className="text-xs text-gray-500 line-clamp-2">{tutorial.content}</p>
+                                            <div className="text-xs text-gray-400 mt-2">
+                                                Publié le {new Date(tutorial.publishedAt || tutorial.createdAt || Date.now()).toLocaleDateString()}
                                             </div>
-                                        )}
-                                    </figure>
-                                    <div className="card-body p-4">
-                                        <h3 className="card-title text-base font-bold line-clamp-1">{tutorial.title}</h3>
-                                        <p className="text-xs text-gray-500 line-clamp-2">{tutorial.content}</p>
-                                        <div className="text-xs text-gray-400 mt-2">
-                                            Publié le {new Date(tutorial.publishedAt || tutorial.createdAt || Date.now()).toLocaleDateString()}
                                         </div>
-                                    </div>
-                                </Link>
+                                    </Link>
+
+                                    {isOwner && (
+                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Link
+                                                href={`/tutorials/edit/${tutorial.id}`}
+                                                className="btn btn-sm btn-circle btn-neutral shadow-lg tooltip tooltip-left"
+                                                data-tip="Éditer le tutoriel"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                </svg>
+                                            </Link>
+                                        </div>
+                                    )}
+                                </div>
                             ))}
                         </div>
                     ) : (

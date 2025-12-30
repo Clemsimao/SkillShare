@@ -2,9 +2,10 @@
 // Composant exécuter côté navig. (car gestion des fonctionalités interactives: events...)
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createTutorial, uploadTutorialImage } from "@/integration/services/tutorials";
+import { createTutorial, updateTutorial, uploadTutorialImage } from "@/integration/services/tutorials";
+import type { Tutorial } from "@/integration/types/api";
 
 const ACCENT = "#19362D";
 // le type FormData définit les types de données attendus
@@ -29,17 +30,25 @@ const CATEGORIES = [
   { value: "sculpture", label: "Sculpture" },
 ];
 
+interface TutorialFormProps {
+  initialData?: Tutorial;
+  isEditing?: boolean;
+}
+
 // cette fonction définit l'état initial du formulaire
-export default function TutorialForm() {
+export default function TutorialForm({ initialData, isEditing = false }: TutorialFormProps) {
   const router = useRouter();
+
+  // Initialisation de l'état avec les données existantes si en mode édition
   const [data, setData] = useState<FormData>({
-    title: "",
-    category: "",
-    description: "",
-    mediaUrl: "",
+    title: initialData?.title || "",
+    category: "", // Backend doesn't support category yet
+    description: initialData?.content || "",
+    mediaUrl: initialData?.videoLink || "",
     photoFile: null,
-    photoPreview: null,
+    photoPreview: initialData?.picture || null,
   });
+
   const [isLoading, setIsLoading] = useState(false);
 
   // --- handlers :  gestionnaires d'événements
@@ -83,7 +92,7 @@ export default function TutorialForm() {
     alert("Brouillon enregistré (simulation).");
   }
 
-  // fonction  bouton "Publier"
+  // fonction  bouton "Publier" / "Mettre à jour"
   async function onPublish(e: FormEvent) {
     e.preventDefault();
     const errs = validate();
@@ -91,29 +100,51 @@ export default function TutorialForm() {
 
     setIsLoading(true);
     try {
-      // 1. Création du tutoriel (texte)
-      const response = await createTutorial({
-        title: data.title,
-        content: data.description, // Mapping description -> content
-        videoLink: data.mediaUrl || undefined
-        // Note: category is not supported by backend yet
-      });
+      let resultTutorial: Tutorial | undefined;
 
-      if (response.success && response.tutorial) {
-        // 2. Upload de l'image si présente
+      // 1. Création ou Mise à jour (texte)
+      if (isEditing && initialData) {
+        // --- MISE À JOUR ---
+        const response = await updateTutorial(initialData.id, {
+          title: data.title,
+          content: data.description,
+          videoLink: data.mediaUrl || undefined
+        });
+
+        if (response.success && response.tutorial) {
+          resultTutorial = response.tutorial;
+        } else {
+          throw new Error(response.message);
+        }
+      } else {
+        // --- CRÉATION ---
+        const response = await createTutorial({
+          title: data.title,
+          content: data.description, // Mapping description -> content
+          videoLink: data.mediaUrl || undefined
+          // Note: category is not supported by backend yet
+        });
+
+        if (response.success && response.tutorial) {
+          resultTutorial = response.tutorial;
+        } else {
+          throw new Error(response.message);
+        }
+      }
+
+      if (resultTutorial) {
+        // 2. Upload de l'image si nouvelle image sélectionnée
         if (data.photoFile) {
-          await uploadTutorialImage(response.tutorial.id, data.photoFile);
+          await uploadTutorialImage(resultTutorial.id, data.photoFile);
         }
 
         // 3. Redirection
-        // alert("Tutoriel publié avec succès !");
-        router.push(`/tutorials/${response.tutorial.id}`);
-      } else {
-        alert("Erreur lors de la création : " + response.message);
+        router.push(`/tutorials/${resultTutorial.id}`);
+        router.refresh();
       }
     } catch (error) {
       console.error("Erreur detailed:", error);
-      alert("Une erreur est survenue lors de la publication.");
+      alert("Une erreur est survenue lors de l'enregistrement : " + (error instanceof Error ? error.message : "Erreur inconnue"));
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +154,7 @@ export default function TutorialForm() {
   return (
     <form className="w-full max-w-xl mx-auto space-y-4">
       <h1 className="font-sans text-xl font-bold text-cyan-500 md:text-xl">
-        Créer un tutoriel
+        {isEditing ? "Éditer le tutoriel" : "Créer un tutoriel"}
       </h1>
 
       <input
@@ -184,14 +215,18 @@ export default function TutorialForm() {
         disabled={isLoading}
       />
 
-      <button
-        onClick={onSaveDraft}
-        className="btn w-full btn-dash btn-secondary"
-        type="button"
-        disabled={isLoading}
-      >
-        Enregistrer les modifications
-      </button>
+      {/* Mode Création: Draft + Publish. Mode Édition: Save Changes only */}
+      {!isEditing && (
+        <button
+          onClick={onSaveDraft}
+          className="btn w-full btn-dash btn-secondary"
+          type="button"
+          disabled={isLoading}
+        >
+          Enregistrer les modifications
+        </button>
+      )}
+
       <button
         onClick={onPublish}
         className="btn btn-outline btn-primary flex-1 w-full"
@@ -202,7 +237,7 @@ export default function TutorialForm() {
         {isLoading ? (
           <span className="loading loading-spinner"></span>
         ) : (
-          "Publier"
+          isEditing ? "Mettre à jour" : "Publier"
         )}
       </button>
     </form>
